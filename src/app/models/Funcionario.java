@@ -13,19 +13,21 @@ public abstract class Funcionario extends Pessoa {
      * Construtores
      */
     public Funcionario() {
+        super(null, null, null, null, null);
         setLogin(null);
         setSenha(null);
         setNCTPS(null);
         setDataAdmissao(null);
     }
 
-    public Funcionario(String login, String senha, String NCTPS, String dataAdmissao) {
+    public Funcionario(String login, String senha, String NCTPS, String dataAdmissao, String CPF, String RG, String nome, String telefone, String dataNascimento) {
+        super(CPF, RG, nome, telefone, dataNascimento);
         setLogin(login);
         setSenha(senha);
         setNCTPS(NCTPS);
         setDataAdmissao(dataAdmissao);
     }
-
+  
     /*
      * Gets and sets
      */

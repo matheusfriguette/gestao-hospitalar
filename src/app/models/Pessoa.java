@@ -1,15 +1,24 @@
 package models;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /*
  * Pessoa
  */
-public class Pessoa {
+public abstract class Pessoa {
     private String CPF;
     private String RG;
     private String Nome;
     private String Telefone;
-    private String DataNascimento;
+    private Date DataNascimento;
+    protected static SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
+    protected static SimpleDateFormat formatoHora = new SimpleDateFormat("HH:mm");
 
+    /*
+     * Construtores
+     */
     public Pessoa() {
         setCPF(null);
         setRG(null);
@@ -50,7 +59,7 @@ public class Pessoa {
     }
 
     public void setNome(String nome) {
-        Nome = nome;
+        this.Nome = nome;
     }
 
     public String getTelefone() {
@@ -58,14 +67,18 @@ public class Pessoa {
     }
 
     public void setTelefone(String telefone) {
-        Telefone = telefone;
+        this.Telefone = telefone;
     }
 
-    public String getDataNascimento() {
+    public Date getDataNascimento() {
         return DataNascimento;
     }
 
     public void setDataNascimento(String dataNascimento) {
-        DataNascimento = dataNascimento;
+        try {
+            this.DataNascimento = formatoData.parse(dataNascimento);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 }
