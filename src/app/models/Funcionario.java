@@ -3,7 +3,7 @@ package models;
 /*
  * Funcionario
  */
-public abstract class Funcionario {
+public abstract class Funcionario extends Pessoa {
     private String Login;
     private String Senha;
     private String NCTPS;
