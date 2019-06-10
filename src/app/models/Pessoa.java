@@ -1,5 +1,6 @@
-package models;
+package app.models;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -7,12 +8,13 @@ import java.util.Date;
 /*
  * Pessoa
  */
-public abstract class Pessoa {
-    private String CPF;
-    private String RG;
-    private String Nome;
-    private String Telefone;
-    private Date DataNascimento;
+public abstract class Pessoa implements Serializable {
+    private String cpf;
+    private String rg;
+    private String nome;
+    private String telefone;
+    private Date dataNascimento;
+
     protected static SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
     protected static SimpleDateFormat formatoHora = new SimpleDateFormat("HH:mm");
 
@@ -27,56 +29,56 @@ public abstract class Pessoa {
         setDataNascimento(null);
     }
 
-    public Pessoa(String CPF, String RG, String nome, String telefone, String dataNascimento) {
-        setCPF(CPF);
-        setRG(RG);
+    public Pessoa(String cpf, String rg, String nome, String telefone, String dataNascimento) {
+        setCPF(cpf);
+        setRG(rg);
         setNome(nome);
         setTelefone(telefone);
         setDataNascimento(dataNascimento);
     }
 
     /*
-     * Gets and sets
+     * Gets e sets
      */
     public String getCPF() {
-        return CPF;
+        return cpf;
     }
 
-    public void setCPF(String CPF) {
-        this.CPF = CPF;
+    public void setCPF(String cpf) {
+        this.cpf = cpf;
     }
 
     public String getRG() {
-        return RG;
+        return rg;
     }
 
-    public void setRG(String RG) {
-        this.RG = RG;
+    public void setRG(String rg) {
+        this.rg = rg;
     }
 
     public String getNome() {
-        return Nome;
+        return nome;
     }
 
     public void setNome(String nome) {
-        this.Nome = nome;
+        this.nome = nome;
     }
 
     public String getTelefone() {
-        return Telefone;
+        return telefone;
     }
 
     public void setTelefone(String telefone) {
-        this.Telefone = telefone;
+        this.telefone = telefone;
     }
 
     public Date getDataNascimento() {
-        return DataNascimento;
+        return dataNascimento;
     }
 
     public void setDataNascimento(String dataNascimento) {
         try {
-            this.DataNascimento = formatoData.parse(dataNascimento);
+            this.dataNascimento = formatoData.parse(dataNascimento);
         } catch (ParseException e) {
             e.printStackTrace();
         }

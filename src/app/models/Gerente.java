@@ -1,4 +1,4 @@
-package models;
+package app.models;
 
 /*
  * Gerente
@@ -11,8 +11,8 @@ public class Gerente extends Funcionario {
         super(null, null, null, null, null, null, null, null, null);
     }
 
-    public Gerente(String login, String senha, String NCTPS, String dataAdmissao, String CPF, String RG, String nome,
+    public Gerente(String login, String senha, String nctps, String dataAdmissao, String cpf, String rg, String nome,
             String telefone, String dataNascimento) {
-        super(login, senha, NCTPS, dataAdmissao, CPF, RG, nome, telefone, dataNascimento);
+        super(login, senha, nctps, dataAdmissao, cpf, rg, nome, telefone, dataNascimento);
     }
 }

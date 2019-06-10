@@ -1,4 +1,4 @@
-package models;
+package app.models;
 
 /*
  * Funcionario
@@ -29,7 +29,7 @@ public abstract class Funcionario extends Pessoa {
     }
   
     /*
-     * Gets and sets
+     * Gets e sets
      */
     public String getLogin() {
         return Login;

@@ -1,11 +1,11 @@
-package models;
+package app.models;
 
 /*
  * Medico
  */
 public class Medico extends Funcionario {
-    private String CRM;
-    private String Especialidade;
+    private String crm;
+    private String especialidade;
 
     /*
      * Construtores
@@ -16,10 +16,10 @@ public class Medico extends Funcionario {
         setEspecialidade(null);
     }
 
-    public Medico(String CRM, String especialidade, String login, String senha, String NCTPS, String dataAdmissao,
-            String CPF, String RG, String nome, String telefone, String dataNascimento) {
-        super(login, senha, NCTPS, dataAdmissao, CPF, RG, nome, telefone, dataNascimento);
-        setCRM(CRM);
+    public Medico(String crm, String especialidade, String login, String senha, String nctps, String dataAdmissao,
+            String cpf, String rg, String nome, String telefone, String dataNascimento) {
+        super(login, senha, nctps, dataAdmissao, cpf, rg, nome, telefone, dataNascimento);
+        setCRM(crm);
         setEspecialidade(especialidade);
     }
 
@@ -27,18 +27,18 @@ public class Medico extends Funcionario {
      * Gets e sets
      */
     public String getCRM() {
-        return CRM;
+        return crm;
     }
 
-    public void setCRM(String CRM) {
-        this.CRM = CRM;
+    public void setCRM(String crm) {
+        this.crm = crm;
     }
 
     public String getEspecialidade() {
-        return Especialidade;
+        return especialidade;
     }
 
     public void setEspecialidade(String especialidade) {
-        this.Especialidade = especialidade;
+        this.especialidade = especialidade;
     }
 }
