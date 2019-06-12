@@ -1,11 +1,14 @@
 package app.models;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /*
  * Exame
  */
-public class Exame {
+public class Exame implements Serializable {
+    private static final long serialVersionUID = 1L;
+    private static long serialUID = 1L;
     private String id;
     private String nome;
     private String observacoes;
@@ -16,15 +19,15 @@ public class Exame {
      * Construtores
      */
     public Exame() {
-        setId(null);
+        setId(Long.toString(serialUID++));
         setNome(null);
         setObservacoes(null);
         setTempoDuracao(null);
         setTempoResultado(null);
     }
 
-    public Exame(String id, String nome, String observacoes, Date tempoDuracao, Date tempoResultado) {
-        setId(id);
+    public Exame(String nome, String observacoes, Date tempoDuracao, Date tempoResultado) {
+        setId(Long.toString(serialUID++));
         setNome(nome);
         setObservacoes(observacoes);
         setTempoDuracao(tempoDuracao);

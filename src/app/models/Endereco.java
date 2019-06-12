@@ -1,6 +1,6 @@
 package app.models;
 
-/**
+/*
  * Endereco
  */
 public class Endereco {
@@ -12,10 +12,10 @@ public class Endereco {
     private String numero;
     private String complemento;
 
-    /**
+    /*
      * Construtores
      */
-    public Endereco(){
+    public Endereco() {
         setCEP(null);
         setRua(null);
         setNumero(null);
@@ -25,7 +25,8 @@ public class Endereco {
         setComplemento(null);
     }
 
-    public Endereco(String CEP, String estado, String cidade, String bairro, String rua, String numero, String complemento){
+    public Endereco(String CEP, String estado, String cidade, String bairro, String rua, String numero,
+            String complemento) {
         setCEP(CEP);
         setEstado(estado);
         setCidade(cidade);
@@ -34,7 +35,7 @@ public class Endereco {
         setNumero(numero);
         setComplemento(complemento);
     }
-    
+
     /*
      * Gets e sets
      */

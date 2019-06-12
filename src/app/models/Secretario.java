@@ -1,12 +1,15 @@
 package app.models;
 
-import java.text.ParseException;
+import java.io.Serializable;
 import java.util.Date;
 
 /*
  * Secretaria
  */
-public class Secretario extends Funcionario {
+public class Secretario extends Funcionario implements Serializable {
+    private static final long serialVersionUID = 1L;
+    private static long serialUID = 1L;
+    private String id;
     private Date horarioEntrada;
     private Date horarioSaida;
 
@@ -14,14 +17,17 @@ public class Secretario extends Funcionario {
      * Construtores
      */
     public Secretario() {
-        super(null, null, null, null, null, null, null, null, null);
+        super(null, null, null, null, null, null, null, null, null, null);
+        setId(Long.toString(serialUID++));
         setHorarioEntrada(null);
         setHorarioSaida(null);
     }
 
-    public Secretario(String horarioEntrada, String horarioSaida, String login, String senha, String nctps,
-            String dataAdmissao, String cpf, String rg, String nome, String telefone, String dataNascimento) {
-        super(login, senha, nctps, dataAdmissao, cpf, rg, nome, telefone, dataNascimento);
+    public Secretario(Date horarioEntrada, Date horarioSaida, String login, String senha, String nctps,
+            Date dataAdmissao, String cpf, String rg, String nome, String telefone, Date dataNascimento,
+            Endereco endereco) {
+        super(login, senha, nctps, dataAdmissao, cpf, rg, nome, telefone, dataNascimento, endereco);
+        setId(Long.toString(serialUID++));
         setHorarioEntrada(horarioEntrada);
         setHorarioSaida(horarioSaida);
     }
@@ -29,27 +35,27 @@ public class Secretario extends Funcionario {
     /*
      * Gets e sets
      */
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public Date getHorarioEntrada() {
         return horarioEntrada;
     }
 
-    public void setHorarioEntrada(String horarioEntrada) {
-        try {
-            this.horarioEntrada = formatoHora.parse(horarioEntrada);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+    public void setHorarioEntrada(Date horarioEntrada) {
+        this.horarioEntrada = horarioEntrada;
     }
 
     public Date getHorarioSaida() {
         return horarioSaida;
     }
 
-    public void setHorarioSaida(String horarioSaida) {
-        try {
-            this.horarioSaida = formatoHora.parse(horarioSaida);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+    public void setHorarioSaida(Date horarioSaida) {
+        this.horarioSaida = horarioSaida;
     }
 }

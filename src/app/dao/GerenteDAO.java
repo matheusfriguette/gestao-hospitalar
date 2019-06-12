@@ -22,24 +22,21 @@ public class GerenteDAO {
         this.gerenteFile = new File("gerentes.dat");
     }
 
-    public ArrayList<Gerente> getGerentes() {
+    public ArrayList<Gerente> getGerentes() throws FileNotFoundException, IOException, ClassNotFoundException {
         ObjectInputStream input = null;
 
-        try {
-            if (this.gerenteFile.length() > 0) {
-                input = new ObjectInputStream(new FileInputStream(this.gerenteFile));
-                this.gerentes = (ArrayList<Gerente>) input.readObject();
-                input.close();
-            } else {
-                this.gerentes = new ArrayList<Gerente>();
-            }
-        } catch (Exception e) {
-            return this.gerentes;
+        if (this.gerenteFile.length() > 0) {
+            input = new ObjectInputStream(new FileInputStream(this.gerenteFile));
+            this.gerentes = (ArrayList<Gerente>) input.readObject();
+            input.close();
+        } else {
+            this.gerentes = new ArrayList<Gerente>();
         }
+
         return this.gerentes;
     }
 
-    public void addGerente(Gerente novoGerente) throws FileNotFoundException, IOException {
+    public void addGerente(Gerente novoGerente) throws FileNotFoundException, IOException, ClassNotFoundException {
         ObjectOutputStream output = null;
         this.gerentes = getGerentes();
         this.gerentes.add(novoGerente);

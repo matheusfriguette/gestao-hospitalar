@@ -1,6 +1,9 @@
 package app.views;
 
 import app.controllers.LoginController;
+import app.models.Gerente;
+import app.models.Medico;
+import app.models.Secretario;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -12,6 +15,8 @@ import javax.swing.JComboBox;
 import javax.swing.JRadioButton;
 import javax.swing.JOptionPane;
 import java.io.IOException;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /*
  * LoginView
@@ -64,7 +69,10 @@ public class LoginView extends JFrame {
 
         lblTipoFuncionarios = new JLabel("Cargo:");
 
+        tratadorBotoes tratador = new tratadorBotoes();
+
         btnLogin = new JButton("Logar");
+        btnLogin.addActionListener(tratador);
 
         cmbTipoFuncionarios = new JComboBox(tipoFuncionarios);
         cmbTipoFuncionarios.setBackground(new java.awt.Color(255, 255, 255));
@@ -127,16 +135,26 @@ public class LoginView extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    private void btnLogarAction(java.awt.event.ActionEvent evento) {
-        if ((String)cmbTipoFuncionarios.getSelectedItem() == tipoFuncionarios[0]) {
-            logarSecretario();
+
+    private void logarGerente() {
+        String login = txtLogin.getText();
+        char aux[] = pswSenha.getPassword();
+        String senha = new String(aux);
+
+        Gerente gerente = this.loginController.logarGerente(login, senha);
+
+        if (gerente != null) {
+            // logou
+        } else {
+            JOptionPane.showMessageDialog(null, "O login ou senha informados estão incorretos", "Erro!",
+                    JOptionPane.WARNING_MESSAGE);
         }
-        else if((String)cmbTipoFcun)
     }
 
     private void logarSecretario() {
         String login = txtLogin.getText();
-        String senha = pswSenha.getPassword().toString();
+        char aux[] = pswSenha.getPassword();
+        String senha = new String(aux);
 
         Secretario secretario = this.loginController.logarSecretario(login, senha);
 
@@ -146,6 +164,37 @@ public class LoginView extends JFrame {
             JOptionPane.showMessageDialog(null, "O login ou senha informados estão incorretos", "Erro!",
                     JOptionPane.WARNING_MESSAGE);
         }
+    }
+
+    private void logarMedico() {
+        String login = txtLogin.getText();
+        char aux[] = pswSenha.getPassword();
+        String senha = new String(aux);
+
+        // Medico medico = this.loginController.logarMedico(login, senha);
+
+        // if (medico != null) {
+        //     // logou
+        // } else {   
+        //     JOptionPane.showMessageDialog(null, "O login ou senha informados estão incorretos", "Erro!",
+        //             JOptionPane.WARNING_MESSAGE);
+        // }
+    }
+
+    private class tratadorBotoes implements ActionListener{
+        public void actionPerformed(ActionEvent e){
+             if(e.getSource() == btnLogin){
+                if (cmbTipoFuncionarios.getSelectedItem().toString() == tipoFuncionarios[0]) {
+                    logarSecretario();
+                }
+                else if(cmbTipoFuncionarios.getSelectedItem().toString() == tipoFuncionarios[1]){
+                    logarMedico();    
+                }
+                else if(cmbTipoFuncionarios.getSelectedItem().toString() == tipoFuncionarios[2]){
+                    logarGerente();
+                }
+             }
+        } 
     }
 
 }

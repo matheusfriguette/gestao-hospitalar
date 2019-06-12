@@ -1,65 +1,68 @@
 package app.models;
 
+import java.util.Date;
+
 /*
  * Funcionario
  */
 public abstract class Funcionario extends Pessoa {
-    private String Login;
-    private String Senha;
-    private String NCTPS;
-    private String DataAdmissao;
+    private String login;
+    private String senha;
+    private String nctps;
+    private Date dataAdmissao;
 
     /*
      * Construtores
      */
     public Funcionario() {
-        super(null, null, null, null, null);
+        super(null, null, null, null, null, null);
         setLogin(null);
         setSenha(null);
         setNCTPS(null);
         setDataAdmissao(null);
     }
 
-    public Funcionario(String login, String senha, String NCTPS, String dataAdmissao, String CPF, String RG, String nome, String telefone, String dataNascimento) {
-        super(CPF, RG, nome, telefone, dataNascimento);
+    public Funcionario(String login, String senha, String nctps, Date dataAdmissao, String cpf, String rg,
+            String nome, String telefone, Date dataNascimento, Endereco endereco) {
+        super(cpf, rg, nome, telefone, dataNascimento, endereco);
         setLogin(login);
         setSenha(senha);
-        setNCTPS(NCTPS);
+        setNCTPS(nctps);
         setDataAdmissao(dataAdmissao);
     }
-  
+
     /*
      * Gets e sets
      */
     public String getLogin() {
-        return Login;
+        return login;
     }
 
     public void setLogin(String login) {
-        Login = login;
+        this.login = login;
     }
 
     public String getSenha() {
-        return Senha;
+        return senha;
     }
 
     public void setSenha(String senha) {
-        Senha = senha;
+        this.senha = senha;
     }
 
     public String getNCTPS() {
-        return NCTPS;
+        return nctps;
     }
 
-    public void setNCTPS(String NCTPS) {
-        this.NCTPS = NCTPS;
+    public void setNCTPS(String nctps) {
+        this.nctps = nctps;
     }
 
-    public String getDataAdmissao() {
-        return DataAdmissao;
+    public Date getDataAdmissao() {
+        return dataAdmissao;
     }
 
-    public void setDataAdmissao(String dataAdmissao) {
-        DataAdmissao = dataAdmissao;
+    public void setDataAdmissao(Date dataAdmissao) {
+        this.dataAdmissao = dataAdmissao;
     }
 }

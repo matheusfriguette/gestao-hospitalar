@@ -1,11 +1,8 @@
 package app;
 
-import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
-import app.dao.GerenteDAO;
-import app.models.Gerente;
 import app.views.LoginView;
 
 public class App {

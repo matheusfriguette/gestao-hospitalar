@@ -1,22 +1,17 @@
 package app.models;
 
-import java.io.Serializable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /*
  * Pessoa
  */
-public abstract class Pessoa implements Serializable {
+public abstract class Pessoa {
     private String cpf;
     private String rg;
     private String nome;
     private String telefone;
     private Date dataNascimento;
-
-    protected static SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
-    protected static SimpleDateFormat formatoHora = new SimpleDateFormat("HH:mm");
+    private Endereco endereco;
 
     /*
      * Construtores
@@ -27,14 +22,16 @@ public abstract class Pessoa implements Serializable {
         setNome(null);
         setTelefone(null);
         setDataNascimento(null);
+        setEndereco(null);
     }
 
-    public Pessoa(String cpf, String rg, String nome, String telefone, String dataNascimento) {
+    public Pessoa(String cpf, String rg, String nome, String telefone, Date dataNascimento, Endereco endereco) {
         setCPF(cpf);
         setRG(rg);
         setNome(nome);
         setTelefone(telefone);
         setDataNascimento(dataNascimento);
+        setEndereco(endereco);
     }
 
     /*
@@ -76,11 +73,15 @@ public abstract class Pessoa implements Serializable {
         return dataNascimento;
     }
 
-    public void setDataNascimento(String dataNascimento) {
-        try {
-            this.dataNascimento = formatoData.parse(dataNascimento);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+    public void setDataNascimento(Date dataNascimento) {
+        this.dataNascimento = dataNascimento;
+    }
+
+    public Endereco getEndereco() {
+        return endereco;
+    }
+
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
     }
 }
