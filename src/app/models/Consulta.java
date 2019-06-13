@@ -1,14 +1,18 @@
 package app.models;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
+
+import app.dao.ConsultaDAO;
 
 /*
  * Consulta
  */
 public class Consulta implements Serializable {
     private static final long serialVersionUID = 1L;
-    private static long serialUID = 1L;
+    private static long serialUID;
     private String id;
     private Paciente paciente;
     private Medico medico;
@@ -19,7 +23,7 @@ public class Consulta implements Serializable {
      * Construtores
      */
     public Consulta() {
-        setId(Long.toString(serialUID++));
+        setId(Long.toString(++serialUID));
         setPaciente(null);
         setMedico(null);
         setData(null);
@@ -27,11 +31,24 @@ public class Consulta implements Serializable {
     }
 
     public Consulta(Paciente paciente, Medico medico, Date data, Diagnostico diagnostico) {
-        setId(Long.toString(serialUID++));
+        setId(Long.toString(++serialUID));
         setPaciente(paciente);
         setMedico(medico);
         setData(data);
         setDiagnostico(diagnostico);
+    }
+
+    static {
+        ConsultaDAO consulta = new ConsultaDAO();
+        try {
+            serialUID = consulta.getLastKey();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /*
