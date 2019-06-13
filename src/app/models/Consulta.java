@@ -17,6 +17,7 @@ public class Consulta implements Serializable {
     private Paciente paciente;
     private Medico medico;
     private Date data;
+    private Boolean consultaRealizada;
     private Diagnostico diagnostico;
 
     /*
@@ -27,14 +28,16 @@ public class Consulta implements Serializable {
         setPaciente(null);
         setMedico(null);
         setData(null);
+        setConsultaRealizada(null);
         setDiagnostico(null);
     }
 
-    public Consulta(Paciente paciente, Medico medico, Date data, Diagnostico diagnostico) {
+    public Consulta(Paciente paciente, Medico medico, Date data, Boolean consultaRealizada, Diagnostico diagnostico) {
         setId(Long.toString(++serialUID));
         setPaciente(paciente);
         setMedico(medico);
         setData(data);
+        setConsultaRealizada(consultaRealizada);
         setDiagnostico(diagnostico);
     }
 
@@ -84,6 +87,14 @@ public class Consulta implements Serializable {
 
     public void setData(Date data) {
         this.data = data;
+    }
+
+    public Boolean getConsultaRealizada() {
+        return consultaRealizada;
+    }
+
+    public void setConsultaRealizada(Boolean consultaRealizada) {
+        this.consultaRealizada = consultaRealizada;
     }
 
     public Diagnostico getDiagnostico() {

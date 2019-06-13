@@ -3,7 +3,7 @@ package app.models;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.Duration;
 
 import app.dao.ExameDAO;
 
@@ -12,12 +12,12 @@ import app.dao.ExameDAO;
  */
 public class Exame implements Serializable {
     private static final long serialVersionUID = 1L;
-    private static long serialUID ;
+    private static long serialUID;
     private String id;
     private String nome;
     private String observacoes;
-    private Date tempoDuracao;
-    private Date tempoResultado;
+    private Duration tempoDuracao;
+    private Duration tempoResultado;
 
     /*
      * Construtores
@@ -30,7 +30,7 @@ public class Exame implements Serializable {
         setTempoResultado(null);
     }
 
-    public Exame(String nome, String observacoes, Date tempoDuracao, Date tempoResultado) {
+    public Exame(String nome, String observacoes, Duration tempoDuracao, Duration tempoResultado) {
         setId(Long.toString(++serialUID));
         setNome(nome);
         setObservacoes(observacoes);
@@ -78,19 +78,19 @@ public class Exame implements Serializable {
         this.observacoes = observacoes;
     }
 
-    public Date getTempoDuracao() {
+    public Duration getTempoDuracao() {
         return tempoDuracao;
     }
 
-    public void setTempoDuracao(Date tempoDuracao) {
+    public void setTempoDuracao(Duration tempoDuracao) {
         this.tempoDuracao = tempoDuracao;
     }
 
-    public Date getTempoResultado() {
+    public Duration getTempoResultado() {
         return tempoResultado;
     }
 
-    public void setTempoResultado(Date tempoResultado) {
+    public void setTempoResultado(Duration tempoResultado) {
         this.tempoResultado = tempoResultado;
     }
 }

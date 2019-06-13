@@ -7,6 +7,7 @@ import java.util.ArrayList;
  */
 public class Diagnostico {
     private String sintomas;
+    private String observacoes;
     private ArrayList<Exame> exames;
     private ArrayList<Remedio> remedios;
 
@@ -15,12 +16,14 @@ public class Diagnostico {
      */
     public Diagnostico() {
         setSintomas(null);
+        setObservacoes(null);
         setExames(null);
         setRemedios(null);
     }
 
-    public Diagnostico(String sintomas, ArrayList<Exame> exames, ArrayList<Remedio> remedios) {
+    public Diagnostico(String sintomas, String sintomas, ArrayList<Exame> exames, ArrayList<Remedio> remedios) {
         setSintomas(sintomas);
+        setObservacoes(observacoes);
         setExames(exames);
         setRemedios(remedios);
     }
@@ -34,6 +37,14 @@ public class Diagnostico {
 
     public void setSintomas(String sintomas) {
         this.sintomas = sintomas;
+    }
+
+    public String getObservacoes() {
+        return observacoes;
+    }
+
+    public void setObservacoes(String observacoes) {
+        this.observacoes = observacoes;
     }
 
     public ArrayList<Exame> getExames() {
