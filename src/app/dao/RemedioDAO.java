@@ -7,7 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.TreeMap;
+import java.util.HashMap;
 
 import app.models.Remedio;
 
@@ -16,7 +16,7 @@ import app.models.Remedio;
  */
 public class RemedioDAO {
     private File remedioFile;
-    private TreeMap<String, Remedio> remedios;
+    private HashMap<String, Remedio> remedios;
 
     public RemedioDAO() {
         this.remedioFile = new File("remedios.dat");
@@ -28,15 +28,15 @@ public class RemedioDAO {
         return this.remedios.get(id);
     }
 
-    public TreeMap<String, Remedio> getRemedios() throws FileNotFoundException, IOException, ClassNotFoundException {
+    public HashMap<String, Remedio> getRemedios() throws FileNotFoundException, IOException, ClassNotFoundException {
         ObjectInputStream input = null;
 
         if (this.remedioFile.length() > 0) {
             input = new ObjectInputStream(new FileInputStream(this.remedioFile));
-            this.remedios = (TreeMap<String, Remedio>) input.readObject();
+            this.remedios = (HashMap<String, Remedio>) input.readObject();
             input.close();
         } else {
-            this.remedios = new TreeMap<String, Remedio>();
+            this.remedios = new HashMap<String, Remedio>();
         }
 
         return this.remedios;
@@ -74,14 +74,5 @@ public class RemedioDAO {
         output.writeObject(this.remedios);
         output.flush();
         output.close();
-    }
-
-    public long getLastKey() throws FileNotFoundException, ClassNotFoundException, IOException {
-        this.remedios = getRemedios();
-        if (this.remedios.size() == 0) {
-            return 0;
-        }
-
-        return Long.parseLong(remedios.lastKey());
     }
 }

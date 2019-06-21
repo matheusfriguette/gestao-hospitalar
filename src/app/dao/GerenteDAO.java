@@ -7,7 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.TreeMap;
+import java.util.HashMap;
 
 import app.models.Gerente;
 
@@ -16,7 +16,7 @@ import app.models.Gerente;
  */
 public class GerenteDAO {
     private File gerenteFile;
-    private TreeMap<String, Gerente> gerentes;
+    private HashMap<String, Gerente> gerentes;
 
     public GerenteDAO() {
         this.gerenteFile = new File("gerentes.dat");
@@ -28,15 +28,15 @@ public class GerenteDAO {
         return this.gerentes.get(id);
     }
 
-    public TreeMap<String, Gerente> getGerentes() throws FileNotFoundException, IOException, ClassNotFoundException {
+    public HashMap<String, Gerente> getGerentes() throws FileNotFoundException, IOException, ClassNotFoundException {
         ObjectInputStream input = null;
 
         if (this.gerenteFile.length() > 0) {
             input = new ObjectInputStream(new FileInputStream(this.gerenteFile));
-            this.gerentes = (TreeMap<String, Gerente>) input.readObject();
+            this.gerentes = (HashMap<String, Gerente>) input.readObject();
             input.close();
         } else {
-            this.gerentes = new TreeMap<String, Gerente>();
+            this.gerentes = new HashMap<String, Gerente>();
         }
 
         return this.gerentes;
@@ -74,14 +74,5 @@ public class GerenteDAO {
         output.writeObject(this.gerentes);
         output.flush();
         output.close();
-    }
-
-    public long getLastKey() throws FileNotFoundException, ClassNotFoundException, IOException {
-        this.gerentes = getGerentes();
-        if (this.gerentes.size() == 0) {
-            return 0;
-        }
-
-        return Long.parseLong(gerentes.lastKey());
     }
 }

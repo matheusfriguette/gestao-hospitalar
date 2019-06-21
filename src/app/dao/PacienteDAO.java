@@ -7,7 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.TreeMap;
+import java.util.HashMap;
 
 import app.models.Paciente;
 
@@ -16,7 +16,7 @@ import app.models.Paciente;
  */
 public class PacienteDAO {
     private File pacienteFile;
-    private TreeMap<String, Paciente> pacientes;
+    private HashMap<String, Paciente> pacientes;
 
     public PacienteDAO() {
         this.pacienteFile = new File("pacientes.dat");
@@ -28,15 +28,15 @@ public class PacienteDAO {
         return this.pacientes.get(id);
     }
 
-    public TreeMap<String, Paciente> getPacientes() throws FileNotFoundException, IOException, ClassNotFoundException {
+    public HashMap<String, Paciente> getPacientes() throws FileNotFoundException, IOException, ClassNotFoundException {
         ObjectInputStream input = null;
 
         if (this.pacienteFile.length() > 0) {
             input = new ObjectInputStream(new FileInputStream(this.pacienteFile));
-            this.pacientes = (TreeMap<String, Paciente>) input.readObject();
+            this.pacientes = (HashMap<String, Paciente>) input.readObject();
             input.close();
         } else {
-            this.pacientes = new TreeMap<String, Paciente>();
+            this.pacientes = new HashMap<String, Paciente>();
         }
 
         return this.pacientes;
@@ -74,14 +74,5 @@ public class PacienteDAO {
         output.writeObject(this.pacientes);
         output.flush();
         output.close();
-    }
-
-    public long getLastKey() throws FileNotFoundException, ClassNotFoundException, IOException {
-        this.pacientes = getPacientes();
-        if (this.pacientes.size() == 0) {
-            return 0;
-        }
-
-        return Long.parseLong(pacientes.lastKey());
     }
 }

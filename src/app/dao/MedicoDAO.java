@@ -7,7 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.TreeMap;
+import java.util.HashMap;
 
 import app.models.Medico;
 
@@ -16,7 +16,7 @@ import app.models.Medico;
  */
 public class MedicoDAO {
     private File medicoFile;
-    private TreeMap<String, Medico> medicos;
+    private HashMap<String, Medico> medicos;
 
     public MedicoDAO() {
         this.medicoFile = new File("medicos.dat");
@@ -28,15 +28,15 @@ public class MedicoDAO {
         return this.medicos.get(id);
     }
 
-    public TreeMap<String, Medico> getMedicos() throws FileNotFoundException, IOException, ClassNotFoundException {
+    public HashMap<String, Medico> getMedicos() throws FileNotFoundException, IOException, ClassNotFoundException {
         ObjectInputStream input = null;
 
         if (this.medicoFile.length() > 0) {
             input = new ObjectInputStream(new FileInputStream(this.medicoFile));
-            this.medicos = (TreeMap<String, Medico>) input.readObject();
+            this.medicos = (HashMap<String, Medico>) input.readObject();
             input.close();
         } else {
-            this.medicos = new TreeMap<String, Medico>();
+            this.medicos = new HashMap<String, Medico>();
         }
 
         return this.medicos;
@@ -74,14 +74,5 @@ public class MedicoDAO {
         output.writeObject(this.medicos);
         output.flush();
         output.close();
-    }
-
-    public long getLastKey() throws FileNotFoundException, ClassNotFoundException, IOException {
-        this.medicos = getMedicos();
-        if (this.medicos.size() == 0) {
-            return 0;
-        }
-
-        return Long.parseLong(medicos.lastKey());
     }
 }

@@ -7,7 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.TreeMap;
+import java.util.HashMap;
 
 import app.models.Farmaceutico;
 
@@ -16,7 +16,7 @@ import app.models.Farmaceutico;
  */
 public class FarmaceuticoDAO {
     private File farmaceuticoFile;
-    private TreeMap<String, Farmaceutico> farmaceuticos;
+    private HashMap<String, Farmaceutico> farmaceuticos;
 
     public FarmaceuticoDAO() {
         this.farmaceuticoFile = new File("farmaceuticos.dat");
@@ -28,15 +28,15 @@ public class FarmaceuticoDAO {
         return this.farmaceuticos.get(id);
     }
 
-    public TreeMap<String, Farmaceutico> getFarmaceuticos() throws FileNotFoundException, IOException, ClassNotFoundException {
+    public HashMap<String, Farmaceutico> getFarmaceuticos() throws FileNotFoundException, IOException, ClassNotFoundException {
         ObjectInputStream input = null;
 
         if (this.farmaceuticoFile.length() > 0) {
             input = new ObjectInputStream(new FileInputStream(this.farmaceuticoFile));
-            this.farmaceuticos = (TreeMap<String, Farmaceutico>) input.readObject();
+            this.farmaceuticos = (HashMap<String, Farmaceutico>) input.readObject();
             input.close();
         } else {
-            this.farmaceuticos = new TreeMap<String, Farmaceutico>();
+            this.farmaceuticos = new HashMap<String, Farmaceutico>();
         }
 
         return this.farmaceuticos;
@@ -74,14 +74,5 @@ public class FarmaceuticoDAO {
         output.writeObject(this.farmaceuticos);
         output.flush();
         output.close();
-    }
-
-    public long getLastKey() throws FileNotFoundException, ClassNotFoundException, IOException {
-        this.farmaceuticos = getFarmaceuticos();
-        if (this.farmaceuticos.size() == 0) {
-            return 0;
-        }
-
-        return Long.parseLong(farmaceuticos.lastKey());
     }
 }

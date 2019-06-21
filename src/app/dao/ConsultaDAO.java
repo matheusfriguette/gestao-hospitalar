@@ -1,5 +1,8 @@
 package app.dao;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -7,7 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.TreeMap;
+import java.util.HashMap;
 
 import app.models.Consulta;
 
@@ -16,7 +19,7 @@ import app.models.Consulta;
  */
 public class ConsultaDAO {
     private File consultaFile;
-    private TreeMap<String, Consulta> consultas;
+    private HashMap<String, Consulta> consultas;
 
     public ConsultaDAO() {
         this.consultaFile = new File("consultas.dat");
@@ -28,15 +31,15 @@ public class ConsultaDAO {
         return this.consultas.get(id);
     }
 
-    public TreeMap<String, Consulta> getConsultas() throws FileNotFoundException, IOException, ClassNotFoundException {
+    public HashMap<String, Consulta> getConsultas() throws FileNotFoundException, IOException, ClassNotFoundException {
         ObjectInputStream input = null;
 
         if (this.consultaFile.length() > 0) {
             input = new ObjectInputStream(new FileInputStream(this.consultaFile));
-            this.consultas = (TreeMap<String, Consulta>) input.readObject();
+            this.consultas = (HashMap<String, Consulta>) input.readObject();
             input.close();
         } else {
-            this.consultas = new TreeMap<String, Consulta>();
+            this.consultas = new HashMap<String, Consulta>();
         }
 
         return this.consultas;
@@ -74,14 +77,5 @@ public class ConsultaDAO {
         output.writeObject(this.consultas);
         output.flush();
         output.close();
-    }
-
-    public long getLastKey() throws FileNotFoundException, ClassNotFoundException, IOException {
-        this.consultas = getConsultas();
-        if (this.consultas.size() == 0) {
-            return 0;
-        }
-
-        return Long.parseLong(consultas.lastKey());
     }
 }

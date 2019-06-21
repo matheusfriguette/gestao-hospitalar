@@ -2,7 +2,7 @@ package app.controllers;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.TreeMap;
+import java.util.HashMap;
 
 import app.dao.FarmaceuticoDAO;
 import app.dao.GerenteDAO;
@@ -29,7 +29,7 @@ public class LoginController {
 
     public Gerente logarGerente(String login, String senha) {
         GerenteDAO gerenteDAO = new GerenteDAO();
-        TreeMap<String, Gerente> gerentes = new TreeMap<String, Gerente>();
+        HashMap<String, Gerente> gerentes = new HashMap<String, Gerente>();
 
         try {
             gerentes = gerenteDAO.getGerentes();
@@ -53,7 +53,7 @@ public class LoginController {
 
     public Secretario logarSecretario(String login, String senha) {
         SecretarioDAO secretarioDAO = new SecretarioDAO();
-        TreeMap<String, Secretario> secretarios = new TreeMap<String, Secretario>();
+        HashMap<String, Secretario> secretarios = new HashMap<String, Secretario>();
 
         try {
             secretarios = secretarioDAO.getSecretarios();
@@ -77,7 +77,7 @@ public class LoginController {
 
     public Medico logarMedico(String login, String senha) {
         MedicoDAO medicoDAO = new MedicoDAO();
-        TreeMap<String, Medico> medicos = new TreeMap<String, Medico>();
+        HashMap<String, Medico> medicos = new HashMap<String, Medico>();
 
         try {
             medicos = medicoDAO.getMedicos();
@@ -101,7 +101,7 @@ public class LoginController {
 
     public Farmaceutico logarFarmaceutico(String login, String senha) {
         FarmaceuticoDAO farmaceuticoDAO = new FarmaceuticoDAO();
-        TreeMap<String, Farmaceutico> farmaceuticos = new TreeMap<String, Farmaceutico>();
+        HashMap<String, Farmaceutico> farmaceuticos = new HashMap<String, Farmaceutico>();
 
         try {
             farmaceuticos = farmaceuticoDAO.getFarmaceuticos();

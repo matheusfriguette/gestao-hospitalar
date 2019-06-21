@@ -7,7 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.TreeMap;
+import java.util.HashMap;
 
 import app.models.Exame;
 
@@ -16,7 +16,7 @@ import app.models.Exame;
  */
 public class ExameDAO {
     private File exameFile;
-    private TreeMap<String, Exame> exames;
+    private HashMap<String, Exame> exames;
 
     public ExameDAO() {
         this.exameFile = new File("exames.dat");
@@ -28,15 +28,15 @@ public class ExameDAO {
         return this.exames.get(id);
     }
 
-    public TreeMap<String, Exame> getExames() throws FileNotFoundException, IOException, ClassNotFoundException {
+    public HashMap<String, Exame> getExames() throws FileNotFoundException, IOException, ClassNotFoundException {
         ObjectInputStream input = null;
 
         if (this.exameFile.length() > 0) {
             input = new ObjectInputStream(new FileInputStream(this.exameFile));
-            this.exames = (TreeMap<String, Exame>) input.readObject();
+            this.exames = (HashMap<String, Exame>) input.readObject();
             input.close();
         } else {
-            this.exames = new TreeMap<String, Exame>();
+            this.exames = new HashMap<String, Exame>();
         }
 
         return this.exames;
@@ -74,14 +74,5 @@ public class ExameDAO {
         output.writeObject(this.exames);
         output.flush();
         output.close();
-    }
-
-    public long getLastKey() throws FileNotFoundException, ClassNotFoundException, IOException {
-        this.exames = getExames();
-        if (this.exames.size() == 0) {
-            return 0;
-        }
-
-        return Long.parseLong(exames.lastKey());
     }
 }

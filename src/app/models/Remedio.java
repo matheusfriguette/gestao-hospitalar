@@ -1,17 +1,13 @@
 package app.models;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.Serializable;
-
-import app.dao.RemedioDAO;
+import java.util.UUID;
 
 /*
  * Remedio
  */
 public class Remedio implements Serializable {
     private static final long serialVersionUID = 1L;
-    private static long serialUID;
     private String id;
     private String nome;
     private String observacoes;
@@ -22,7 +18,7 @@ public class Remedio implements Serializable {
      * Construtores
      */
     public Remedio() {
-        setId(Long.toString(++serialUID));
+        setId(UUID.randomUUID().toString());
         setNome(null);
         setObservacoes(null);
         setQuantidadeDisponivel(null);
@@ -30,24 +26,11 @@ public class Remedio implements Serializable {
     }
 
     public Remedio(String nome, String observacoes, Integer quantidadeDisponivel, Double preco) {
-        setId(Long.toString(++serialUID));
+        setId(UUID.randomUUID().toString());
         setNome(nome);
         setObservacoes(observacoes);
         setQuantidadeDisponivel(quantidadeDisponivel);
         setPreco(preco);
-    }
-
-    static {
-        RemedioDAO exame = new RemedioDAO();
-        try {
-            serialUID = exame.getLastKey();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     /*

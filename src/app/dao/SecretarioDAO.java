@@ -7,7 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.TreeMap;
+import java.util.HashMap;
 
 import app.models.Secretario;
 
@@ -16,7 +16,7 @@ import app.models.Secretario;
  */
 public class SecretarioDAO {
     private File secretarioFile;
-    private TreeMap<String, Secretario> secretarios;
+    private HashMap<String, Secretario> secretarios;
 
     public SecretarioDAO() {
         this.secretarioFile = new File("secretarios.dat");
@@ -28,15 +28,15 @@ public class SecretarioDAO {
         return this.secretarios.get(id);
     }
 
-    public TreeMap<String, Secretario> getSecretarios() throws FileNotFoundException, IOException, ClassNotFoundException {
+    public HashMap<String, Secretario> getSecretarios() throws FileNotFoundException, IOException, ClassNotFoundException {
         ObjectInputStream input = null;
 
         if (this.secretarioFile.length() > 0) {
             input = new ObjectInputStream(new FileInputStream(this.secretarioFile));
-            this.secretarios = (TreeMap<String, Secretario>) input.readObject();
+            this.secretarios = (HashMap<String, Secretario>) input.readObject();
             input.close();
         } else {
-            this.secretarios = new TreeMap<String, Secretario>();
+            this.secretarios = new HashMap<String, Secretario>();
         }
 
         return this.secretarios;
@@ -74,14 +74,5 @@ public class SecretarioDAO {
         output.writeObject(this.secretarios);
         output.flush();
         output.close();
-    }
-
-    public long getLastKey() throws FileNotFoundException, ClassNotFoundException, IOException {
-        this.secretarios = getSecretarios();
-        if (this.secretarios.size() == 0) {
-            return 0;
-        }
-
-        return Long.parseLong(secretarios.lastKey());
     }
 }

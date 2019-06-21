@@ -21,7 +21,7 @@ public class Diagnostico {
         setRemedios(null);
     }
 
-    public Diagnostico(String sintomas, String sintomas, ArrayList<Exame> exames, ArrayList<Remedio> remedios) {
+    public Diagnostico(String sintomas, String observacoes, ArrayList<Exame> exames, ArrayList<Remedio> remedios) {
         setSintomas(sintomas);
         setObservacoes(observacoes);
         setExames(exames);

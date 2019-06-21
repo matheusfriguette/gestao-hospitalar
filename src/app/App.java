@@ -1,7 +1,6 @@
 package app;
 
 import java.util.HashMap;
-import java.util.TreeMap;
 
 import javax.swing.JFrame;
 
@@ -16,7 +15,7 @@ public class App {
         GerenteDAO gerenteDAO = new GerenteDAO();
         gerenteDAO.addGerente(gerente);
         gerenteDAO.addGerente(gerente2);
-        TreeMap<String, Gerente> gerentes = gerenteDAO.getGerentes();
+        HashMap<String, Gerente> gerentes = gerenteDAO.getGerentes();
         // LoginView login = new LoginView();
         // login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // login.setSize(380, 200);
