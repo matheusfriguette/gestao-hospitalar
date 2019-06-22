@@ -19,6 +19,9 @@ import app.models.Secretario;
 public class LoginController {
     public static String loggedUser;
 
+    public LoginController() {
+    }
+
     public static void setLoggedUser(String loggedUser) {
         LoginController.loggedUser = loggedUser;
     }

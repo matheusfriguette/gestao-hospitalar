@@ -1,200 +1,127 @@
 package app.views;
 
+import javax.swing.JOptionPane;
+
 import app.controllers.LoginController;
 import app.models.Gerente;
-import app.models.Medico;
-import app.models.Secretario;
 
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JButton;
-import javax.swing.JTextField;
-import javax.swing.JComboBox;
-import javax.swing.JRadioButton;
-import javax.swing.JOptionPane;
-import java.io.IOException;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+public class LoginView extends javax.swing.JFrame {
+    private javax.swing.JButton jButton1;
+    private javax.swing.JComboBox jComboBox1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPasswordField jPasswordField1;
+    private javax.swing.JTextField jTextField2;
 
-/*
- * LoginView
- */
-public class LoginView extends JFrame {
-    private LoginController loginController;
-
-    private JPanel panelLogin;
-    private JLabel lblDigite;
-    private JLabel lblLogin;
-    private JLabel lblSenha;
-    private JLabel lblTipoFuncionarios;
-    private JPasswordField pswSenha;
-    private JButton btnLogin;
-    private JTextField txtLogin;
-    private JComboBox cmbTipoFuncionarios;
-    private String tipoFuncionarios[] = { "Secretário(a)", "Médico(a)", "Gerente" };
-
-    /*
-     * Construtores
-     */
-    public LoginView() throws IOException {
-        super("Login");
-        InicializarTela();
-        loginController = new LoginController();
+    public LoginView() {
+        initComponents();
     }
 
-    private void InicializarTela() {
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setBackground(new java.awt.Color(0, 255, 255));
-        setResizable(false);
+    @SuppressWarnings("unchecked")
+    private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
-        panelLogin = new JPanel();
-        panelLogin.setBackground(new java.awt.Color(255, 255, 255));
-        panelLogin.setRequestFocusEnabled(false);
-        panelLogin.setVerifyInputWhenFocusTarget(false);
+        jPanel2 = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        jTextField2 = new javax.swing.JTextField();
+        jLabel10 = new javax.swing.JLabel();
+        jPasswordField1 = new javax.swing.JPasswordField();
+        jComboBox1 = new javax.swing.JComboBox();
+        jLabel7 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
-        lblDigite = new JLabel("Digite seus dados de Login");
-        lblDigite.setHorizontalAlignment(0);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Sistema hospitalar");
+        getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        lblLogin = new JLabel("Login:");
-        lblLogin.setHorizontalAlignment(4);
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Digite seus dados de login"));
 
-        txtLogin = new JTextField(20);
+        jLabel6.setText("Login:");
 
-        lblSenha = new JLabel("Senha:");
-        lblSenha.setHorizontalAlignment(4);
+        jLabel10.setText("Senha:");
 
-        pswSenha = new JPasswordField(20);
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(
+                new String[] { "Selecione", "Secretário(a)", "Médico(a)", "Gerente" }));
 
-        lblTipoFuncionarios = new JLabel("Cargo:");
+        jLabel7.setText("Cargo:");
 
-        tratadorBotoes tratador = new tratadorBotoes();
+        jButton1.setText("Logar");
+        jButton1.setToolTipText("");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
-        btnLogin = new JButton("Logar");
-        btnLogin.addActionListener(tratador);
-
-        cmbTipoFuncionarios = new JComboBox(tipoFuncionarios);
-        cmbTipoFuncionarios.setBackground(new java.awt.Color(255, 255, 255));
-
-        javax.swing.GroupLayout panelLoginLayout = new javax.swing.GroupLayout(panelLogin);
-        panelLogin.setLayout(panelLoginLayout);
-        panelLoginLayout.setHorizontalGroup(panelLoginLayout
-                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLoginLayout.createSequentialGroup()
-                        .addContainerGap(37, Short.MAX_VALUE)
-                        .addGroup(panelLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(btnLogin)
-                                .addGroup(panelLoginLayout.createSequentialGroup().addGroup(
-                                        panelLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                .addComponent(lblLogin, -2, 72, -2).addComponent(lblSenha)
-                                                .addComponent(lblTipoFuncionarios))
-                                        .addGap(18, 18, 18)
-                                        .addGroup(panelLoginLayout
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jButton1))
+                                .addGroup(jPanel2Layout.createSequentialGroup().addContainerGap()
+                                        .addGroup(jPanel2Layout
+                                                .createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                .addComponent(jLabel6).addComponent(jLabel10).addComponent(jLabel7))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(jPanel2Layout
                                                 .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                .addComponent(lblDigite)
-                                                .addComponent(pswSenha, -1, 171, Short.MAX_VALUE).addComponent(txtLogin)
-                                                .addGroup(panelLoginLayout
-                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING,
-                                                                false)
-                                                        .addComponent(cmbTipoFuncionarios)))))
-                        .addGap(64, 64, 64)));
-
-        panelLoginLayout.setVerticalGroup(panelLoginLayout
-                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLoginLayout.createSequentialGroup()
-                        .addContainerGap(48, Short.MAX_VALUE).addComponent(lblDigite)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(panelLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(lblLogin).addComponent(txtLogin, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(panelLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(pswSenha, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                        Short.MAX_VALUE)
+                                                .addComponent(jTextField2).addComponent(jPasswordField1,
+                                                        javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE))))
+                        .addContainerGap()));
+        jPanel2Layout.setVerticalGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup().addContainerGap()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE,
                                         javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(lblSenha))
-                        .addGap(10, 10, 10)
-                        .addGroup(panelLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                                .addComponent(lblTipoFuncionarios).addComponent(cmbTipoFuncionarios).addGap(30, 30, 30))
-                        .addComponent(btnLogin).addGap(18, 18, 18)));
+                                .addComponent(jLabel6))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel10)
+                                .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel7).addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18).addComponent(jButton1)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 362, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(
-                                panelLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                Short.MAX_VALUE)));
-        layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 172, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(
-                                panelLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                Short.MAX_VALUE)));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 10);
+        getContentPane().add(jPanel2, gridBagConstraints);
 
         pack();
-        setLocationRelativeTo(null);
     }
 
-
-    private void logarGerente() {
-        String login = txtLogin.getText();
-        char aux[] = pswSenha.getPassword();
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
+        LoginController loginController = new LoginController();
+        String login = jTextField2.getText();
+        char aux[] = jPasswordField1.getPassword();
         String senha = new String(aux);
 
-        Gerente gerente = this.loginController.logarGerente(login, senha);
+        if (jComboBox1.getSelectedItem().toString() == "Secretário(a)") {
+            // logarSecretario();
+        } else if (jComboBox1.getSelectedItem().toString() == "Médico(a)") {
+            // logarMedico();
+        } else if (jComboBox1.getSelectedItem().toString() == "Gerente") {
+            Gerente gerente = loginController.logarGerente(login, senha);
 
-        if (gerente != null) {
-            // logou
-        } else {
-            JOptionPane.showMessageDialog(null, "O login ou senha informados estão incorretos", "Erro!",
-                    JOptionPane.WARNING_MESSAGE);
+            if (gerente != null) {
+                this.setVisible(false);
+                new GerenteMasterView().setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(null, "O login ou senha informados estão incorretos", "Erro!",
+                        JOptionPane.WARNING_MESSAGE);
+            }
         }
     }
-
-    private void logarSecretario() {
-        String login = txtLogin.getText();
-        char aux[] = pswSenha.getPassword();
-        String senha = new String(aux);
-
-        Secretario secretario = this.loginController.logarSecretario(login, senha);
-
-        if (secretario != null) {
-            // logou
-        } else {
-            JOptionPane.showMessageDialog(null, "O login ou senha informados estão incorretos", "Erro!",
-                    JOptionPane.WARNING_MESSAGE);
-        }
-    }
-
-    private void logarMedico() {
-        String login = txtLogin.getText();
-        char aux[] = pswSenha.getPassword();
-        String senha = new String(aux);
-
-        // Medico medico = this.loginController.logarMedico(login, senha);
-
-        // if (medico != null) {
-        //     // logou
-        // } else {   
-        //     JOptionPane.showMessageDialog(null, "O login ou senha informados estão incorretos", "Erro!",
-        //             JOptionPane.WARNING_MESSAGE);
-        // }
-    }
-
-    private class tratadorBotoes implements ActionListener{
-        public void actionPerformed(ActionEvent e){
-             if(e.getSource() == btnLogin){
-                if (cmbTipoFuncionarios.getSelectedItem().toString() == tipoFuncionarios[0]) {
-                    logarSecretario();
-                }
-                else if(cmbTipoFuncionarios.getSelectedItem().toString() == tipoFuncionarios[1]){
-                    logarMedico();    
-                }
-                else if(cmbTipoFuncionarios.getSelectedItem().toString() == tipoFuncionarios[2]){
-                    logarGerente();
-                }
-             }
-        } 
-    }
-
 }

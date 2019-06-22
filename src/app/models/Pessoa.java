@@ -1,11 +1,13 @@
 package app.models;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /*
  * Pessoa
  */
-public abstract class Pessoa {
+public abstract class Pessoa implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String cpf;
     private String rg;
     private String nome;

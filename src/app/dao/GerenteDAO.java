@@ -32,7 +32,7 @@ public class GerenteDAO {
         ObjectInputStream input = null;
 
         if (this.gerenteFile.length() > 0) {
-            input = new ObjectInputStream(new FileInputStream(this.gerenteFile));
+            input = new ObjectInputStream(new FileInputStream("gerentes.dat"));
             this.gerentes = (HashMap<String, Gerente>) input.readObject();
             input.close();
         } else {
@@ -47,9 +47,8 @@ public class GerenteDAO {
         this.gerentes = getGerentes();
         this.gerentes.put(novoGerente.getId(), novoGerente);
 
-        output = new ObjectOutputStream(new FileOutputStream(this.gerenteFile));
+        output = new ObjectOutputStream(new FileOutputStream("gerentes.dat"));
         output.writeObject(this.gerentes);
-        output.flush();
         output.close();
     }
 
@@ -59,9 +58,8 @@ public class GerenteDAO {
         this.gerentes = getGerentes();
         this.gerentes.put(id, novoGerente);
 
-        output = new ObjectOutputStream(new FileOutputStream(this.gerenteFile));
+        output = new ObjectOutputStream(new FileOutputStream("gerentes.dat"));
         output.writeObject(this.gerentes);
-        output.flush();
         output.close();
     }
 
@@ -70,9 +68,8 @@ public class GerenteDAO {
         this.gerentes = getGerentes();
         this.gerentes.remove(id);
 
-        output = new ObjectOutputStream(new FileOutputStream(this.gerenteFile));
+        output = new ObjectOutputStream(new FileOutputStream("gerentes.dat"));
         output.writeObject(this.gerentes);
-        output.flush();
         output.close();
     }
 }

@@ -1,11 +1,13 @@
 package app.models;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /*
  * Funcionario
  */
-public abstract class Funcionario extends Pessoa {
+public abstract class Funcionario extends Pessoa implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String login;
     private String senha;
     private String nctps;
