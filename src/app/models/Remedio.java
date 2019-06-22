@@ -11,8 +11,8 @@ public class Remedio implements Serializable {
     private String id;
     private String nome;
     private String observacoes;
-    private Integer quantidadeDisponivel;
-    private Double preco;
+    private int quantidadeDisponivel;
+    private double preco;
 
     /*
      * Construtores
@@ -21,11 +21,11 @@ public class Remedio implements Serializable {
         setId(UUID.randomUUID().toString());
         setNome(null);
         setObservacoes(null);
-        setQuantidadeDisponivel(null);
-        setPreco(null);
+        setQuantidadeDisponivel(0);
+        setPreco(0);
     }
 
-    public Remedio(String nome, String observacoes, Integer quantidadeDisponivel, Double preco) {
+    public Remedio(String nome, String observacoes, int quantidadeDisponivel, double preco) {
         setId(UUID.randomUUID().toString());
         setNome(nome);
         setObservacoes(observacoes);
@@ -60,19 +60,19 @@ public class Remedio implements Serializable {
         this.observacoes = observacoes;
     }
 
-    public Integer getQuantidadeDisponivel() {
+    public int getQuantidadeDisponivel() {
         return quantidadeDisponivel;
     }
 
-    public void setQuantidadeDisponivel(Integer quantidadeDisponivel) {
+    public void setQuantidadeDisponivel(int quantidadeDisponivel) {
         this.quantidadeDisponivel = quantidadeDisponivel;
     }
 
-    public Double getPreco() {
+    public double getPreco() {
         return preco;
     }
 
-    public void setPreco(Double preco) {
+    public void setPreco(double preco) {
         this.preco = preco;
     }
 }
