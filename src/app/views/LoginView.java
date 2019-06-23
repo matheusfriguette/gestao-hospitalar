@@ -6,6 +6,7 @@ import app.controllers.LoginController;
 import app.models.Gerente;
 import app.models.Medico;
 import app.models.Secretario;
+import app.models.Farmaceutico;
 
 public class LoginView extends javax.swing.JFrame {
 
@@ -37,7 +38,7 @@ public class LoginView extends javax.swing.JFrame {
         jLabel10.setText("Senha:");
 
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(
-                new String[] { "Selecione", "Secretário(a)", "Médico(a)", "Gerente" }));
+                new String[] { "Selecione", "Farmacêutico(a)", "Gerente", "Médico(a)", "Secretário(a)" }));
 
         jLabel7.setText("Cargo:");
 
@@ -131,6 +132,16 @@ public class LoginView extends javax.swing.JFrame {
             if (gerente != null) {
                 this.setVisible(false);
                 new GerenteMasterView().setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(null, "O login ou senha informados estão incorretos", "Erro!",
+                        JOptionPane.WARNING_MESSAGE);
+            }
+        } else if (jComboBox1.getSelectedItem().toString() == "Farmacêutico(a)"){
+            Farmaceutico farmaceutico = loginController.logarFarmaceutico(login, senha);
+
+            if (farmaceutico != null) {
+                this.setVisible(false);
+                new FarmaceuticoMasterView().setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(null, "O login ou senha informados estão incorretos", "Erro!",
                         JOptionPane.WARNING_MESSAGE);

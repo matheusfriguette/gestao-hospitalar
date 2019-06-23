@@ -1,16 +1,18 @@
 package app.models;
 
+import java.io.Serializable;
+
 /*
  * Endereco
  */
-public class Endereco {
+public class Endereco implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String cep;
     private String estado;
     private String cidade;
     private String bairro;
     private String rua;
     private String numero;
-    private String complemento;
 
     /*
      * Construtores
