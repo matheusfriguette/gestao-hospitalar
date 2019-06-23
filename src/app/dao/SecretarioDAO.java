@@ -19,7 +19,7 @@ public class SecretarioDAO {
     private HashMap<String, Secretario> secretarios;
 
     public SecretarioDAO() {
-        this.secretarioFile = new File("secretarios.dat");
+        this.secretarioFile = new File("data/secretarios.dat");
     }
 
     public Secretario getSecretario(String id) throws FileNotFoundException, ClassNotFoundException, IOException {
@@ -28,7 +28,8 @@ public class SecretarioDAO {
         return this.secretarios.get(id);
     }
 
-    public HashMap<String, Secretario> getSecretarios() throws FileNotFoundException, IOException, ClassNotFoundException {
+    public HashMap<String, Secretario> getSecretarios()
+            throws FileNotFoundException, IOException, ClassNotFoundException {
         ObjectInputStream input = null;
 
         if (this.secretarioFile.length() > 0) {
@@ -42,7 +43,8 @@ public class SecretarioDAO {
         return this.secretarios;
     }
 
-    public void addSecretario(Secretario novoSecretario) throws FileNotFoundException, IOException, ClassNotFoundException {
+    public void addSecretario(Secretario novoSecretario)
+            throws FileNotFoundException, IOException, ClassNotFoundException {
         ObjectOutputStream output = null;
         this.secretarios = getSecretarios();
         this.secretarios.put(novoSecretario.getId(), novoSecretario);

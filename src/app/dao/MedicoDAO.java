@@ -19,7 +19,7 @@ public class MedicoDAO {
     private HashMap<String, Medico> medicos;
 
     public MedicoDAO() {
-        this.medicoFile = new File("medicos.dat");
+        this.medicoFile = new File("data/medicos.dat");
     }
 
     public Medico getMedico(String id) throws FileNotFoundException, ClassNotFoundException, IOException {

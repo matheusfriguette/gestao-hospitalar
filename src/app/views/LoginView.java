@@ -4,16 +4,10 @@ import javax.swing.JOptionPane;
 
 import app.controllers.LoginController;
 import app.models.Gerente;
+import app.models.Medico;
+import app.models.Secretario;
 
 public class LoginView extends javax.swing.JFrame {
-    private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox jComboBox1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JTextField jTextField2;
 
     public LoginView() {
         initComponents();
@@ -102,6 +96,9 @@ public class LoginView extends javax.swing.JFrame {
         pack();
     }
 
+    /*
+     * Botão logar
+     */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
         LoginController loginController = new LoginController();
         String login = jTextField2.getText();
@@ -109,9 +106,25 @@ public class LoginView extends javax.swing.JFrame {
         String senha = new String(aux);
 
         if (jComboBox1.getSelectedItem().toString() == "Secretário(a)") {
-            // logarSecretario();
+            Medico medico = loginController.logarMedico(login, senha);
+
+            if (medico != null) {
+                this.setVisible(false);
+                // new MedicoMasterView().setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(null, "O login ou senha informados estão incorretos", "Erro!",
+                        JOptionPane.WARNING_MESSAGE);
+            }
         } else if (jComboBox1.getSelectedItem().toString() == "Médico(a)") {
-            // logarMedico();
+            Secretario secretario = loginController.logarSecretario(login, senha);
+
+            if (secretario != null) {
+                this.setVisible(false);
+                // new SecretarioMasterView().setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(null, "O login ou senha informados estão incorretos", "Erro!",
+                        JOptionPane.WARNING_MESSAGE);
+            }
         } else if (jComboBox1.getSelectedItem().toString() == "Gerente") {
             Gerente gerente = loginController.logarGerente(login, senha);
 
@@ -124,4 +137,13 @@ public class LoginView extends javax.swing.JFrame {
             }
         }
     }
+
+    private javax.swing.JButton jButton1;
+    private javax.swing.JComboBox jComboBox1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPasswordField jPasswordField1;
+    private javax.swing.JTextField jTextField2;
 }

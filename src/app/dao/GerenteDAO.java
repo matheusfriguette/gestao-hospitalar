@@ -19,7 +19,7 @@ public class GerenteDAO {
     private HashMap<String, Gerente> gerentes;
 
     public GerenteDAO() {
-        this.gerenteFile = new File("gerentes.dat");
+        this.gerenteFile = new File("data/gerentes.dat");
     }
 
     public Gerente getGerente(String id) throws FileNotFoundException, ClassNotFoundException, IOException {
@@ -32,7 +32,7 @@ public class GerenteDAO {
         ObjectInputStream input = null;
 
         if (this.gerenteFile.length() > 0) {
-            input = new ObjectInputStream(new FileInputStream("gerentes.dat"));
+            input = new ObjectInputStream(new FileInputStream(this.gerenteFile));
             this.gerentes = (HashMap<String, Gerente>) input.readObject();
             input.close();
         } else {
@@ -47,7 +47,7 @@ public class GerenteDAO {
         this.gerentes = getGerentes();
         this.gerentes.put(novoGerente.getId(), novoGerente);
 
-        output = new ObjectOutputStream(new FileOutputStream("gerentes.dat"));
+        output = new ObjectOutputStream(new FileOutputStream(this.gerenteFile));
         output.writeObject(this.gerentes);
         output.close();
     }
@@ -58,7 +58,7 @@ public class GerenteDAO {
         this.gerentes = getGerentes();
         this.gerentes.put(id, novoGerente);
 
-        output = new ObjectOutputStream(new FileOutputStream("gerentes.dat"));
+        output = new ObjectOutputStream(new FileOutputStream(this.gerenteFile));
         output.writeObject(this.gerentes);
         output.close();
     }
@@ -68,7 +68,7 @@ public class GerenteDAO {
         this.gerentes = getGerentes();
         this.gerentes.remove(id);
 
-        output = new ObjectOutputStream(new FileOutputStream("gerentes.dat"));
+        output = new ObjectOutputStream(new FileOutputStream(this.gerenteFile));
         output.writeObject(this.gerentes);
         output.close();
     }

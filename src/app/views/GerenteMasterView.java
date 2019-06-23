@@ -1,53 +1,86 @@
 package app.views;
 
-import app.controllers.LoginController;
-import app.dao.GerenteDAO;
+import java.util.HashMap;
+
+import javax.swing.JOptionPane;
+
+import app.controllers.GerenteController;
+import app.models.Farmaceutico;
 import app.models.Gerente;
+import app.models.Medico;
+import app.models.Secretario;
 
 public class GerenteMasterView extends javax.swing.JFrame {
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton10;
-    private javax.swing.JButton jButton11;
-    private javax.swing.JButton jButton12;
-    private javax.swing.JButton jButton13;
-    private javax.swing.JButton jButton14;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
-    private javax.swing.JButton jButton9;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel10;
-    private javax.swing.JPanel jPanel11;
-    private javax.swing.JPanel jPanel12;
-    private javax.swing.JPanel jPanel13;
-    private javax.swing.JPanel jPanel14;
-    private javax.swing.JPanel jPanel15;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JScrollBar jScrollBar1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable4;
-    private javax.swing.JTable jTable5;
-    private javax.swing.JTable jTable6;
+    private Gerente gerenteLogado;
+    private HashMap<String, Gerente> listaGerentes;
+    private HashMap<String, Secretario> listaSecretarios;
+    private HashMap<String, Medico> listaMedicos;
+    private HashMap<String, Farmaceutico> listaFarmaceuticos;
+    private Object[][] tabelaGerentes;
+    private Object[][] tabelaSecretarios;
+    private Object[][] tabelaMedicos;
+    private Object[][] tabelaFarmaceuticos;
 
     public GerenteMasterView() {
+        GerenteController gerenteController = new GerenteController();
+        this.gerenteLogado = gerenteController.getGerenteLogado();
+        this.listaGerentes = gerenteController.getGerentes();
+        this.listaSecretarios = gerenteController.getSecretarios();
+        this.listaMedicos = gerenteController.getMedicos();
+        this.listaFarmaceuticos = gerenteController.getFarmaceuticos();
+        this.loadTabelas();
+
         initComponents();
+    }
+
+    private void loadTabelas() {
+        this.tabelaGerentes = new Object[listaGerentes.keySet().size()][4];
+        int index = 0;
+        for (String id : listaGerentes.keySet()) {
+            Gerente gerente = listaGerentes.get(id);
+            tabelaGerentes[index][0] = gerente.getNome();
+            tabelaGerentes[index][1] = gerente.getNome();
+            tabelaGerentes[index][2] = gerente.getNome();
+            tabelaGerentes[index][3] = gerente.getNome();
+            index++;
+        }
+
+        this.tabelaSecretarios = new Object[listaSecretarios.keySet().size()][5];
+        index = 0;
+        for (String id : listaSecretarios.keySet()) {
+            Secretario secretario = listaSecretarios.get(id);
+            tabelaSecretarios[index][0] = secretario.getNome();
+            tabelaSecretarios[index][1] = secretario.getNome();
+            tabelaSecretarios[index][2] = secretario.getNome();
+            tabelaSecretarios[index][3] = secretario.getNome();
+            index++;
+        }
+
+        this.tabelaMedicos = new Object[listaMedicos.keySet().size()][5];
+        index = 0;
+        for (String id : listaMedicos.keySet()) {
+            Medico medico = listaMedicos.get(id);
+            tabelaMedicos[index][0] = medico.getNome();
+            tabelaMedicos[index][1] = medico.getNome();
+            tabelaMedicos[index][2] = medico.getNome();
+            tabelaMedicos[index][3] = medico.getNome();
+            index++;
+        }
+
+        this.tabelaFarmaceuticos = new Object[listaFarmaceuticos.keySet().size()][4];
+        index = 0;
+        for (String id : listaFarmaceuticos.keySet()) {
+            Farmaceutico farmaceutico = listaFarmaceuticos.get(id);
+            tabelaFarmaceuticos[index][0] = farmaceutico.getNome();
+            tabelaFarmaceuticos[index][1] = farmaceutico.getNome();
+            tabelaFarmaceuticos[index][2] = farmaceutico.getNome();
+            tabelaFarmaceuticos[index][3] = farmaceutico.getNome();
+            index++;
+        }
     }
 
     @SuppressWarnings("unchecked")
     private void initComponents() {
-        
         java.awt.GridBagConstraints gridBagConstraints;
 
         jCheckBox1 = new javax.swing.JCheckBox();
@@ -93,9 +126,14 @@ public class GerenteMasterView extends javax.swing.JFrame {
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel1.setText("Bem vindo," + loginController.getLoggedUser(). .loggedUser.getName());
+        jLabel1.setText("Bem vindo, " + this.gerenteLogado.getNome());
 
         jButton1.setText("Sair");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Alterar senha");
         jButton2.setToolTipText("");
@@ -133,10 +171,9 @@ public class GerenteMasterView extends javax.swing.JFrame {
         jPanel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(new Object[][] {
-
-        }, new String[] { "Nome", "Telefone", "Data de admissão", "NCTPS" }) {
-            Class[] types = new Class[] { java.lang.String.class, java.lang.String.class, java.lang.Object.class,
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(this.tabelaGerentes,
+                new String[] { "Nome", "Telefone", "Data de admissão", "NCTPS" }) {
+            Class[] types = new Class[] { java.lang.String.class, java.lang.String.class, java.lang.String.class,
                     java.lang.String.class };
 
             public Class getColumnClass(int columnIndex) {
@@ -215,9 +252,8 @@ public class GerenteMasterView extends javax.swing.JFrame {
         jPanel10.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
         jPanel10.setLayout(new java.awt.GridBagLayout());
 
-        jTable4.setModel(new javax.swing.table.DefaultTableModel(new Object[][] {
-
-        }, new String[] { "Nome", "Telefone", "Data de admissão", "NCTPS", "Horário" }) {
+        jTable4.setModel(new javax.swing.table.DefaultTableModel(this.tabelaSecretarios,
+                new String[] { "Nome", "Telefone", "Data de admissão", "NCTPS", "Horário" }) {
             Class[] types = new Class[] { java.lang.Object.class, java.lang.Object.class, java.lang.Object.class,
                     java.lang.Object.class, java.lang.String.class };
 
@@ -297,9 +333,8 @@ public class GerenteMasterView extends javax.swing.JFrame {
         jPanel12.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
         jPanel12.setLayout(new java.awt.GridBagLayout());
 
-        jTable5.setModel(new javax.swing.table.DefaultTableModel(new Object[][] {
-
-        }, new String[] { "Nome", "Telefone", "Data de admissão", "NCTPS", "Especialidade" }));
+        jTable5.setModel(new javax.swing.table.DefaultTableModel(this.tabelaMedicos,
+                new String[] { "Nome", "Telefone", "Data de admissão", "NCTPS", "Especialidade" }));
         jScrollPane5.setViewportView(jTable5);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -372,9 +407,8 @@ public class GerenteMasterView extends javax.swing.JFrame {
         jPanel14.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
         jPanel14.setLayout(new java.awt.GridBagLayout());
 
-        jTable6.setModel(new javax.swing.table.DefaultTableModel(new Object[][] {
-
-        }, new String[] { "Nome", "Telefone", "Data de admissão", "NCTPS" }));
+        jTable6.setModel(new javax.swing.table.DefaultTableModel(this.tabelaFarmaceuticos,
+                new String[] { "Nome", "Telefone", "Data de admissão", "NCTPS" }));
         jScrollPane6.setViewportView(jTable6);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -455,51 +489,142 @@ public class GerenteMasterView extends javax.swing.JFrame {
         pack();
     }
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton3ActionPerformed
-
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton5ActionPerformed
-
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton6ActionPerformed
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton4ActionPerformed
-
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton7ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton7ActionPerformed
-
-    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton8ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton8ActionPerformed
-
-    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton9ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton9ActionPerformed
-
-    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton10ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton10ActionPerformed
-
-    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton11ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton11ActionPerformed
-
-    private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton12ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton12ActionPerformed
-
-    private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton13ActionPerformed
-        // TODO add your handling code here:
-    }// GEN-LAST:event_jButton13ActionPerformed
-
-    private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton14ActionPerformed
-        // TODO add your handling code here:
+    /*
+     * Botão sair
+     */
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
+        this.dispose();
     }
+
+    /*
+     * Botão editar gerente
+     */
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
+        if (jTable1.getSelectionModel().isSelectionEmpty()) {
+            JOptionPane.showMessageDialog(null, "Selecione um gerente", "Erro!", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    /*
+     * Botão editar secretário
+     */
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {
+        if (jTable4.getSelectionModel().isSelectionEmpty()) {
+            JOptionPane.showMessageDialog(null, "Selecione um secretário", "Erro!", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    /*
+     * Botão novo gerente
+     */
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {
+    }
+
+    /*
+     * Botão deletar gerente
+     */
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {
+        if (jTable1.getSelectionModel().isSelectionEmpty()) {
+            JOptionPane.showMessageDialog(null, "Selecione um gerente", "Erro!", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    /*
+     * Botão novo secretário
+     */
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {
+    }
+
+    /*
+     * Botão deletar secretário
+     */
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {
+        if (jTable4.getSelectionModel().isSelectionEmpty()) {
+            JOptionPane.showMessageDialog(null, "Selecione um secretário", "Erro!", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    /*
+     * Botão editar médico
+     */
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {
+        if (jTable5.getSelectionModel().isSelectionEmpty()) {
+            JOptionPane.showMessageDialog(null, "Selecione um médico", "Erro!", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    /*
+     * Botão novo médico
+     */
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {
+    }
+
+    /*
+     * Botão deletar médico
+     */
+    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {
+        if (jTable5.getSelectionModel().isSelectionEmpty()) {
+            JOptionPane.showMessageDialog(null, "Selecione um médico", "Erro!", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    /*
+     * Botão editar farmacêutico
+     */
+    private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {
+        if (jTable6.getSelectionModel().isSelectionEmpty()) {
+            JOptionPane.showMessageDialog(null, "Selecione um farmacêutico", "Erro!", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    /*
+     * Botão novo farmacêutico
+     */
+    private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {
+    }
+
+    /*
+     * Botão deletar farmacêutico
+     */
+    private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {
+        if (jTable6.getSelectionModel().isSelectionEmpty()) {
+            JOptionPane.showMessageDialog(null, "Selecione um farmacêutico", "Erro!", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton10;
+    private javax.swing.JButton jButton11;
+    private javax.swing.JButton jButton12;
+    private javax.swing.JButton jButton13;
+    private javax.swing.JButton jButton14;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
+    private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel13;
+    private javax.swing.JPanel jPanel14;
+    private javax.swing.JPanel jPanel15;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JScrollBar jScrollBar1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable4;
+    private javax.swing.JTable jTable5;
+    private javax.swing.JTable jTable6;
 }

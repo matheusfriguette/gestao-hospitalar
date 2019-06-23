@@ -19,7 +19,7 @@ public class RemedioDAO {
     private HashMap<String, Remedio> remedios;
 
     public RemedioDAO() {
-        this.remedioFile = new File("remedios.dat");
+        this.remedioFile = new File("data/remedios.dat");
     }
 
     public Remedio getRemedio(String id) throws FileNotFoundException, ClassNotFoundException, IOException {

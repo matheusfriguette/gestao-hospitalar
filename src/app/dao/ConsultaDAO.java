@@ -1,8 +1,5 @@
 package app.dao;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -22,7 +19,7 @@ public class ConsultaDAO {
     private HashMap<String, Consulta> consultas;
 
     public ConsultaDAO() {
-        this.consultaFile = new File("consultas.dat");
+        this.consultaFile = new File("data/consultas.dat");
     }
 
     public Consulta getConsulta(String id) throws FileNotFoundException, ClassNotFoundException, IOException {

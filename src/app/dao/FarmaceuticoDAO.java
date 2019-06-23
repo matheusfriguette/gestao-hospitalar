@@ -19,7 +19,7 @@ public class FarmaceuticoDAO {
     private HashMap<String, Farmaceutico> farmaceuticos;
 
     public FarmaceuticoDAO() {
-        this.farmaceuticoFile = new File("farmaceuticos.dat");
+        this.farmaceuticoFile = new File("data/farmaceuticos.dat");
     }
 
     public Farmaceutico getFarmaceutico(String id) throws FileNotFoundException, ClassNotFoundException, IOException {
@@ -28,7 +28,8 @@ public class FarmaceuticoDAO {
         return this.farmaceuticos.get(id);
     }
 
-    public HashMap<String, Farmaceutico> getFarmaceuticos() throws FileNotFoundException, IOException, ClassNotFoundException {
+    public HashMap<String, Farmaceutico> getFarmaceuticos()
+            throws FileNotFoundException, IOException, ClassNotFoundException {
         ObjectInputStream input = null;
 
         if (this.farmaceuticoFile.length() > 0) {
@@ -42,7 +43,8 @@ public class FarmaceuticoDAO {
         return this.farmaceuticos;
     }
 
-    public void addFarmaceutico(Farmaceutico novoFarmaceutico) throws FileNotFoundException, IOException, ClassNotFoundException {
+    public void addFarmaceutico(Farmaceutico novoFarmaceutico)
+            throws FileNotFoundException, IOException, ClassNotFoundException {
         ObjectOutputStream output = null;
         this.farmaceuticos = getFarmaceuticos();
         this.farmaceuticos.put(novoFarmaceutico.getId(), novoFarmaceutico);

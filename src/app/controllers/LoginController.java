@@ -17,17 +17,50 @@ import app.models.Secretario;
  * LoginController
  */
 public class LoginController {
-    public static String loggedUser;
+    public static String usuarioLogado;
 
     public LoginController() {
     }
 
-    public static void setLoggedUser(String loggedUser) {
-        LoginController.loggedUser = loggedUser;
+    public static void setUsuarioLogado(String usuarioLogado) {
+        LoginController.usuarioLogado = usuarioLogado;
     }
 
-    public static String getLoggedUser() {
-        return loggedUser;
+    public static String getUsuarioLogado() {
+        return usuarioLogado;
+    }
+
+    public Secretario getSecretarioLogado() {
+        SecretarioDAO secretarioDAO = new SecretarioDAO();
+        try {
+            return secretarioDAO.getSecretario(usuarioLogado);
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public Medico getMedicoLogado() {
+        MedicoDAO medicoDAO = new MedicoDAO();
+        try {
+            return medicoDAO.getMedico(usuarioLogado);
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public Farmaceutico getFarmaceuticoLogado() {
+        FarmaceuticoDAO farmaceuticoDAO = new FarmaceuticoDAO();
+        try {
+            return farmaceuticoDAO.getFarmaceutico(usuarioLogado);
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     public Gerente logarGerente(String login, String senha) {
@@ -46,7 +79,7 @@ public class LoginController {
 
         for (Gerente gerente : gerentes.values()) {
             if (gerente.getLogin().equals(login) && gerente.getSenha().equals(senha)) {
-                setLoggedUser(gerente.getId());
+                setUsuarioLogado(gerente.getId());
                 return gerente;
             }
         }
@@ -70,7 +103,7 @@ public class LoginController {
 
         for (Secretario secretario : secretarios.values()) {
             if (secretario.getLogin().equals(login) && secretario.getSenha().equals(senha)) {
-                setLoggedUser(secretario.getId());
+                setUsuarioLogado(secretario.getId());
                 return secretario;
             }
         }
@@ -94,7 +127,7 @@ public class LoginController {
 
         for (Medico medico : medicos.values()) {
             if (medico.getLogin().equals(login) && medico.getSenha().equals(senha)) {
-                setLoggedUser(medico.getId());
+                setUsuarioLogado(medico.getId());
                 return medico;
             }
         }
@@ -118,7 +151,7 @@ public class LoginController {
 
         for (Farmaceutico farmaceutico : farmaceuticos.values()) {
             if (farmaceutico.getLogin().equals(login) && farmaceutico.getSenha().equals(senha)) {
-                setLoggedUser(farmaceutico.getId());
+                setUsuarioLogado(farmaceutico.getId());
                 return farmaceutico;
             }
         }

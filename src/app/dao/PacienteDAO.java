@@ -19,7 +19,7 @@ public class PacienteDAO {
     private HashMap<String, Paciente> pacientes;
 
     public PacienteDAO() {
-        this.pacienteFile = new File("pacientes.dat");
+        this.pacienteFile = new File("data/pacientes.dat");
     }
 
     public Paciente getPaciente(String id) throws FileNotFoundException, ClassNotFoundException, IOException {
