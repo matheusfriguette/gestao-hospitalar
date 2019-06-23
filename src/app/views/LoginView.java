@@ -9,12 +9,12 @@ import app.models.Secretario;
 import app.models.Farmaceutico;
 
 public class LoginView extends javax.swing.JFrame {
+    private static final long serialVersionUID = 1L;
 
     public LoginView() {
         initComponents();
     }
 
-    @SuppressWarnings("unchecked")
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
@@ -23,7 +23,7 @@ public class LoginView extends javax.swing.JFrame {
         jTextField2 = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         jPasswordField1 = new javax.swing.JPasswordField();
-        jComboBox1 = new javax.swing.JComboBox();
+        jComboBox1 = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
 
@@ -37,7 +37,7 @@ public class LoginView extends javax.swing.JFrame {
 
         jLabel10.setText("Senha:");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(
                 new String[] { "Selecione", "Farmacêutico(a)", "Gerente", "Médico(a)", "Secretário(a)" }));
 
         jLabel7.setText("Cargo:");
@@ -102,15 +102,15 @@ public class LoginView extends javax.swing.JFrame {
      */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
         LoginController loginController = new LoginController();
-        String login = jTextField2.getText();
         char aux[] = jPasswordField1.getPassword();
+        String login = jTextField2.getText();
         String senha = new String(aux);
 
         if (jComboBox1.getSelectedItem().toString() == "Secretário(a)") {
             Medico medico = loginController.logarMedico(login, senha);
 
             if (medico != null) {
-                this.setVisible(false);
+                this.dispose();
                 // new MedicoMasterView().setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(null, "O login ou senha informados estão incorretos", "Erro!",
@@ -120,7 +120,7 @@ public class LoginView extends javax.swing.JFrame {
             Secretario secretario = loginController.logarSecretario(login, senha);
 
             if (secretario != null) {
-                this.setVisible(false);
+                this.dispose();
                 // new SecretarioMasterView().setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(null, "O login ou senha informados estão incorretos", "Erro!",
@@ -130,18 +130,24 @@ public class LoginView extends javax.swing.JFrame {
             Gerente gerente = loginController.logarGerente(login, senha);
 
             if (gerente != null) {
-                this.setVisible(false);
-                new GerenteMasterView().setVisible(true);
+                GerenteMasterView gerenteMasterView = new GerenteMasterView();
+                gerenteMasterView.pack();
+                gerenteMasterView.setLocationRelativeTo(null);
+                gerenteMasterView.setVisible(true);
+                this.dispose();
             } else {
                 JOptionPane.showMessageDialog(null, "O login ou senha informados estão incorretos", "Erro!",
                         JOptionPane.WARNING_MESSAGE);
             }
-        } else if (jComboBox1.getSelectedItem().toString() == "Farmacêutico(a)"){
+        } else if (jComboBox1.getSelectedItem().toString() == "Farmacêutico(a)") {
             Farmaceutico farmaceutico = loginController.logarFarmaceutico(login, senha);
 
             if (farmaceutico != null) {
-                this.setVisible(false);
-                new FarmaceuticoMasterView().setVisible(true);
+                FarmaceuticoMasterView farmaceuticoMasterView = new FarmaceuticoMasterView();
+                farmaceuticoMasterView.pack();
+                farmaceuticoMasterView.setLocationRelativeTo(null);
+                farmaceuticoMasterView.setVisible(true);
+                this.dispose();
             } else {
                 JOptionPane.showMessageDialog(null, "O login ou senha informados estão incorretos", "Erro!",
                         JOptionPane.WARNING_MESSAGE);
@@ -150,7 +156,7 @@ public class LoginView extends javax.swing.JFrame {
     }
 
     private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox jComboBox1;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;

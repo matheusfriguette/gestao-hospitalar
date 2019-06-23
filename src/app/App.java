@@ -6,6 +6,9 @@ import app.views.LoginView;
 
 public class App {
     public static void main(String[] args) throws Exception {
-        new LoginView().setVisible(true);
+        LoginView loginView = new LoginView();
+        loginView.pack();
+        loginView.setLocationRelativeTo(null);
+        loginView.setVisible(true);
     }
 }

@@ -5,49 +5,58 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import javax.swing.JOptionPane;
 
-import app.dao.GerenteDAO;
+import app.dao.SecretarioDAO;
 import app.models.Endereco;
-import app.models.Gerente;
+import app.models.Secretario;
 
-public class InserirGerenteView extends javax.swing.JFrame {
+public class InserirSecretarioView extends javax.swing.JFrame {
     private static final long serialVersionUID = 1L;
-    private GerenteDAO gerenteDAO;
-    private String gerenteId;
+    private SecretarioDAO secretarioDAO;
+    private String secretarioId;
 
-    public InserirGerenteView() {
-        gerenteDAO = new GerenteDAO();
+    public InserirSecretarioView() {
+        secretarioDAO = new SecretarioDAO();
         initComponents();
     }
 
-    public InserirGerenteView(Gerente gerente) {
-        gerenteDAO = new GerenteDAO();
+    public InserirSecretarioView(Secretario secretario) {
+        secretarioDAO = new SecretarioDAO();
         initComponents();
-        this.gerenteId = gerente.getId();
-        LocalDate dataNascimento = gerente.getDataNascimento().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        LocalDate dataAdmissao = gerente.getDataAdmissao().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        jTextField3.setText(gerente.getCPF());
-        jTextField4.setText(gerente.getRG());
-        jTextField1.setText(gerente.getNome());
-        jTextField2.setText(gerente.getTelefone());
+        this.secretarioId = secretario.getId();
+        LocalDate dataNascimento = secretario.getDataNascimento().toInstant().atZone(ZoneId.systemDefault())
+                .toLocalDate();
+        LocalDate dataAdmissao = secretario.getDataAdmissao().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        Calendar horarioEntrada = GregorianCalendar.getInstance();
+        horarioEntrada.setTime(secretario.getHorarioEntrada());
+        Calendar horarioSaida = GregorianCalendar.getInstance();
+        horarioSaida.setTime(secretario.getHorarioSaida());
+        jTextField3.setText(secretario.getCPF());
+        jTextField4.setText(secretario.getRG());
+        jTextField1.setText(secretario.getNome());
+        jTextField2.setText(secretario.getTelefone());
         jTextField7.setText(Integer.toString(dataNascimento.getYear()));
         jComboBox1.setSelectedIndex(dataNascimento.getMonthValue());
         jComboBox2.setSelectedIndex(dataNascimento.getDayOfMonth());
-        jTextField8.setText(gerente.getEndereco().getCEP());
-        jTextField9.setText(gerente.getEndereco().getEstado());
-        jTextField10.setText(gerente.getEndereco().getCidade());
-        jTextField11.setText(gerente.getEndereco().getBairro());
-        jTextField12.setText(gerente.getEndereco().getRua());
-        jTextField13.setText(gerente.getEndereco().getNumero());
-        jTextField5.setText(gerente.getLogin());
-        jPasswordField1.setText(gerente.getLogin());
-        jTextField6.setText(gerente.getNCTPS());
+        jTextField8.setText(secretario.getEndereco().getCEP());
+        jTextField9.setText(secretario.getEndereco().getEstado());
+        jTextField10.setText(secretario.getEndereco().getCidade());
+        jTextField11.setText(secretario.getEndereco().getBairro());
+        jTextField12.setText(secretario.getEndereco().getRua());
+        jTextField13.setText(secretario.getEndereco().getNumero());
+        jTextField5.setText(secretario.getLogin());
+        jPasswordField1.setText(secretario.getLogin());
+        jTextField6.setText(secretario.getNCTPS());
         jTextField14.setText(Integer.toString(dataAdmissao.getYear()));
         jComboBox3.setSelectedIndex(dataAdmissao.getMonthValue());
         jComboBox4.setSelectedIndex(dataAdmissao.getDayOfMonth());
+        jTextField15.setText(Integer.toString(horarioEntrada.get(Calendar.HOUR_OF_DAY)));
+        jTextField16.setText(Integer.toString(horarioSaida.get(Calendar.HOUR_OF_DAY)));
     }
 
     private void initComponents() {
@@ -95,12 +104,16 @@ public class InserirGerenteView extends javax.swing.JFrame {
         jComboBox3 = new javax.swing.JComboBox<>();
         jComboBox4 = new javax.swing.JComboBox<>();
         jTextField14 = new javax.swing.JTextField();
+        jTextField16 = new javax.swing.JTextField();
+        jLabel22 = new javax.swing.JLabel();
+        jLabel23 = new javax.swing.JLabel();
+        jTextField15 = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Inserir gerente");
+        setTitle("Inserir secretário");
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Dados básicos"));
@@ -115,8 +128,6 @@ public class InserirGerenteView extends javax.swing.JFrame {
 
         jLabel6.setText("Dia:");
 
-        jTextField7.setToolTipText("");
-
         jLabel7.setText("Ano:");
 
         jLabel8.setText("Mês:");
@@ -130,29 +141,17 @@ public class InserirGerenteView extends javax.swing.JFrame {
 
         jLabel2.setText("Telefone:");
 
-        jTextField2.setToolTipText("");
-
         jLabel9.setText("CEP:");
-
-        jTextField8.setToolTipText("");
 
         jLabel10.setText("Estado:");
 
-        jTextField9.setToolTipText("");
-
         jLabel11.setText("Cidade:");
 
-        jTextField10.setToolTipText("");
-
         jLabel12.setText("Bairro:");
-
-        jTextField11.setToolTipText("");
 
         jLabel13.setText("Rua:");
 
         jLabel14.setText("Nº:");
-
-        jTextField13.setToolTipText("");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -164,17 +163,17 @@ public class InserirGerenteView extends javax.swing.JFrame {
                                         .addComponent(jTextField1))
                                 .addGroup(jPanel1Layout.createSequentialGroup().addComponent(jLabel3)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 156,
+                                        .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 148,
                                                 Short.MAX_VALUE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jLabel4)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(
-                                                jTextField4, javax.swing.GroupLayout.DEFAULT_SIZE, 156,
+                                                jTextField4, javax.swing.GroupLayout.DEFAULT_SIZE, 147,
                                                 Short.MAX_VALUE))
                                 .addGroup(jPanel1Layout.createSequentialGroup().addComponent(jLabel7)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextField7, javax.swing.GroupLayout.DEFAULT_SIZE, 147,
+                                        .addComponent(jTextField7, javax.swing.GroupLayout.DEFAULT_SIZE, 130,
                                                 Short.MAX_VALUE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jLabel8)
@@ -192,32 +191,32 @@ public class InserirGerenteView extends javax.swing.JFrame {
                                         .addComponent(jTextField2))
                                 .addGroup(jPanel1Layout.createSequentialGroup().addComponent(jLabel9)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextField8, javax.swing.GroupLayout.DEFAULT_SIZE, 82,
+                                        .addComponent(jTextField8, javax.swing.GroupLayout.DEFAULT_SIZE, 77,
                                                 Short.MAX_VALUE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jLabel10)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextField9, javax.swing.GroupLayout.DEFAULT_SIZE, 83,
+                                        .addComponent(jTextField9, javax.swing.GroupLayout.DEFAULT_SIZE, 78,
                                                 Short.MAX_VALUE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jLabel11)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(
-                                                jTextField10, javax.swing.GroupLayout.DEFAULT_SIZE, 83,
+                                                jTextField10, javax.swing.GroupLayout.DEFAULT_SIZE, 76,
                                                 Short.MAX_VALUE))
                                 .addGroup(jPanel1Layout.createSequentialGroup().addComponent(jLabel12)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextField11, javax.swing.GroupLayout.DEFAULT_SIZE, 91,
+                                        .addComponent(jTextField11, javax.swing.GroupLayout.DEFAULT_SIZE, 86,
                                                 Short.MAX_VALUE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jLabel13)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextField12, javax.swing.GroupLayout.DEFAULT_SIZE, 91,
+                                        .addComponent(jTextField12, javax.swing.GroupLayout.DEFAULT_SIZE, 86,
                                                 Short.MAX_VALUE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jLabel14)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextField13, javax.swing.GroupLayout.DEFAULT_SIZE, 92,
+                                        .addComponent(jTextField13, javax.swing.GroupLayout.DEFAULT_SIZE, 85,
                                                 Short.MAX_VALUE))
                                 .addGroup(jPanel1Layout.createSequentialGroup().addComponent(jLabel5).addGap(0, 0,
                                         Short.MAX_VALUE)))
@@ -308,6 +307,10 @@ public class InserirGerenteView extends javax.swing.JFrame {
                 "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23",
                 "24", "25", "26", "27", "28", "29", "30", "31" }));
 
+        jLabel22.setText("Entrada (HH:MM):");
+
+        jLabel23.setText("Saída (HH:MM):");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -326,7 +329,7 @@ public class InserirGerenteView extends javax.swing.JFrame {
                                         .addComponent(jTextField6))
                                 .addGroup(jPanel2Layout.createSequentialGroup().addComponent(jLabel19)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextField14, javax.swing.GroupLayout.DEFAULT_SIZE, 147,
+                                        .addComponent(jTextField14, javax.swing.GroupLayout.DEFAULT_SIZE, 130,
                                                 Short.MAX_VALUE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jLabel20)
@@ -338,8 +341,20 @@ public class InserirGerenteView extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, 55,
                                                 javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(jPanel2Layout.createSequentialGroup().addComponent(jLabel18).addGap(0, 0,
-                                        Short.MAX_VALUE)))
+                                .addGroup(
+                                        jPanel2Layout
+                                                .createSequentialGroup().addComponent(jLabel18)
+                                                .addGap(0, 0, Short.MAX_VALUE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+                                        jPanel2Layout.createSequentialGroup().addComponent(jLabel22)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jTextField15, javax.swing.GroupLayout.DEFAULT_SIZE, 87,
+                                                        Short.MAX_VALUE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jLabel23)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jTextField16, javax.swing.GroupLayout.DEFAULT_SIZE, 87,
+                                                        Short.MAX_VALUE)))
                         .addContainerGap()));
         jPanel2Layout
                 .setVerticalGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -373,7 +388,17 @@ public class InserirGerenteView extends javax.swing.JFrame {
                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
                                                 javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addContainerGap(51, Short.MAX_VALUE)));
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jTextField16, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel23)
+                                        .addComponent(jTextField15, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel22))
+                                .addContainerGap(69, Short.MAX_VALUE)));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -402,13 +427,13 @@ public class InserirGerenteView extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
-                        jPanel3Layout.createSequentialGroup().addContainerGap(279, Short.MAX_VALUE)
+                        jPanel3Layout.createSequentialGroup().addContainerGap(262, Short.MAX_VALUE)
                                 .addComponent(jButton2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton1).addContainerGap()));
         jPanel3Layout.setVerticalGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
-                        jPanel3Layout.createSequentialGroup().addContainerGap(21, Short.MAX_VALUE)
+                        jPanel3Layout.createSequentialGroup().addContainerGap(25, Short.MAX_VALUE)
                                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(jButton1).addComponent(jButton2))
                                 .addContainerGap()));
@@ -432,6 +457,8 @@ public class InserirGerenteView extends javax.swing.JFrame {
         String senha = new String(aux);
         Date dataNascimento = new Date();
         Date dataAdmissao = new Date();
+        Date horarioEntrada = new Date();
+        Date horarioSaida = new Date();
         try {
             dataNascimento = new SimpleDateFormat("dd/MM/yyyy").parse(jComboBox2.getSelectedItem().toString() + "/"
                     + jComboBox1.getSelectedItem().toString() + "/" + jTextField7.getText());
@@ -446,18 +473,30 @@ public class InserirGerenteView extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "A data esta inválida", "Erro!", JOptionPane.WARNING_MESSAGE);
             return;
         }
+        try {
+            horarioEntrada = new SimpleDateFormat("hh:mm").parse(jTextField15.getText());
+        } catch (ParseException e) {
+            JOptionPane.showMessageDialog(null, "O horário esta inválido", "Erro!", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        try {
+            horarioSaida = new SimpleDateFormat("hh:mm").parse(jTextField16.getText());
+        } catch (ParseException e) {
+            JOptionPane.showMessageDialog(null, "O horário esta inválido", "Erro!", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
         Endereco endereco = new Endereco(jTextField8.getText(), jTextField9.getText(), jTextField10.getText(),
                 jTextField11.getText(), jTextField12.getText(), jTextField13.getText());
 
-        Gerente gerente = new Gerente(jTextField5.getText(), senha, jTextField6.getText(), dataAdmissao,
-                jTextField3.getText(), jTextField4.getText(), jTextField1.getText(), jTextField2.getText(),
-                dataNascimento, endereco);
+        Secretario secretario = new Secretario(horarioEntrada, horarioSaida, jTextField5.getText(), senha,
+                jTextField6.getText(), dataAdmissao, jTextField3.getText(), jTextField4.getText(),
+                jTextField1.getText(), jTextField2.getText(), dataNascimento, endereco);
 
-        if (this.gerenteId != null) {
+        if (this.secretarioId != null) {
             try {
-                this.gerenteDAO.editGerente(this.gerenteId, gerente);
-                JOptionPane.showMessageDialog(null, "Gerente editado com sucesso", "Sucesso!",
+                this.secretarioDAO.editSecretario(this.secretarioId, secretario);
+                JOptionPane.showMessageDialog(null, "Secretário editado com sucesso", "Sucesso!",
                         JOptionPane.INFORMATION_MESSAGE);
                 GerenteMasterView gerenteMasterView = new GerenteMasterView();
                 gerenteMasterView.pack();
@@ -469,8 +508,8 @@ public class InserirGerenteView extends javax.swing.JFrame {
             }
         } else {
             try {
-                this.gerenteDAO.addGerente(gerente);
-                JOptionPane.showMessageDialog(null, "Gerente inserido com sucesso", "Sucesso!",
+                this.secretarioDAO.addSecretario(secretario);
+                JOptionPane.showMessageDialog(null, "Secretário inserido com sucesso", "Sucesso!",
                         JOptionPane.INFORMATION_MESSAGE);
                 GerenteMasterView gerenteMasterView = new GerenteMasterView();
                 gerenteMasterView.pack();
@@ -514,6 +553,8 @@ public class InserirGerenteView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -531,6 +572,8 @@ public class InserirGerenteView extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField12;
     private javax.swing.JTextField jTextField13;
     private javax.swing.JTextField jTextField14;
+    private javax.swing.JTextField jTextField15;
+    private javax.swing.JTextField jTextField16;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
