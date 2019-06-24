@@ -172,7 +172,11 @@ public class GerenteMasterView extends javax.swing.JFrame {
         });
 
         jButton2.setText("Alterar senha");
-        jButton2.setToolTipText("");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -538,6 +542,16 @@ public class GerenteMasterView extends javax.swing.JFrame {
     }
 
     /*
+     * Botão alterar senha
+     */
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
+        AlterarSenhaView alterarSenhaView = new AlterarSenhaView("gerente", gerenteLogado.getId());
+        alterarSenhaView.pack();
+        alterarSenhaView.setLocationRelativeTo(null);
+        alterarSenhaView.setVisible(true);
+    }
+
+    /*
      * Botão editar gerente
      */
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -597,16 +611,23 @@ public class GerenteMasterView extends javax.swing.JFrame {
         if (jTable1.getSelectionModel().isSelectionEmpty()) {
             JOptionPane.showMessageDialog(null, "Selecione um gerente", "Erro!", JOptionPane.WARNING_MESSAGE);
         } else {
-            int option = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja deletar este gerente?",
-                    "Deletar gerente?", JOptionPane.YES_NO_OPTION);
+            if (this.listaIdGerentes[jTable1.getSelectionModel().getAnchorSelectionIndex()]
+                    .equals(this.gerenteLogado.getId())) {
+                JOptionPane.showMessageDialog(null, "Você não pode deletar seu próprio usuário", "Erro!",
+                        JOptionPane.WARNING_MESSAGE);
+            } else {
+                int option = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja deletar este gerente?",
+                        "Deletar gerente?", JOptionPane.YES_NO_OPTION);
 
-            if (option == JOptionPane.YES_OPTION) {
-                try {
-                    gerenteDAO
-                            .deleteGerente(this.listaIdGerentes[jTable1.getSelectionModel().getAnchorSelectionIndex()]);
-                    this.loadTabelas();
-                } catch (ClassNotFoundException | IOException e) {
-                    JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
+                if (option == JOptionPane.YES_OPTION) {
+                    try {
+                        gerenteDAO.deleteGerente(
+                                this.listaIdGerentes[jTable1.getSelectionModel().getAnchorSelectionIndex()]);
+                        this.loadTabelas();
+                    } catch (ClassNotFoundException | IOException e) {
+                        JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!",
+                                JOptionPane.WARNING_MESSAGE);
+                    }
                 }
             }
         }
