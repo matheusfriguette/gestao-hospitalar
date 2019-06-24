@@ -44,8 +44,8 @@ public class GerenteMasterView extends javax.swing.JFrame {
         this.farmaceuticoDAO = new FarmaceuticoDAO();
         this.gerenteController = new GerenteController();
         this.gerenteLogado = gerenteController.getGerenteLogado();
-        this.loadTabelas();
         initComponents();
+        this.loadTabelas();
     }
 
     private void loadTabelas() {
@@ -118,6 +118,15 @@ public class GerenteMasterView extends javax.swing.JFrame {
             tabelaFarmaceuticos[index][3] = farmaceutico.getNCTPS();
             index++;
         }
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(this.tabelaGerentes,
+                new String[] { "Nome", "Telefone", "Data de admissão", "NCTPS" }));
+        jTable4.setModel(new javax.swing.table.DefaultTableModel(this.tabelaSecretarios,
+                new String[] { "Nome", "Telefone", "Data de admissão", "NCTPS", "Horário" }));
+        jTable5.setModel(new javax.swing.table.DefaultTableModel(this.tabelaMedicos,
+                new String[] { "Nome", "Telefone", "Data de admissão", "NCTPS", "Especialidade" }));
+        jTable6.setModel(new javax.swing.table.DefaultTableModel(this.tabelaFarmaceuticos,
+                new String[] { "Nome", "Telefone", "Data de admissão", "NCTPS" }));
     }
 
     private void initComponents() {
@@ -215,14 +224,7 @@ public class GerenteMasterView extends javax.swing.JFrame {
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(this.tabelaGerentes,
-                new String[] { "Nome", "Telefone", "Data de admissão", "NCTPS" }) {
-            Class[] types = new Class[] { java.lang.String.class, java.lang.String.class, java.lang.String.class,
-                    java.lang.String.class };
-
-            public Class getColumnClass(int columnIndex) {
-                return types[columnIndex];
-            }
-        });
+                new String[] { "Nome", "Telefone", "Data de admissão", "NCTPS" }));
         jScrollPane1.setViewportView(jTable1);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -296,14 +298,7 @@ public class GerenteMasterView extends javax.swing.JFrame {
         jPanel10.setLayout(new java.awt.GridBagLayout());
 
         jTable4.setModel(new javax.swing.table.DefaultTableModel(this.tabelaSecretarios,
-                new String[] { "Nome", "Telefone", "Data de admissão", "NCTPS", "Horário" }) {
-            Class[] types = new Class[] { java.lang.Object.class, java.lang.Object.class, java.lang.Object.class,
-                    java.lang.Object.class, java.lang.String.class };
-
-            public Class getColumnClass(int columnIndex) {
-                return types[columnIndex];
-            }
-        });
+                new String[] { "Nome", "Telefone", "Data de admissão", "NCTPS", "Horário" }));
         jScrollPane4.setViewportView(jTable4);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -555,6 +550,17 @@ public class GerenteMasterView extends javax.swing.JFrame {
     }
 
     /*
+     * Botão novo gerente
+     */
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {
+        InserirGerenteView inserirGerenteView = new InserirGerenteView();
+        inserirGerenteView.pack();
+        inserirGerenteView.setLocationRelativeTo(null);
+        inserirGerenteView.setVisible(true);
+        this.dispose();
+    }
+
+    /*
      * Botão editar gerente
      */
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -573,38 +579,6 @@ public class GerenteMasterView extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
             }
         }
-    }
-
-    /*
-     * Botão editar secretário
-     */
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {
-        if (jTable4.getSelectionModel().isSelectionEmpty()) {
-            JOptionPane.showMessageDialog(null, "Selecione um secretário", "Erro!", JOptionPane.WARNING_MESSAGE);
-        } else {
-            try {
-                Secretario secretario = secretarioDAO
-                        .getSecretario(this.listaIdSecretarios[jTable4.getSelectionModel().getAnchorSelectionIndex()]);
-                InserirSecretarioView inserirSecretarioView = new InserirSecretarioView(secretario);
-                inserirSecretarioView.pack();
-                inserirSecretarioView.setLocationRelativeTo(null);
-                inserirSecretarioView.setVisible(true);
-                this.dispose();
-            } catch (ClassNotFoundException | IOException e) {
-                JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-            }
-        }
-    }
-
-    /*
-     * Botão novo gerente
-     */
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {
-        InserirGerenteView inserirGerenteView = new InserirGerenteView();
-        inserirGerenteView.pack();
-        inserirGerenteView.setLocationRelativeTo(null);
-        inserirGerenteView.setVisible(true);
-        this.dispose();
     }
 
     /*
@@ -648,6 +622,27 @@ public class GerenteMasterView extends javax.swing.JFrame {
     }
 
     /*
+     * Botão editar secretário
+     */
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {
+        if (jTable4.getSelectionModel().isSelectionEmpty()) {
+            JOptionPane.showMessageDialog(null, "Selecione um secretário", "Erro!", JOptionPane.WARNING_MESSAGE);
+        } else {
+            try {
+                Secretario secretario = secretarioDAO
+                        .getSecretario(this.listaIdSecretarios[jTable4.getSelectionModel().getAnchorSelectionIndex()]);
+                InserirSecretarioView inserirSecretarioView = new InserirSecretarioView(secretario);
+                inserirSecretarioView.pack();
+                inserirSecretarioView.setLocationRelativeTo(null);
+                inserirSecretarioView.setVisible(true);
+                this.dispose();
+            } catch (ClassNotFoundException | IOException e) {
+                JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+    }
+
+    /*
      * Botão deletar secretário
      */
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -667,6 +662,17 @@ public class GerenteMasterView extends javax.swing.JFrame {
                 }
             }
         }
+    }
+
+    /*
+     * Botão novo médico
+     */
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {
+        InserirMedicoView inserirMedicoView = new InserirMedicoView();
+        inserirMedicoView.pack();
+        inserirMedicoView.setLocationRelativeTo(null);
+        inserirMedicoView.setVisible(true);
+        this.dispose();
     }
 
     /*
@@ -691,17 +697,6 @@ public class GerenteMasterView extends javax.swing.JFrame {
     }
 
     /*
-     * Botão novo médico
-     */
-    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {
-        InserirMedicoView inserirMedicoView = new InserirMedicoView();
-        inserirMedicoView.pack();
-        inserirMedicoView.setLocationRelativeTo(null);
-        inserirMedicoView.setVisible(true);
-        this.dispose();
-    }
-
-    /*
      * Botão deletar médico
      */
     private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -723,6 +718,17 @@ public class GerenteMasterView extends javax.swing.JFrame {
     }
 
     /*
+     * Botão novo farmacêutico
+     */
+    private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {
+        InserirFarmaceuticoView inserirFarmaceuticoView = new InserirFarmaceuticoView();
+        inserirFarmaceuticoView.pack();
+        inserirFarmaceuticoView.setLocationRelativeTo(null);
+        inserirFarmaceuticoView.setVisible(true);
+        this.dispose();
+    }
+
+    /*
      * Botão editar farmacêutico
      */
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -741,17 +747,6 @@ public class GerenteMasterView extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
             }
         }
-    }
-
-    /*
-     * Botão novo farmacêutico
-     */
-    private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {
-        InserirFarmaceuticoView inserirFarmaceuticoView = new InserirFarmaceuticoView();
-        inserirFarmaceuticoView.pack();
-        inserirFarmaceuticoView.setLocationRelativeTo(null);
-        inserirFarmaceuticoView.setVisible(true);
-        this.dispose();
     }
 
     /*

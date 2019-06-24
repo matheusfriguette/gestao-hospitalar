@@ -1,7 +1,6 @@
 package app.controllers;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import app.dao.FarmaceuticoDAO;
@@ -52,5 +51,4 @@ public class FarmaceuticoController {
 
         return null;
     }
-
 }

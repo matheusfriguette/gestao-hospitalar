@@ -1,11 +1,13 @@
 package app.models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /*
  * Diagnostico
  */
-public class Diagnostico {
+public class Diagnostico implements Serializable {
+    private static final long serialVersionUID = 1L;
     private String sintomas;
     private String observacoes;
     private ArrayList<Exame> exames;

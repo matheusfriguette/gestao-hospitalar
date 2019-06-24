@@ -106,7 +106,7 @@ public class LoginView extends javax.swing.JFrame {
         String login = jTextField2.getText();
         String senha = new String(aux);
 
-        if (jComboBox1.getSelectedItem().toString() == "Secretário(a)") {
+        if (jComboBox1.getSelectedItem().toString() == "Médico(a)") {
             Medico medico = loginController.logarMedico(login, senha);
 
             if (medico != null) {
@@ -116,12 +116,15 @@ public class LoginView extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "O login ou senha informados estão incorretos", "Erro!",
                         JOptionPane.WARNING_MESSAGE);
             }
-        } else if (jComboBox1.getSelectedItem().toString() == "Médico(a)") {
+        } else if (jComboBox1.getSelectedItem().toString() == "Secretário(a)") {
             Secretario secretario = loginController.logarSecretario(login, senha);
 
             if (secretario != null) {
                 this.dispose();
-                // new SecretarioMasterView().setVisible(true);
+                SecretarioMasterView secretarioMasterView = new SecretarioMasterView();
+                secretarioMasterView.pack();
+                secretarioMasterView.setLocationRelativeTo(null);
+                secretarioMasterView.setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(null, "O login ou senha informados estão incorretos", "Erro!",
                         JOptionPane.WARNING_MESSAGE);

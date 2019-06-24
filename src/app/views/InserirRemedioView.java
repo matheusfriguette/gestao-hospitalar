@@ -158,8 +158,9 @@ public class InserirRemedioView extends javax.swing.JFrame {
 
         if (this.remedioId != null) {
             try {
+                remedio.setId(this.remedioId);
                 this.remedioDAO.editRemedio(this.remedioId, remedio);
-                JOptionPane.showMessageDialog(null, "Secretário editado com sucesso", "Sucesso!",
+                JOptionPane.showMessageDialog(null, "Remédio editado com sucesso", "Sucesso!",
                         JOptionPane.INFORMATION_MESSAGE);
                 FarmaceuticoMasterView farmaceuticoMasterView = new FarmaceuticoMasterView();
                 farmaceuticoMasterView.pack();
@@ -172,7 +173,7 @@ public class InserirRemedioView extends javax.swing.JFrame {
         } else {
             try {
                 this.remedioDAO.addRemedio(remedio);
-                JOptionPane.showMessageDialog(null, "Secretário inserido com sucesso", "Sucesso!",
+                JOptionPane.showMessageDialog(null, "Remédio inserido com sucesso", "Sucesso!",
                         JOptionPane.INFORMATION_MESSAGE);
                 FarmaceuticoMasterView farmaceuticoMasterView = new FarmaceuticoMasterView();
                 farmaceuticoMasterView.pack();

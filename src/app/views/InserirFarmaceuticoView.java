@@ -36,8 +36,8 @@ public class InserirFarmaceuticoView extends javax.swing.JFrame {
         jTextField2.setText(farmaceutico.getNome());
         jTextField8.setText(farmaceutico.getTelefone());
         jTextField7.setText(Integer.toString(dataNascimento.getYear()));
-        jComboBox1.setSelectedIndex(dataNascimento.getMonthValue());
-        jComboBox2.setSelectedIndex(dataNascimento.getDayOfMonth());
+        jComboBox1.setSelectedIndex(dataNascimento.getMonthValue() - 1);
+        jComboBox2.setSelectedIndex(dataNascimento.getDayOfMonth() - 1);
         jTextField9.setText(farmaceutico.getEndereco().getCEP());
         jTextField10.setText(farmaceutico.getEndereco().getEstado());
         jTextField11.setText(farmaceutico.getEndereco().getCidade());
@@ -48,8 +48,8 @@ public class InserirFarmaceuticoView extends javax.swing.JFrame {
         jPasswordField1.setText(farmaceutico.getLogin());
         jTextField16.setText(farmaceutico.getNCTPS());
         jTextField17.setText(Integer.toString(dataAdmissao.getYear()));
-        jComboBox3.setSelectedIndex(dataAdmissao.getMonthValue());
-        jComboBox4.setSelectedIndex(dataAdmissao.getDayOfMonth());
+        jComboBox3.setSelectedIndex(dataAdmissao.getMonthValue() - 1);
+        jComboBox4.setSelectedIndex(dataAdmissao.getDayOfMonth() - 1);
     }
 
     private void initComponents() {
@@ -447,6 +447,7 @@ public class InserirFarmaceuticoView extends javax.swing.JFrame {
 
         if (this.farmaceuticoId != null) {
             try {
+                farmaceutico.setId(this.farmaceuticoId);
                 this.farmaceuticoDAO.editFarmaceutico(this.farmaceuticoId, farmaceutico);
                 JOptionPane.showMessageDialog(null, "Farmacêutico editado com sucesso", "Sucesso!",
                         JOptionPane.INFORMATION_MESSAGE);

@@ -41,8 +41,8 @@ public class InserirSecretarioView extends javax.swing.JFrame {
         jTextField1.setText(secretario.getNome());
         jTextField2.setText(secretario.getTelefone());
         jTextField7.setText(Integer.toString(dataNascimento.getYear()));
-        jComboBox1.setSelectedIndex(dataNascimento.getMonthValue());
-        jComboBox2.setSelectedIndex(dataNascimento.getDayOfMonth());
+        jComboBox1.setSelectedIndex(dataNascimento.getMonthValue() - 1);
+        jComboBox2.setSelectedIndex(dataNascimento.getDayOfMonth() - 1);
         jTextField8.setText(secretario.getEndereco().getCEP());
         jTextField9.setText(secretario.getEndereco().getEstado());
         jTextField10.setText(secretario.getEndereco().getCidade());
@@ -53,8 +53,8 @@ public class InserirSecretarioView extends javax.swing.JFrame {
         jPasswordField1.setText(secretario.getLogin());
         jTextField6.setText(secretario.getNCTPS());
         jTextField14.setText(Integer.toString(dataAdmissao.getYear()));
-        jComboBox3.setSelectedIndex(dataAdmissao.getMonthValue());
-        jComboBox4.setSelectedIndex(dataAdmissao.getDayOfMonth());
+        jComboBox3.setSelectedIndex(dataAdmissao.getMonthValue() - 1);
+        jComboBox4.setSelectedIndex(dataAdmissao.getDayOfMonth() - 1);
         jTextField15.setText(Integer.toString(horarioEntrada.get(Calendar.HOUR_OF_DAY)));
         jTextField16.setText(Integer.toString(horarioSaida.get(Calendar.HOUR_OF_DAY)));
     }
@@ -495,6 +495,7 @@ public class InserirSecretarioView extends javax.swing.JFrame {
 
         if (this.secretarioId != null) {
             try {
+                secretario.setId(this.secretarioId);
                 this.secretarioDAO.editSecretario(this.secretarioId, secretario);
                 JOptionPane.showMessageDialog(null, "Secretário editado com sucesso", "Sucesso!",
                         JOptionPane.INFORMATION_MESSAGE);

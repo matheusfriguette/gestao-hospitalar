@@ -24,24 +24,28 @@ public class FarmaceuticoMasterView extends javax.swing.JFrame {
         this.farmaceuticoController = new FarmaceuticoController();
         this.farmaceuticoLogado = farmaceuticoController.getFarmaceuticoLogado();
         this.listaRemedios = farmaceuticoController.getRemedios();
-        this.loadTabelas();
         initComponents();
+        this.loadTabelas();
     }
 
     private void loadTabelas() {
         this.listaRemedios = farmaceuticoController.getRemedios();
 
         this.tabelaRemedios = new Object[listaRemedios.keySet().size()][4];
+        this.listaIdRemedios = new String[listaRemedios.keySet().size()];
         int index = 0;
         for (String id : listaRemedios.keySet()) {
             Remedio remedio = listaRemedios.get(id);
             listaIdRemedios[index] = id;
-            tabelaRemedios[index][0] = remedio.getId();
+            tabelaRemedios[index][0] = remedio.getId().substring(0, remedio.getId().indexOf("-"));
             tabelaRemedios[index][1] = remedio.getNome();
             tabelaRemedios[index][2] = remedio.getQuantidadeDisponivel();
             tabelaRemedios[index][3] = "R$" + remedio.getPreco();
             index++;
         }
+
+        jTable3.setModel(new javax.swing.table.DefaultTableModel(this.tabelaRemedios,
+                new String[] { "ID", "Nome", "Qtd disponivel", "Preço" }));
     }
 
     private void initComponents() {
@@ -65,7 +69,7 @@ public class FarmaceuticoMasterView extends javax.swing.JFrame {
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18));
-        jLabel1.setText("Bem vindo" + this.farmaceuticoLogado.getNome());
+        jLabel1.setText("Bem vindo, " + this.farmaceuticoLogado.getNome());
 
         jButton1.setText("Sair");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -114,14 +118,7 @@ public class FarmaceuticoMasterView extends javax.swing.JFrame {
         jPanel8.setLayout(new java.awt.GridBagLayout());
 
         jTable3.setModel(new javax.swing.table.DefaultTableModel(this.tabelaRemedios,
-                new String[] { "ID", "Nome", "Qtd disponivel", "Preço" }) {
-            Class[] types = new Class[] { java.lang.String.class, java.lang.String.class, java.lang.String.class,
-                    java.lang.String.class };
-
-            public Class getColumnClass(int columnIndex) {
-                return types[columnIndex];
-            }
-        });
+                new String[] { "ID", "Nome", "Qtd disponivel", "Preço" }));
         jScrollPane3.setViewportView(jTable3);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -225,15 +222,26 @@ public class FarmaceuticoMasterView extends javax.swing.JFrame {
     }
 
     /*
+     * Botão novo remédio
+     */
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {
+        InserirRemedioView inserirRemedioView = new InserirRemedioView();
+        inserirRemedioView.pack();
+        inserirRemedioView.setLocationRelativeTo(null);
+        inserirRemedioView.setVisible(true);
+        this.dispose();
+    }
+
+    /*
      * Botão editar remédio
      */
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {
-        if (jTable1.getSelectionModel().isSelectionEmpty()) {
+        if (jTable3.getSelectionModel().isSelectionEmpty()) {
             JOptionPane.showMessageDialog(null, "Selecione um remédio", "Erro!", JOptionPane.WARNING_MESSAGE);
         } else {
             try {
                 Remedio remedio = remedioDAO
-                        .getRemedio(this.listaIdRemedios[jTable1.getSelectionModel().getAnchorSelectionIndex()]);
+                        .getRemedio(this.listaIdRemedios[jTable3.getSelectionModel().getAnchorSelectionIndex()]);
                 InserirRemedioView inserirRemedioView = new InserirRemedioView(remedio);
                 inserirRemedioView.pack();
                 inserirRemedioView.setLocationRelativeTo(null);
@@ -246,21 +254,10 @@ public class FarmaceuticoMasterView extends javax.swing.JFrame {
     }
 
     /*
-     * Botão novo remédio
-     */
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {
-        InserirRemedioView inserirRemedioView = new InserirRemedioView();
-        inserirRemedioView.pack();
-        inserirRemedioView.setLocationRelativeTo(null);
-        inserirRemedioView.setVisible(true);
-        this.dispose();
-    }
-
-    /*
      * Botão deletar remédio
      */
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {
-        if (jTable1.getSelectionModel().isSelectionEmpty()) {
+        if (jTable3.getSelectionModel().isSelectionEmpty()) {
             JOptionPane.showMessageDialog(null, "Selecione um remédio", "Erro!", JOptionPane.WARNING_MESSAGE);
         } else {
             int option = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja deletar este remédio?",
@@ -269,7 +266,7 @@ public class FarmaceuticoMasterView extends javax.swing.JFrame {
             if (option == JOptionPane.YES_OPTION) {
                 try {
                     remedioDAO
-                            .deleteRemedio(this.listaIdRemedios[jTable1.getSelectionModel().getAnchorSelectionIndex()]);
+                            .deleteRemedio(this.listaIdRemedios[jTable3.getSelectionModel().getAnchorSelectionIndex()]);
                     this.loadTabelas();
                 } catch (ClassNotFoundException | IOException e) {
                     JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
@@ -290,6 +287,5 @@ public class FarmaceuticoMasterView extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane3;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable3;
 }

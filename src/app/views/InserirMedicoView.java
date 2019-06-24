@@ -34,8 +34,8 @@ public class InserirMedicoView extends javax.swing.JFrame {
         jTextField1.setText(medico.getNome());
         jTextField2.setText(medico.getTelefone());
         jTextField7.setText(Integer.toString(dataNascimento.getYear()));
-        jComboBox1.setSelectedIndex(dataNascimento.getMonthValue());
-        jComboBox2.setSelectedIndex(dataNascimento.getDayOfMonth());
+        jComboBox1.setSelectedIndex(dataNascimento.getMonthValue() - 1);
+        jComboBox2.setSelectedIndex(dataNascimento.getDayOfMonth() - 1);
         jTextField8.setText(medico.getEndereco().getCEP());
         jTextField9.setText(medico.getEndereco().getEstado());
         jTextField10.setText(medico.getEndereco().getCidade());
@@ -46,8 +46,8 @@ public class InserirMedicoView extends javax.swing.JFrame {
         jPasswordField1.setText(medico.getLogin());
         jTextField6.setText(medico.getNCTPS());
         jTextField14.setText(Integer.toString(dataAdmissao.getYear()));
-        jComboBox3.setSelectedIndex(dataAdmissao.getMonthValue());
-        jComboBox4.setSelectedIndex(dataAdmissao.getDayOfMonth());
+        jComboBox3.setSelectedIndex(dataAdmissao.getMonthValue() - 1);
+        jComboBox4.setSelectedIndex(dataAdmissao.getDayOfMonth() - 1);
         jTextField15.setText(medico.getEspecialidade());
         jTextField16.setText(medico.getCRM());
     }
@@ -507,6 +507,7 @@ public class InserirMedicoView extends javax.swing.JFrame {
 
         if (this.medicoId != null) {
             try {
+                medico.setId(this.medicoId);
                 this.medicoDAO.editMedico(this.medicoId, medico);
                 JOptionPane.showMessageDialog(null, "Médico editado com sucesso", "Sucesso!",
                         JOptionPane.INFORMATION_MESSAGE);
