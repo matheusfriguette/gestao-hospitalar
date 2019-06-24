@@ -1,38 +1,45 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package app.views;
 
+import java.io.IOException;
 import java.util.HashMap;
 
+import javax.swing.JOptionPane;
+
 import app.controllers.FarmaceuticoController;
+import app.dao.RemedioDAO;
 import app.models.Farmaceutico;
 import app.models.Remedio;
 
 public class FarmaceuticoMasterView extends javax.swing.JFrame {
+    private static final long serialVersionUID = 1L;
+    private RemedioDAO remedioDAO;
+    private FarmaceuticoController farmaceuticoController;
     private Farmaceutico farmaceuticoLogado;
-    private HashMap<String, Remedio> listaRemedio;
-    private Object[][] tabelaRemedio;
+    private HashMap<String, Remedio> listaRemedios;
+    private String[] listaIdRemedios;
+    private Object[][] tabelaRemedios;
 
     public FarmaceuticoMasterView() {
-        FarmaceuticoController farmaceuticoController = new FarmaceuticoController();
+        this.remedioDAO = new RemedioDAO();
+        this.farmaceuticoController = new FarmaceuticoController();
         this.farmaceuticoLogado = farmaceuticoController.getFarmaceuticoLogado();
-        this.listaRemedio = farmaceuticoController.getRemedios();
+        this.listaRemedios = farmaceuticoController.getRemedios();
         this.loadTabelas();
         initComponents();
     }
 
     private void loadTabelas() {
-        this.tabelaRemedio = new Object[listaRemedio.keySet().size()][4];
+        this.listaRemedios = farmaceuticoController.getRemedios();
+
+        this.tabelaRemedios = new Object[listaRemedios.keySet().size()][4];
         int index = 0;
-        for (String id : listaRemedio.keySet()) {
-            Remedio remedio = listaRemedio.get(id);
-            tabelaRemedio[index][0] = remedio.getId();
-            tabelaRemedio[index][1] = remedio.getNome();
-            tabelaRemedio[index][2] = remedio.getQuantidadeDisponivel();
-            tabelaRemedio[index][3] = remedio.getPreco();
+        for (String id : listaRemedios.keySet()) {
+            Remedio remedio = listaRemedios.get(id);
+            listaIdRemedios[index] = id;
+            tabelaRemedios[index][0] = remedio.getId();
+            tabelaRemedios[index][1] = remedio.getNome();
+            tabelaRemedios[index][2] = remedio.getQuantidadeDisponivel();
+            tabelaRemedios[index][3] = "R$" + remedio.getPreco();
             index++;
         }
     }
@@ -57,13 +64,22 @@ public class FarmaceuticoMasterView extends javax.swing.JFrame {
         setTitle("Sistema hospitalar");
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18));
         jLabel1.setText("Bem vindo" + this.farmaceuticoLogado.getNome());
 
         jButton1.setText("Sair");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Alterar senha");
-        jButton2.setToolTipText("");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -97,7 +113,7 @@ public class FarmaceuticoMasterView extends javax.swing.JFrame {
         jPanel8.setToolTipText("");
         jPanel8.setLayout(new java.awt.GridBagLayout());
 
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(this.tabelaRemedio,
+        jTable3.setModel(new javax.swing.table.DefaultTableModel(this.tabelaRemedios,
                 new String[] { "ID", "Nome", "Qtd disponivel", "Preço" }) {
             Class[] types = new Class[] { java.lang.String.class, java.lang.String.class, java.lang.String.class,
                     java.lang.String.class };
@@ -186,41 +202,94 @@ public class FarmaceuticoMasterView extends javax.swing.JFrame {
         pack();
     }
 
+    /*
+     * Botão sair
+     */
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
+        int option = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja sair?", "Sair?",
+                JOptionPane.YES_NO_OPTION);
+
+        if (option == JOptionPane.YES_OPTION) {
+            this.dispose();
+        }
+    }
+
+    /*
+     * Botão alterar senha
+     */
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
+        AlterarSenhaView alterarSenhaView = new AlterarSenhaView("farmaceutico", farmaceuticoLogado.getId());
+        alterarSenhaView.pack();
+        alterarSenhaView.setLocationRelativeTo(null);
+        alterarSenhaView.setVisible(true);
+    }
+
+    /*
+     * Botão editar remédio
+     */
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {
-
+        if (jTable1.getSelectionModel().isSelectionEmpty()) {
+            JOptionPane.showMessageDialog(null, "Selecione um remédio", "Erro!", JOptionPane.WARNING_MESSAGE);
+        } else {
+            try {
+                Remedio remedio = remedioDAO
+                        .getRemedio(this.listaIdRemedios[jTable1.getSelectionModel().getAnchorSelectionIndex()]);
+                InserirRemedioView inserirRemedioView = new InserirRemedioView(remedio);
+                inserirRemedioView.pack();
+                inserirRemedioView.setLocationRelativeTo(null);
+                inserirRemedioView.setVisible(true);
+                this.dispose();
+            } catch (ClassNotFoundException | IOException e) {
+                JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
+            }
+        }
     }
 
+    /*
+     * Botão novo remédio
+     */
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {
-
+        InserirRemedioView inserirRemedioView = new InserirRemedioView();
+        inserirRemedioView.pack();
+        inserirRemedioView.setLocationRelativeTo(null);
+        inserirRemedioView.setVisible(true);
+        this.dispose();
     }
 
+    /*
+     * Botão deletar remédio
+     */
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {
+        if (jTable1.getSelectionModel().isSelectionEmpty()) {
+            JOptionPane.showMessageDialog(null, "Selecione um remédio", "Erro!", JOptionPane.WARNING_MESSAGE);
+        } else {
+            int option = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja deletar este remédio?",
+                    "Deletar remédio?", JOptionPane.YES_NO_OPTION);
 
+            if (option == JOptionPane.YES_OPTION) {
+                try {
+                    remedioDAO
+                            .deleteRemedio(this.listaIdRemedios[jTable1.getSelectionModel().getAnchorSelectionIndex()]);
+                    this.loadTabelas();
+                } catch (ClassNotFoundException | IOException e) {
+                    JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
+                }
+
+            }
+        }
     }
 
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JTabbedPane jTabbedPane3;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable3;
 }
-

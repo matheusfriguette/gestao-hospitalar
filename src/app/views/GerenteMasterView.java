@@ -39,6 +39,9 @@ public class GerenteMasterView extends javax.swing.JFrame {
 
     public GerenteMasterView() {
         this.gerenteDAO = new GerenteDAO();
+        this.secretarioDAO = new SecretarioDAO();
+        this.medicoDAO = new MedicoDAO();
+        this.farmaceuticoDAO = new FarmaceuticoDAO();
         this.gerenteController = new GerenteController();
         this.gerenteLogado = gerenteController.getGerenteLogado();
         this.loadTabelas();
@@ -174,7 +177,7 @@ public class GerenteMasterView extends javax.swing.JFrame {
         jButton2.setText("Alterar senha");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButton2ActionPerformed(evt);
             }
         });
 

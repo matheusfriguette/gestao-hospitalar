@@ -131,11 +131,6 @@ public class AlterarSenhaView extends javax.swing.JFrame {
 
                 JOptionPane.showMessageDialog(null, "Senha alterada com sucesso!", "Sucesso!",
                         JOptionPane.WARNING_MESSAGE);
-
-                GerenteMasterView gerenteMasterView = new GerenteMasterView();
-                gerenteMasterView.pack();
-                gerenteMasterView.setLocationRelativeTo(null);
-                gerenteMasterView.setVisible(true);
                 this.dispose();
             } else if (tipoFuncionario == "secretario") {
                 SecretarioDAO secretarioDAO = new SecretarioDAO();
@@ -157,7 +152,6 @@ public class AlterarSenhaView extends javax.swing.JFrame {
 
                 JOptionPane.showMessageDialog(null, "Senha alterada com sucesso!", "Sucesso!",
                         JOptionPane.WARNING_MESSAGE);
-
                 this.dispose();
             } else if (tipoFuncionario == "medico") {
                 MedicoDAO medicoDAO = new MedicoDAO();
@@ -179,7 +173,6 @@ public class AlterarSenhaView extends javax.swing.JFrame {
 
                 JOptionPane.showMessageDialog(null, "Senha alterada com sucesso!", "Sucesso!",
                         JOptionPane.WARNING_MESSAGE);
-
                 this.dispose();
             } else if (tipoFuncionario == "farmaceutico") {
                 FarmaceuticoDAO farmaceuticoDAO = new FarmaceuticoDAO();
@@ -201,11 +194,6 @@ public class AlterarSenhaView extends javax.swing.JFrame {
 
                 JOptionPane.showMessageDialog(null, "Senha alterada com sucesso!", "Sucesso!",
                         JOptionPane.WARNING_MESSAGE);
-
-                FarmaceuticoMasterView farmaceuticoMasterView = new FarmaceuticoMasterView();
-                farmaceuticoMasterView.pack();
-                farmaceuticoMasterView.setLocationRelativeTo(null);
-                farmaceuticoMasterView.setVisible(true);
                 this.dispose();
             }
         }
