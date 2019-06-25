@@ -58,11 +58,11 @@ public class SecretarioMasterView extends javax.swing.JFrame {
             tabelaPacientes[index][0] = paciente.getNome();
             tabelaPacientes[index][1] = paciente.getCPF();
             tabelaPacientes[index][2] = paciente.getTelefone();
-            tabelaPacientes[index][3] = paciente.getConsultas() != null
+            tabelaPacientes[index][3] = paciente.getConsultas() != null && paciente.getConsultas().size() > 0
                     ? (paciente.getConsultas().get(0).getData() != null
-                            ? new SimpleDateFormat("dd/MM/yyyy").format(paciente.getConsultas().get(0).getData())
-                            : "")
-                    : "";
+                            ? new SimpleDateFormat("dd/MM/yyyy hh:mm").format(paciente.getConsultas().get(0).getData())
+                            : "Nenhuma consulta marcada")
+                    : "Nenhuma consulta marcada";
             index++;
         }
 
@@ -386,7 +386,6 @@ public class SecretarioMasterView extends javax.swing.JFrame {
         });
 
         jButton2.setText("Alterar senha");
-        jButton2.setToolTipText("");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -450,14 +449,41 @@ public class SecretarioMasterView extends javax.swing.JFrame {
      * Botão marcar consulta
      */
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {
-
+        if (jTable1.getSelectionModel().isSelectionEmpty()) {
+            JOptionPane.showMessageDialog(null, "Selecione um paciente", "Erro!", JOptionPane.WARNING_MESSAGE);
+        } else {
+            try {
+                Paciente paciente = pacienteDAO
+                        .getPaciente(this.listaIdPacientes[jTable1.getSelectionModel().getAnchorSelectionIndex()]);
+                InserirConsultaView inserirConsultaView = new InserirConsultaView(paciente);
+                inserirConsultaView.pack();
+                inserirConsultaView.setLocationRelativeTo(null);
+                inserirConsultaView.setVisible(true);
+                this.dispose();
+            } catch (ClassNotFoundException | IOException e) {
+                JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
+            }
+        }
     }
 
     /*
      * Botão ver histórico
      */
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
-        new HistoricoPacienteView().setVisible(true);
+        if (jTable1.getSelectionModel().isSelectionEmpty()) {
+            JOptionPane.showMessageDialog(null, "Selecione um paciente", "Erro!", JOptionPane.WARNING_MESSAGE);
+        } else {
+            try {
+                Paciente paciente = pacienteDAO
+                        .getPaciente(this.listaIdPacientes[jTable1.getSelectionModel().getAnchorSelectionIndex()]);
+                HistoricoPacienteView historicoPacienteView = new HistoricoPacienteView(paciente);
+                historicoPacienteView.pack();
+                historicoPacienteView.setLocationRelativeTo(null);
+                historicoPacienteView.setVisible(true);
+            } catch (ClassNotFoundException | IOException e) {
+                JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
+            }
+        }
     }
 
     /*

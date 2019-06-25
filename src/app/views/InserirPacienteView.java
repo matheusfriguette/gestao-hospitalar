@@ -5,11 +5,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.JOptionPane;
 
 import app.dao.PacienteDAO;
+import app.models.Consulta;
 import app.models.Endereco;
 import app.models.Paciente;
 
@@ -297,6 +299,7 @@ public class InserirPacienteView extends javax.swing.JFrame {
      */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
         Date dataNascimento = new Date();
+        ArrayList<Consulta> consultas = new ArrayList<Consulta>();
         try {
             dataNascimento = new SimpleDateFormat("dd/MM/yyyy").parse(jComboBox2.getSelectedItem().toString() + "/"
                     + jComboBox1.getSelectedItem().toString() + "/" + jTextField7.getText());
@@ -309,7 +312,7 @@ public class InserirPacienteView extends javax.swing.JFrame {
                 jTextField11.getText(), jTextField12.getText(), jTextField13.getText());
 
         Paciente paciente = new Paciente(jTextField3.getText(), jTextField4.getText(), jTextField1.getText(),
-                jTextField2.getText(), dataNascimento, endereco, null);
+                jTextField2.getText(), dataNascimento, endereco, consultas);
 
         if (this.pacienteId != null) {
             try {
@@ -323,7 +326,6 @@ public class InserirPacienteView extends javax.swing.JFrame {
                 secretarioMasterView.setLocationRelativeTo(null);
                 secretarioMasterView.setVisible(true);
                 this.dispose();
-                this.dispose();
             } catch (ClassNotFoundException | IOException e) {
                 JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
             }
@@ -336,7 +338,6 @@ public class InserirPacienteView extends javax.swing.JFrame {
                 secretarioMasterView.pack();
                 secretarioMasterView.setLocationRelativeTo(null);
                 secretarioMasterView.setVisible(true);
-                this.dispose();
                 this.dispose();
             } catch (ClassNotFoundException | IOException e) {
                 JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);

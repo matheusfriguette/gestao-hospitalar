@@ -1,7 +1,5 @@
 package app;
 
-import app.dao.GerenteDAO;
-import app.models.Gerente;
 import app.views.LoginView;
 
 public class App {

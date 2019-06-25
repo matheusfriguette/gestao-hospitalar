@@ -22,7 +22,8 @@ public class Paciente extends Pessoa implements Serializable {
         setConsultas(null);
     }
 
-    public Paciente(String cpf, String rg, String nome, String telefone, Date dataNascimento, Endereco endereco, ArrayList<Consulta> consultas) {
+    public Paciente(String cpf, String rg, String nome, String telefone, Date dataNascimento, Endereco endereco,
+            ArrayList<Consulta> consultas) {
         super(cpf, rg, nome, telefone, dataNascimento, endereco);
         setId(UUID.randomUUID().toString());
         setConsultas(consultas);
@@ -45,5 +46,12 @@ public class Paciente extends Pessoa implements Serializable {
 
     public void setConsultas(ArrayList<Consulta> consultas) {
         this.consultas = consultas;
+    }
+
+    /*
+     * Métodos
+     */
+    public void addConsulta(Consulta consulta) {
+        this.consultas.add(consulta);
     }
 }

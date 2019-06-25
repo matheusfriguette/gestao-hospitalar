@@ -111,7 +111,10 @@ public class LoginView extends javax.swing.JFrame {
 
             if (medico != null) {
                 this.dispose();
-                // new MedicoMasterView().setVisible(true);
+                MedicoMasterView medicoMasterView = new MedicoMasterView();
+                medicoMasterView.pack();
+                medicoMasterView.setLocationRelativeTo(null);
+                medicoMasterView.setVisible(true);
             } else {
                 JOptionPane.showMessageDialog(null, "O login ou senha informados estão incorretos", "Erro!",
                         JOptionPane.WARNING_MESSAGE);

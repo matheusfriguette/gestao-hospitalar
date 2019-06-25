@@ -1,18 +1,28 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package app.views;
 
-/**
- *
- * @author doppaspd
- */
-public class HistoricoPacienteView extends javax.swing.JFrame {
+import java.text.SimpleDateFormat;
 
-    public HistoricoPacienteView() {
+import app.models.Consulta;
+import app.models.Paciente;
+
+public class HistoricoPacienteView extends javax.swing.JFrame {
+    private static final long serialVersionUID = 1L;
+    private Object[][] tabelaConsultas;
+
+    public HistoricoPacienteView(Paciente paciente) {
         initComponents();
+        this.tabelaConsultas = new Object[paciente.getConsultas().size()][4];
+        int index = 0;
+        for (Consulta consulta : paciente.getConsultas()) {
+            tabelaConsultas[index][0] = consulta.getData() != null
+                    ? new SimpleDateFormat("dd/MM/yyyy hh:mm").format(consulta.getData())
+                    : "";
+            tabelaConsultas[index][1] = consulta.getMedico() != null ? consulta.getPaciente().getNome() : "";
+            tabelaConsultas[index][1] = consulta.getConsultaRealizada() ? "Sim" : "Não";
+        }
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(this.tabelaConsultas,
+                new String[] { "Data", "Médico", "Realizada?" }));
     }
 
     private void initComponents() {
@@ -28,40 +38,23 @@ public class HistoricoPacienteView extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Tabela com o histórico"));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Data", "Médico", "Realizada?"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(this.tabelaConsultas,
+                new String[] { "Data", "Médico", "Realizada?" }));
         jScrollPane1.setViewportView(jTable1);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
-                .addContainerGap())
-        );
+        jPanel2Layout.setHorizontalGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+                        jPanel2Layout.createSequentialGroup()
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 365,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap()));
+        jPanel2Layout.setVerticalGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup().addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
+                        .addContainerGap()));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -76,5 +69,4 @@ public class HistoricoPacienteView extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
-    // End of variables declaration//GEN-END:variables
 }
