@@ -158,9 +158,10 @@ public class Hospital {
 
         for (Funcionario funcionario : funcionarios) {
             if (funcionario.getId().equals(id)) {
-                funcionario = novoFuncionario;
+                deleteFuncionario(funcionario.getId());
             }
         }
+        funcionarios.add(novoFuncionario);
 
         Arquivos.set(arquivoFuncionarios, funcionarios);
     }
@@ -211,9 +212,10 @@ public class Hospital {
 
         for (Paciente paciente : pacientes) {
             if (paciente.getId().equals(id)) {
-                paciente = novoPaciente;
+                deletePaciente(paciente.getId());
             }
         }
+        pacientes.add(novoPaciente);
 
         Arquivos.set(arquivoPacientes, pacientes);
     }
@@ -264,9 +266,10 @@ public class Hospital {
 
         for (Consulta consulta : consultas) {
             if (consulta.getId().equals(id)) {
-                consulta = novoConsulta;
+                deleteConsulta(consulta.getId());
             }
         }
+        consultas.add(novoConsulta);
 
         Arquivos.set(arquivoConsultas, consultas);
     }
@@ -317,9 +320,10 @@ public class Hospital {
 
         for (Exame exame : exames) {
             if (exame.getId().equals(id)) {
-                exame = novoExame;
+                deleteExame(exame.getId());
             }
         }
+        exames.add(novoExame);
 
         Arquivos.set(arquivoExames, exames);
     }
@@ -370,9 +374,10 @@ public class Hospital {
 
         for (Remedio remedio : remedios) {
             if (remedio.getId().equals(id)) {
-                remedio = novoRemedio;
+                deleteRemedio(remedio.getId());
             }
         }
+        remedios.add(novoRemedio);
 
         Arquivos.set(arquivoRemedios, remedios);
     }
@@ -423,9 +428,10 @@ public class Hospital {
 
         for (Plano plano : planos) {
             if (plano.getId().equals(id)) {
-                plano = novoPlano;
+                deletePlano(plano.getId());
             }
         }
+        planos.add(novoPlano);
 
         Arquivos.set(arquivoPlanos, planos);
     }

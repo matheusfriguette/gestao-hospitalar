@@ -477,10 +477,12 @@ public class InserirSecretarioView extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Preencha os dados de login", "Erro!", JOptionPane.WARNING_MESSAGE);
             return;
         }
-
-        if (hospital.existeLogin(jTextField5.getText())) {
-            JOptionPane.showMessageDialog(null, "O login inserido já existe", "Erro!", JOptionPane.WARNING_MESSAGE);
-            return;
+        
+        if(this.secretarioId == null) {
+            if (hospital.existeLogin(jTextField5.getText())) {
+                JOptionPane.showMessageDialog(null, "O login inserido já existe", "Erro!", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
         }
 
         LocalDate dataNascimento = LocalDate.parse(jComboBox2.getSelectedItem().toString() + "/"

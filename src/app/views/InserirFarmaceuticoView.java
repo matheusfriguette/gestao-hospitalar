@@ -358,9 +358,11 @@ public class InserirFarmaceuticoView extends javax.swing.JFrame {
             return;
         }
 
-        if (hospital.existeLogin(jTextField15.getText())) {
-            JOptionPane.showMessageDialog(null, "O login inserido já existe", "Erro!", JOptionPane.WARNING_MESSAGE);
-            return;
+        if(this.farmaceuticoId == null) {
+            if (hospital.existeLogin(jTextField5.getText())) {
+                JOptionPane.showMessageDialog(null, "O login inserido já existe", "Erro!", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
         }
 
         LocalDate dataNascimento = LocalDate.parse(jComboBox2.getSelectedItem().toString() + "/"

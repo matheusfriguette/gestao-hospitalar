@@ -432,9 +432,11 @@ public class InserirMedicoView extends javax.swing.JFrame {
             return;
         }
 
-        if (hospital.existeLogin(jTextField5.getText())) {
-            JOptionPane.showMessageDialog(null, "O login inserido já existe", "Erro!", JOptionPane.WARNING_MESSAGE);
-            return;
+        if (this.medicoId == null) {
+            if (hospital.existeLogin(jTextField5.getText())) {
+                JOptionPane.showMessageDialog(null, "O login inserido já existe", "Erro!", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
         }
 
         LocalDate dataNascimento = LocalDate.parse(jComboBox2.getSelectedItem().toString() + "/"
