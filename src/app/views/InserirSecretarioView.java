@@ -1,20 +1,17 @@
 package app.views;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.time.LocalTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
 import app.controllers.GerenteController;
+import app.controllers.LoginController;
 import app.dao.SecretarioDAO;
 import app.models.Endereco;
 import app.models.Secretario;
@@ -31,36 +28,7 @@ public class InserirSecretarioView extends javax.swing.JFrame {
         secretarioDAO = new SecretarioDAO();
         this.gerenteController = new GerenteController();
         this.listaSecretarios = gerenteController.getSecretarios();
-        int[] horarios = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23 };
-        for (String id : listaSecretarios.keySet()) {
-            Secretario secretario = listaSecretarios.get(id);
-            String horarioEntrada = new SimpleDateFormat("hh").format(secretario.getHorarioEntrada());
-            String horarioSaida = new SimpleDateFormat("hh").format(secretario.getHorarioSaida());
-            for (int x = Integer.parseInt(horarioEntrada); x <= Integer.parseInt(horarioSaida); x++) {
-                if (horarios[x] != -1) {
-                    horarios[x] = -1;
-                }
-            }
-        }
-        this.horariosVagos = new DefaultListModel<String>();
-        int atual = -1;
-        String horarioVago = "";
-        String horarioVagoFinal = "";
-        for (int x : horarios) {
-            if (atual == -1) {
-                if (x != -1) {
-                    horarioVago = String.format("%02d:00 - ", x);
-                    atual = 0;
-                }
-            } else {
-                if (x == -1 || (x == 23 && x != -1)) {
-                    horarioVagoFinal = String.format("%02d:00", x);
-                    horariosVagos.addElement(horarioVago + horarioVagoFinal);
-                    atual = -1;
-                }
-            }
-        }
-
+        this.getHorariosVagos();
         initComponents();
     }
 
@@ -68,50 +36,16 @@ public class InserirSecretarioView extends javax.swing.JFrame {
         secretarioDAO = new SecretarioDAO();
         this.gerenteController = new GerenteController();
         this.listaSecretarios = gerenteController.getSecretarios();
-        int[] horarios = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23 };
-        for (String id : listaSecretarios.keySet()) {
-            Secretario secretarioHorario = listaSecretarios.get(id);
-            String horarioEntrada = new SimpleDateFormat("hh").format(secretarioHorario.getHorarioEntrada());
-            String horarioSaida = new SimpleDateFormat("hh").format(secretarioHorario.getHorarioSaida());
-            for (int x = Integer.parseInt(horarioEntrada); x <= Integer.parseInt(horarioSaida); x++) {
-                if (horarios[x] != -1) {
-                    horarios[x] = -1;
-                }
-            }
-        }
-        this.horariosVagos = new DefaultListModel<String>();
-        int atual = -1;
-        String horarioVago = "";
-        String horarioVagoFinal = "";
-        for (int x : horarios) {
-            if (atual == -1) {
-                if (x != -1) {
-                    horarioVago = String.format("%02d:00 - ", x);
-                    atual = 0;
-                }
-            } else {
-                if (x == -1 || (x == 23 && x != -1)) {
-                    horarioVagoFinal = String.format("%02d:00", x);
-                    horariosVagos.addElement(horarioVago + horarioVagoFinal);
-                    atual = -1;
-                }
-            }
-        }
+        this.getHorariosVagos();
         initComponents();
         this.secretarioId = secretario.getId();
-        LocalDate dataNascimento = secretario.getDataNascimento().toInstant().atZone(ZoneId.systemDefault())
-                .toLocalDate();
-        Calendar horarioEntrada = GregorianCalendar.getInstance();
-        horarioEntrada.setTime(secretario.getHorarioEntrada());
-        Calendar horarioSaida = GregorianCalendar.getInstance();
-        horarioSaida.setTime(secretario.getHorarioSaida());
         jTextField3.setText(secretario.getCPF());
         jTextField4.setText(secretario.getRG());
         jTextField1.setText(secretario.getNome());
         jTextField2.setText(secretario.getTelefone());
-        jTextField7.setText(Integer.toString(dataNascimento.getYear()));
-        jComboBox1.setSelectedIndex(dataNascimento.getMonthValue() - 1);
-        jComboBox2.setSelectedIndex(dataNascimento.getDayOfMonth() - 1);
+        jTextField7.setText(Integer.toString(secretario.getDataNascimento().getYear()));
+        jComboBox1.setSelectedIndex(secretario.getDataNascimento().getMonthValue() - 1);
+        jComboBox2.setSelectedIndex(secretario.getDataNascimento().getDayOfMonth() - 1);
         jTextField8.setText(secretario.getEndereco().getCEP());
         jTextField9.setText(secretario.getEndereco().getEstado());
         jTextField10.setText(secretario.getEndereco().getCidade());
@@ -121,10 +55,40 @@ public class InserirSecretarioView extends javax.swing.JFrame {
         jTextField5.setText(secretario.getLogin());
         jPasswordField1.setText(secretario.getSenha());
         jTextField6.setText(secretario.getNCTPS());
-        jComboBox8.setSelectedItem(new SimpleDateFormat("hh").format(secretario.getHorarioEntrada()));
-        jComboBox3.setSelectedItem(new SimpleDateFormat("mm").format(secretario.getHorarioEntrada()));
-        jComboBox9.setSelectedItem(new SimpleDateFormat("hh").format(secretario.getHorarioSaida()));
-        jComboBox4.setSelectedItem(new SimpleDateFormat("mm").format(secretario.getHorarioSaida()));
+        jComboBox8.setSelectedItem(String.format("%02d", secretario.getHorarioEntrada().getHour()));
+        jComboBox3.setSelectedItem(String.format("%02d", secretario.getHorarioEntrada().getMinute()));
+        jComboBox9.setSelectedItem(String.format("%02d", secretario.getHorarioSaida().getHour()));
+        jComboBox4.setSelectedItem(String.format("%02d", secretario.getHorarioSaida().getMinute()));
+    }
+
+    public void getHorariosVagos() {
+        int[] horarios = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23 };
+        for (String id : listaSecretarios.keySet()) {
+            Secretario secretario = listaSecretarios.get(id);
+            for (int x = secretario.getHorarioEntrada().getHour(); x <= secretario.getHorarioSaida().getHour(); x++) {
+                if (horarios[x] != -1) {
+                    horarios[x] = -1;
+                }
+            }
+        }
+        this.horariosVagos = new DefaultListModel<String>();
+        int atual = -1;
+        String horarioVago = "";
+        String horarioVagoFinal = "";
+        for (int x : horarios) {
+            if (atual == -1) {
+                if (x != -1) {
+                    horarioVago = String.format("%02d:00 - ", x);
+                    atual = 0;
+                }
+            } else {
+                if (x == -1 || (x == 23 && x != -1)) {
+                    horarioVagoFinal = String.format("%02d:00", x);
+                    horariosVagos.addElement(horarioVago + horarioVagoFinal);
+                    atual = -1;
+                }
+            }
+        }
     }
 
     private void initComponents() {
@@ -515,37 +479,28 @@ public class InserirSecretarioView extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
         char aux[] = jPasswordField1.getPassword();
         String senha = new String(aux);
-        Date dataNascimento = new Date();
-        Date dataAdmissao = Date.from(Instant.now());
-        Date horarioEntrada = new Date();
-        Date horarioSaida = new Date();
-        try {
-            dataNascimento = new SimpleDateFormat("dd/MM/yyyy").parse(jComboBox2.getSelectedItem().toString() + "/"
-                    + jComboBox1.getSelectedItem().toString() + "/" + jTextField7.getText());
-        } catch (ParseException e) {
-            JOptionPane.showMessageDialog(null, "A data esta inválida", "Erro!", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        try {
-            horarioEntrada = new SimpleDateFormat("hh:mm")
-                    .parse(jComboBox8.getSelectedItem() + ":" + jComboBox3.getSelectedItem());
-        } catch (ParseException e) {
-            JOptionPane.showMessageDialog(null, "O horário de entrada esta inválido", "Erro!",
-                    JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        try {
-            horarioSaida = new SimpleDateFormat("hh:mm")
-                    .parse(jComboBox9.getSelectedItem() + ":" + jComboBox4.getSelectedItem());
-        } catch (ParseException e) {
-            JOptionPane.showMessageDialog(null, "O horário de saída esta inválido", "Erro!",
-                    JOptionPane.WARNING_MESSAGE);
+
+        if (jTextField5.getText().equals("") || senha.equals("")) {
+            JOptionPane.showMessageDialog(null, "Preencha os dados de login", "Erro!", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
+        LoginController loginController = new LoginController();
+        if (loginController.existeLogin(jTextField5.getText())) {
+            JOptionPane.showMessageDialog(null, "O login inserido já existe", "Erro!", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        LocalDate dataNascimento = LocalDate.parse(jComboBox2.getSelectedItem().toString() + "/"
+                + jComboBox1.getSelectedItem().toString() + "/" + jTextField7.getText(),
+                DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        LocalDate dataAdmissao = ZonedDateTime.now().toLocalDate();
+        LocalTime horarioEntrada = LocalTime.parse(jComboBox8.getSelectedItem() + ":" + jComboBox3.getSelectedItem(),
+                DateTimeFormatter.ofPattern("HH:mm"));
+        LocalTime horarioSaida = LocalTime.parse(jComboBox9.getSelectedItem() + ":" + jComboBox4.getSelectedItem(),
+                DateTimeFormatter.ofPattern("HH:mm"));
         Endereco endereco = new Endereco(jTextField8.getText(), jTextField9.getText(), jTextField10.getText(),
                 jTextField11.getText(), jTextField12.getText(), jTextField13.getText());
-
         Secretario secretario = new Secretario(horarioEntrada, horarioSaida, jTextField5.getText(), senha,
                 jTextField6.getText(), dataAdmissao, jTextField3.getText(), jTextField4.getText(),
                 jTextField1.getText(), jTextField2.getText(), dataNascimento, endereco);

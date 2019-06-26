@@ -13,13 +13,16 @@ import app.dao.MedicoDAO;
 import app.dao.PlanoDAO;
 import app.dao.SecretarioDAO;
 import app.models.Farmaceutico;
+import app.models.Funcionario;
 import app.models.Gerente;
+import app.models.Hospital;
 import app.models.Medico;
 import app.models.Plano;
 import app.models.Secretario;
 
 public class GerenteMasterView extends javax.swing.JFrame {
     private static final long serialVersionUID = 1L;
+    private Hospital hospital;
     private GerenteDAO gerenteDAO;
     private SecretarioDAO secretarioDAO;
     private MedicoDAO medicoDAO;
@@ -44,13 +47,13 @@ public class GerenteMasterView extends javax.swing.JFrame {
     private Object[][] tabelaPlanos;
 
     public GerenteMasterView() {
+        this.hospital = new Hospital();
         this.gerenteDAO = new GerenteDAO();
         this.secretarioDAO = new SecretarioDAO();
         this.medicoDAO = new MedicoDAO();
         this.farmaceuticoDAO = new FarmaceuticoDAO();
         this.planoDAO = new PlanoDAO();
         this.gerenteController = new GerenteController();
-        this.gerenteLogado = gerenteController.getGerenteLogado();
         initComponents();
         this.loadTabelas();
     }
@@ -204,7 +207,7 @@ public class GerenteMasterView extends javax.swing.JFrame {
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18));
-        jLabel1.setText("Bem vindo, " + this.gerenteLogado.getNome());
+        jLabel1.setText("Bem vindo, " + hospital.getUsuarioLogado().getNome());
 
         jButton1.setText("Sair");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -894,8 +897,8 @@ public class GerenteMasterView extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Selecione um plano", "Erro!", JOptionPane.WARNING_MESSAGE);
         } else {
             try {
-                Plano plano = planoDAO.getPlano(
-                        this.listaIdPlanos[jTable7.getSelectionModel().getAnchorSelectionIndex()]);
+                Plano plano = planoDAO
+                        .getPlano(this.listaIdPlanos[jTable7.getSelectionModel().getAnchorSelectionIndex()]);
                 InserirPlanoView inserirPlanoView = new InserirPlanoView(plano);
                 inserirPlanoView.pack();
                 inserirPlanoView.setLocationRelativeTo(null);
@@ -919,8 +922,7 @@ public class GerenteMasterView extends javax.swing.JFrame {
 
             if (option == JOptionPane.YES_OPTION) {
                 try {
-                    planoDAO.deletePlano(
-                            this.listaIdPlanos[jTable7.getSelectionModel().getAnchorSelectionIndex()]);
+                    planoDAO.deletePlano(this.listaIdPlanos[jTable7.getSelectionModel().getAnchorSelectionIndex()]);
                     this.loadTabelas();
                 } catch (ClassNotFoundException | IOException e) {
                     JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);

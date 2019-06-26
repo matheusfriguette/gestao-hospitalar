@@ -1,9 +1,9 @@
 package app.views;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
 import javax.swing.JOptionPane;
@@ -263,18 +263,12 @@ public class InserirConsultaView extends javax.swing.JFrame {
      * Botão enviar
      */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
-        Date data = new Date();
         Consulta consulta;
-
-        try {
-            data = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").parse(jComboBox4.getSelectedItem().toString() + "/"
-                    + jComboBox3.getSelectedItem().toString() + "/" + jTextField15.getText() + " "
-                    + jComboBox5.getSelectedItem().toString() + ":" + jComboBox2.getSelectedItem().toString() + ":00");
-        } catch (ParseException e) {
-            JOptionPane.showMessageDialog(null, "A data esta inválida", "Erro!", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
+        LocalDateTime data = LocalDateTime.parse(
+                jComboBox4.getSelectedItem().toString() + "/" + jComboBox3.getSelectedItem().toString() + "/"
+                        + jTextField15.getText() + " " + jComboBox5.getSelectedItem().toString() + ":"
+                        + jComboBox2.getSelectedItem().toString() + ":00",
+                DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
         HashMap<String, Consulta> consultas;
         try {
             consultas = consultaDAO.getConsultas();

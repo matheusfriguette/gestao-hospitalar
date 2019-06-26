@@ -41,7 +41,7 @@ public class MedicoMasterView extends javax.swing.JFrame {
                 tabelaConsultas[index][0] = consulta.getId().substring(0, consulta.getId().indexOf("-"));
                 tabelaConsultas[index][1] = consulta.getPaciente() != null ? consulta.getPaciente().getNome() : "";
                 tabelaConsultas[index][2] = consulta.getData() != null
-                        ? new SimpleDateFormat("dd/MM/yyyy hh:mm").format(consulta.getData())
+                        ? new SimpleDateFormat("dd/MM/yyyy HH:mm").format(consulta.getData())
                         : "";
                 index++;
             }

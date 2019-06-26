@@ -1,14 +1,13 @@
 package app.views;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.JOptionPane;
 
+import app.controllers.LoginController;
 import app.dao.MedicoDAO;
 import app.models.Endereco;
 import app.models.Medico;
@@ -27,15 +26,13 @@ public class InserirMedicoView extends javax.swing.JFrame {
         medicoDAO = new MedicoDAO();
         initComponents();
         this.medicoId = medico.getId();
-        LocalDate dataNascimento = medico.getDataNascimento().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        LocalDate dataAdmissao = medico.getDataAdmissao().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         jTextField3.setText(medico.getCPF());
         jTextField4.setText(medico.getRG());
         jTextField1.setText(medico.getNome());
         jTextField2.setText(medico.getTelefone());
-        jTextField7.setText(Integer.toString(dataNascimento.getYear()));
-        jComboBox1.setSelectedIndex(dataNascimento.getMonthValue() - 1);
-        jComboBox2.setSelectedIndex(dataNascimento.getDayOfMonth() - 1);
+        jTextField7.setText(Integer.toString(medico.getDataNascimento().getYear()));
+        jComboBox1.setSelectedIndex(medico.getDataNascimento().getMonthValue() - 1);
+        jComboBox2.setSelectedIndex(medico.getDataNascimento().getDayOfMonth() - 1);
         jTextField8.setText(medico.getEndereco().getCEP());
         jTextField9.setText(medico.getEndereco().getEstado());
         jTextField10.setText(medico.getEndereco().getCidade());
@@ -45,9 +42,6 @@ public class InserirMedicoView extends javax.swing.JFrame {
         jTextField5.setText(medico.getLogin());
         jPasswordField1.setText(medico.getLogin());
         jTextField6.setText(medico.getNCTPS());
-        jTextField14.setText(Integer.toString(dataAdmissao.getYear()));
-        jComboBox3.setSelectedIndex(dataAdmissao.getMonthValue() - 1);
-        jComboBox4.setSelectedIndex(dataAdmissao.getDayOfMonth() - 1);
         jTextField15.setText(medico.getEspecialidade());
         jTextField16.setText(medico.getCRM());
     }
@@ -93,10 +87,6 @@ public class InserirMedicoView extends javax.swing.JFrame {
         jLabel21 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
-        jLabel18 = new javax.swing.JLabel();
-        jComboBox3 = new javax.swing.JComboBox<>();
-        jComboBox4 = new javax.swing.JComboBox<>();
-        jTextField14 = new javax.swing.JTextField();
         jLabel22 = new javax.swing.JLabel();
         jTextField15 = new javax.swing.JTextField();
         jLabel23 = new javax.swing.JLabel();
@@ -319,17 +309,6 @@ public class InserirMedicoView extends javax.swing.JFrame {
 
         jLabel20.setText("Mês:");
 
-        jLabel18.setText("Data de admissão:");
-
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(
-                new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" }));
-
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "01", "02", "03", "04", "05", "06",
-                "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23",
-                "24", "25", "26", "27", "28", "29", "30", "31" }));
-
-        jTextField14.setToolTipText("");
-
         jLabel22.setText("Especialidade:");
 
         jTextField15.setToolTipText("");
@@ -354,22 +333,6 @@ public class InserirMedicoView extends javax.swing.JFrame {
                                 .addGroup(jPanel2Layout.createSequentialGroup().addComponent(jLabel17)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jTextField6))
-                                .addGroup(jPanel2Layout.createSequentialGroup().addComponent(jLabel19)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextField14, javax.swing.GroupLayout.DEFAULT_SIZE, 130,
-                                                Short.MAX_VALUE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel20)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 96,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel21)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, 55,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(jPanel2Layout.createSequentialGroup().addComponent(jLabel18).addGap(0, 0,
-                                        Short.MAX_VALUE))
                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
                                         jPanel2Layout.createSequentialGroup().addComponent(jLabel22)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -389,28 +352,11 @@ public class InserirMedicoView extends javax.swing.JFrame {
                                 .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE,
                                         javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
-                                .addGroup(jPanel2Layout
-                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE,
                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
                                                 javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jLabel17))
-                                .addGap(18, 18, 18).addComponent(jLabel18)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(jPanel2Layout
-                                                .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                .addComponent(jLabel21)
-                                                .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addComponent(jTextField14, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel19).addComponent(jLabel20).addComponent(jComboBox3,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(jTextField15, javax.swing.GroupLayout.PREFERRED_SIZE,
@@ -481,26 +427,24 @@ public class InserirMedicoView extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
         char aux[] = jPasswordField1.getPassword();
         String senha = new String(aux);
-        Date dataNascimento = new Date();
-        Date dataAdmissao = new Date();
-        try {
-            dataNascimento = new SimpleDateFormat("dd/MM/yyyy").parse(jComboBox2.getSelectedItem().toString() + "/"
-                    + jComboBox1.getSelectedItem().toString() + "/" + jTextField7.getText());
-        } catch (ParseException e) {
-            JOptionPane.showMessageDialog(null, "A data esta inválida", "Erro!", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        try {
-            dataAdmissao = new SimpleDateFormat("dd/MM/yyyy").parse(jComboBox4.getSelectedItem().toString() + "/"
-                    + jComboBox3.getSelectedItem().toString() + "/" + jTextField14.getText());
-        } catch (ParseException e) {
-            JOptionPane.showMessageDialog(null, "A data esta inválida", "Erro!", JOptionPane.WARNING_MESSAGE);
+
+        if (jTextField5.getText().equals("") || senha.equals("")) {
+            JOptionPane.showMessageDialog(null, "Preencha os dados de login", "Erro!", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
+        LoginController loginController = new LoginController();
+        if (loginController.existeLogin(jTextField5.getText())) {
+            JOptionPane.showMessageDialog(null, "O login inserido já existe", "Erro!", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        LocalDate dataNascimento = LocalDate.parse(jComboBox2.getSelectedItem().toString() + "/"
+                + jComboBox1.getSelectedItem().toString() + "/" + jTextField7.getText(),
+                DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        LocalDate dataAdmissao = ZonedDateTime.now().toLocalDate();
         Endereco endereco = new Endereco(jTextField8.getText(), jTextField9.getText(), jTextField10.getText(),
                 jTextField11.getText(), jTextField12.getText(), jTextField13.getText());
-
         Medico medico = new Medico(jTextField16.getText(), jTextField15.getText(), jTextField5.getText(), senha,
                 jTextField6.getText(), dataAdmissao, jTextField3.getText(), jTextField4.getText(),
                 jTextField1.getText(), jTextField2.getText(), dataNascimento, endereco);
@@ -550,8 +494,6 @@ public class InserirMedicoView extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
-    private javax.swing.JComboBox<String> jComboBox4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -561,7 +503,6 @@ public class InserirMedicoView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
@@ -584,7 +525,6 @@ public class InserirMedicoView extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField11;
     private javax.swing.JTextField jTextField12;
     private javax.swing.JTextField jTextField13;
-    private javax.swing.JTextField jTextField14;
     private javax.swing.JTextField jTextField15;
     private javax.swing.JTextField jTextField16;
     private javax.swing.JTextField jTextField2;

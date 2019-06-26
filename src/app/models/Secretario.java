@@ -1,7 +1,8 @@
 package app.models;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.UUID;
 
 /*
@@ -9,25 +10,22 @@ import java.util.UUID;
  */
 public class Secretario extends Funcionario implements Serializable {
     private static final long serialVersionUID = 1L;
-    private String id;
-    private Date horarioEntrada;
-    private Date horarioSaida;
+    private LocalTime horarioEntrada;
+    private LocalTime horarioSaida;
 
     /*
      * Construtores
      */
     public Secretario() {
         super(null, null, null, null, null, null, null, null, null, null);
-        setId(UUID.randomUUID().toString());
         setHorarioEntrada(null);
         setHorarioSaida(null);
     }
 
-    public Secretario(Date horarioEntrada, Date horarioSaida, String login, String senha, String nctps,
-            Date dataAdmissao, String cpf, String rg, String nome, String telefone, Date dataNascimento,
+    public Secretario(LocalTime horarioEntrada, LocalTime horarioSaida, String login, String senha, String nctps,
+            LocalDate dataAdmissao, String cpf, String rg, String nome, String telefone, LocalDate dataNascimento,
             Endereco endereco) {
         super(login, senha, nctps, dataAdmissao, cpf, rg, nome, telefone, dataNascimento, endereco);
-        setId(UUID.randomUUID().toString());
         setHorarioEntrada(horarioEntrada);
         setHorarioSaida(horarioSaida);
     }
@@ -35,27 +33,19 @@ public class Secretario extends Funcionario implements Serializable {
     /*
      * Gets e sets
      */
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Date getHorarioEntrada() {
+    public LocalTime getHorarioEntrada() {
         return horarioEntrada;
     }
 
-    public void setHorarioEntrada(Date horarioEntrada) {
+    public void setHorarioEntrada(LocalTime horarioEntrada) {
         this.horarioEntrada = horarioEntrada;
     }
 
-    public Date getHorarioSaida() {
+    public LocalTime getHorarioSaida() {
         return horarioSaida;
     }
 
-    public void setHorarioSaida(Date horarioSaida) {
+    public void setHorarioSaida(LocalTime horarioSaida) {
         this.horarioSaida = horarioSaida;
     }
 }

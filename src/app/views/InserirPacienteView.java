@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -29,15 +30,13 @@ public class InserirPacienteView extends javax.swing.JFrame {
         pacienteDAO = new PacienteDAO();
         initComponents();
         this.pacienteId = paciente.getId();
-        LocalDate dataNascimento = paciente.getDataNascimento().toInstant().atZone(ZoneId.systemDefault())
-                .toLocalDate();
         jTextField3.setText(paciente.getCPF());
         jTextField4.setText(paciente.getRG());
         jTextField1.setText(paciente.getNome());
         jTextField2.setText(paciente.getTelefone());
-        jTextField7.setText(Integer.toString(dataNascimento.getYear()));
-        jComboBox1.setSelectedIndex(dataNascimento.getMonthValue() - 1);
-        jComboBox2.setSelectedIndex(dataNascimento.getDayOfMonth() - 1);
+        jTextField7.setText(Integer.toString(paciente.getDataNascimento().getYear()));
+        jComboBox1.setSelectedIndex(paciente.getDataNascimento().getMonthValue() - 1);
+        jComboBox2.setSelectedIndex(paciente.getDataNascimento().getDayOfMonth() - 1);
         jTextField8.setText(paciente.getEndereco().getCEP());
         jTextField9.setText(paciente.getEndereco().getEstado());
         jTextField10.setText(paciente.getEndereco().getCidade());
@@ -298,15 +297,10 @@ public class InserirPacienteView extends javax.swing.JFrame {
      * Botão enviar
      */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
-        Date dataNascimento = new Date();
         ArrayList<Consulta> consultas = new ArrayList<Consulta>();
-        try {
-            dataNascimento = new SimpleDateFormat("dd/MM/yyyy").parse(jComboBox2.getSelectedItem().toString() + "/"
-                    + jComboBox1.getSelectedItem().toString() + "/" + jTextField7.getText());
-        } catch (ParseException e) {
-            JOptionPane.showMessageDialog(null, "A data esta inválida", "Erro!", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+        LocalDate dataNascimento = LocalDate.parse(jComboBox2.getSelectedItem().toString() + "/"
+                + jComboBox1.getSelectedItem().toString() + "/" + jTextField7.getText(),
+                DateTimeFormatter.ofPattern("dd/MM/yyyy"));
 
         Endereco endereco = new Endereco(jTextField8.getText(), jTextField9.getText(), jTextField10.getText(),
                 jTextField11.getText(), jTextField12.getText(), jTextField13.getText());

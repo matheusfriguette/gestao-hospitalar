@@ -61,7 +61,7 @@ public class SecretarioMasterView extends javax.swing.JFrame {
             tabelaPacientes[index][2] = paciente.getTelefone();
             tabelaPacientes[index][3] = paciente.getConsultas() != null && paciente.getConsultas().size() > 0
                     ? (paciente.getConsultas().get(0).getData() != null
-                            ? new SimpleDateFormat("dd/MM/yyyy hh:mm").format(paciente.getConsultas().get(0).getData())
+                            ? new SimpleDateFormat("dd/MM/yyyy HH:mm").format(paciente.getConsultas().get(0).getData())
                             : "Nenhuma consulta marcada")
                     : "Nenhuma consulta marcada";
             index++;
@@ -474,14 +474,15 @@ public class SecretarioMasterView extends javax.swing.JFrame {
             try {
                 Paciente paciente = pacienteDAO
                         .getPaciente(this.listaIdPacientes[jTable1.getSelectionModel().getAnchorSelectionIndex()]);
-                if(paciente.podeConsultar()) {
+                if (paciente.podeConsultar()) {
                     InserirConsultaView inserirConsultaView = new InserirConsultaView(paciente);
                     inserirConsultaView.pack();
                     inserirConsultaView.setLocationRelativeTo(null);
                     inserirConsultaView.setVisible(true);
                     this.dispose();
                 } else {
-                    JOptionPane.showMessageDialog(null, "As consultas do paciente expiraram", "Erro!", JOptionPane.WARNING_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "As consultas do paciente expiraram", "Erro!",
+                            JOptionPane.WARNING_MESSAGE);
                 }
             } catch (ClassNotFoundException | IOException e) {
                 JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);

@@ -1,8 +1,8 @@
 package app.models;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.UUID;
 
 /*
@@ -24,7 +24,7 @@ public class Paciente extends Pessoa implements Serializable {
         setConsultas(null);
     }
 
-    public Paciente(String cpf, String rg, String nome, String telefone, Date dataNascimento, Endereco endereco,
+    public Paciente(String cpf, String rg, String nome, String telefone, LocalDate dataNascimento, Endereco endereco,
             ArrayList<Consulta> consultas, PlanoPaciente plano) {
         super(cpf, rg, nome, telefone, dataNascimento, endereco);
         setId(UUID.randomUUID().toString());
@@ -72,6 +72,10 @@ public class Paciente extends Pessoa implements Serializable {
     }
 
     public boolean podeConsultar() {
-        return this.plano.getConsultasRestantes() > 0;
+        if (plano == null) {
+            return false;
+        } else {
+            return this.plano.getConsultasRestantes() > 0;
+        }
     }
 }

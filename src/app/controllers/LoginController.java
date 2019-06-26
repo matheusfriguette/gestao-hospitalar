@@ -158,4 +158,50 @@ public class LoginController {
 
         return null;
     }
+
+    public Boolean existeLogin(String login) {
+        GerenteDAO gerenteDAO = new GerenteDAO();
+        HashMap<String, Gerente> gerentes = new HashMap<String, Gerente>();
+        SecretarioDAO secretarioDAO = new SecretarioDAO();
+        HashMap<String, Secretario> secretarios = new HashMap<String, Secretario>();
+        MedicoDAO medicoDAO = new MedicoDAO();
+        HashMap<String, Medico> medicos = new HashMap<String, Medico>();
+        FarmaceuticoDAO farmaceuticoDAO = new FarmaceuticoDAO();
+        HashMap<String, Farmaceutico> farmaceuticos = new HashMap<String, Farmaceutico>();
+
+        try {
+            gerentes = gerenteDAO.getGerentes();
+            secretarios = secretarioDAO.getSecretarios();
+            medicos = medicoDAO.getMedicos();
+            farmaceuticos = farmaceuticoDAO.getFarmaceuticos();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        for (Gerente gerente : gerentes.values()) {
+            if (gerente.getLogin().equals(login)) {
+                return true;
+            }
+        }
+        for (Secretario secretario : secretarios.values()) {
+            if (secretario.getLogin().equals(login)) {
+                return true;
+            }
+        }
+        for (Medico medico : medicos.values()) {
+            if (medico.getLogin().equals(login)) {
+                return true;
+            }
+        }
+        for (Farmaceutico farmaceutico : farmaceuticos.values()) {
+            if (farmaceutico.getLogin().equals(login)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

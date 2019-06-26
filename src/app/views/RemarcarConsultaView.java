@@ -1,12 +1,8 @@
 package app.views;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.JOptionPane;
 
@@ -22,14 +18,11 @@ public class RemarcarConsultaView extends javax.swing.JFrame {
         consultaDAO = new ConsultaDAO();
         initComponents();
         this.consultaId = consulta.getId();
-        LocalDate data = consulta.getData().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        Calendar calendario = Calendar.getInstance();
-        calendario.setTime(consulta.getData());
-        jTextField15.setText(Integer.toString(data.getYear()));
-        jComboBox3.setSelectedIndex(data.getMonthValue() - 1);
-        jComboBox4.setSelectedIndex(data.getDayOfMonth() - 1);
-        jComboBox5.setSelectedIndex(calendario.get(Calendar.HOUR_OF_DAY));
-        jComboBox2.setSelectedIndex(calendario.get(Calendar.MINUTE));
+        jTextField15.setText(Integer.toString(consulta.getData().getYear()));
+        jComboBox3.setSelectedIndex(consulta.getData().getMonthValue() - 1);
+        jComboBox4.setSelectedIndex(consulta.getData().getDayOfMonth() - 1);
+        jComboBox5.setSelectedIndex(consulta.getData().getHour());
+        jComboBox2.setSelectedIndex(consulta.getData().getMinute());
     }
 
     private void initComponents() {
@@ -201,16 +194,11 @@ public class RemarcarConsultaView extends javax.swing.JFrame {
      * Botão enviar
      */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
-        Date data = new Date();
-
-        try {
-            data = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss").parse(jComboBox4.getSelectedItem().toString() + "/"
-                    + jComboBox3.getSelectedItem().toString() + "/" + jTextField15.getText() + " "
-                    + jComboBox5.getSelectedItem().toString() + ":" + jComboBox2.getSelectedItem().toString() + ":00");
-        } catch (ParseException e) {
-            JOptionPane.showMessageDialog(null, "A data esta inválida", "Erro!", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+        LocalDateTime data = LocalDateTime.parse(
+                jComboBox4.getSelectedItem().toString() + "/" + jComboBox3.getSelectedItem().toString() + "/"
+                        + jTextField15.getText() + " " + jComboBox5.getSelectedItem().toString() + ":"
+                        + jComboBox2.getSelectedItem().toString() + ":00",
+                DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
 
         try {
             Consulta consulta = consultaDAO.getConsulta(this.consultaId);

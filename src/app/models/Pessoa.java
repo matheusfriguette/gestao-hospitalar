@@ -1,7 +1,7 @@
 package app.models;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 
 /*
  * Pessoa
@@ -12,7 +12,7 @@ public abstract class Pessoa implements Serializable {
     private String rg;
     private String nome;
     private String telefone;
-    private Date dataNascimento;
+    private LocalDate dataNascimento;
     private Endereco endereco;
 
     /*
@@ -27,7 +27,7 @@ public abstract class Pessoa implements Serializable {
         setEndereco(null);
     }
 
-    public Pessoa(String cpf, String rg, String nome, String telefone, Date dataNascimento, Endereco endereco) {
+    public Pessoa(String cpf, String rg, String nome, String telefone, LocalDate dataNascimento, Endereco endereco) {
         setCPF(cpf);
         setRG(rg);
         setNome(nome);
@@ -71,11 +71,11 @@ public abstract class Pessoa implements Serializable {
         this.telefone = telefone;
     }
 
-    public Date getDataNascimento() {
+    public LocalDate getDataNascimento() {
         return dataNascimento;
     }
 
-    public void setDataNascimento(Date dataNascimento) {
+    public void setDataNascimento(LocalDate dataNascimento) {
         this.dataNascimento = dataNascimento;
     }
 

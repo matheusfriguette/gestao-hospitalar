@@ -1,7 +1,8 @@
 package app.models;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 /*
@@ -12,7 +13,7 @@ public class Consulta implements Serializable {
     private String id;
     private Paciente paciente;
     private Medico medico;
-    private Date data;
+    private LocalDateTime data;
     private boolean consultaRealizada;
     private Prontuario prontuario;
 
@@ -28,7 +29,8 @@ public class Consulta implements Serializable {
         setProntuario(null);
     }
 
-    public Consulta(Paciente paciente, Medico medico, Date data, boolean consultaRealizada, Prontuario prontuario) {
+    public Consulta(Paciente paciente, Medico medico, LocalDateTime data, boolean consultaRealizada,
+            Prontuario prontuario) {
         setId(UUID.randomUUID().toString());
         setPaciente(paciente);
         setMedico(medico);
@@ -64,11 +66,11 @@ public class Consulta implements Serializable {
         this.medico = medico;
     }
 
-    public Date getData() {
+    public LocalDateTime getData() {
         return data;
     }
 
-    public void setData(Date data) {
+    public void setData(LocalDateTime data) {
         this.data = data;
     }
 

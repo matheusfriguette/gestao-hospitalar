@@ -1,14 +1,13 @@
 package app.views;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.JOptionPane;
 
+import app.controllers.LoginController;
 import app.dao.FarmaceuticoDAO;
 import app.models.Endereco;
 import app.models.Farmaceutico;
@@ -27,17 +26,13 @@ public class InserirFarmaceuticoView extends javax.swing.JFrame {
         farmaceuticoDAO = new FarmaceuticoDAO();
         initComponents();
         this.farmaceuticoId = farmaceutico.getId();
-        LocalDate dataNascimento = farmaceutico.getDataNascimento().toInstant().atZone(ZoneId.systemDefault())
-                .toLocalDate();
-        LocalDate dataAdmissao = farmaceutico.getDataAdmissao().toInstant().atZone(ZoneId.systemDefault())
-                .toLocalDate();
         jTextField5.setText(farmaceutico.getCPF());
         jTextField6.setText(farmaceutico.getRG());
         jTextField2.setText(farmaceutico.getNome());
         jTextField8.setText(farmaceutico.getTelefone());
-        jTextField7.setText(Integer.toString(dataNascimento.getYear()));
-        jComboBox1.setSelectedIndex(dataNascimento.getMonthValue() - 1);
-        jComboBox2.setSelectedIndex(dataNascimento.getDayOfMonth() - 1);
+        jTextField7.setText(Integer.toString(farmaceutico.getDataNascimento().getYear()));
+        jComboBox1.setSelectedIndex(farmaceutico.getDataNascimento().getMonthValue() - 1);
+        jComboBox2.setSelectedIndex(farmaceutico.getDataNascimento().getDayOfMonth() - 1);
         jTextField9.setText(farmaceutico.getEndereco().getCEP());
         jTextField10.setText(farmaceutico.getEndereco().getEstado());
         jTextField11.setText(farmaceutico.getEndereco().getCidade());
@@ -47,9 +42,6 @@ public class InserirFarmaceuticoView extends javax.swing.JFrame {
         jTextField15.setText(farmaceutico.getLogin());
         jPasswordField1.setText(farmaceutico.getLogin());
         jTextField16.setText(farmaceutico.getNCTPS());
-        jTextField17.setText(Integer.toString(dataAdmissao.getYear()));
-        jComboBox3.setSelectedIndex(dataAdmissao.getMonthValue() - 1);
-        jComboBox4.setSelectedIndex(dataAdmissao.getDayOfMonth() - 1);
     }
 
     private void initComponents() {
@@ -90,13 +82,6 @@ public class InserirFarmaceuticoView extends javax.swing.JFrame {
         jPasswordField1 = new javax.swing.JPasswordField();
         jLabel20 = new javax.swing.JLabel();
         jTextField16 = new javax.swing.JTextField();
-        jLabel21 = new javax.swing.JLabel();
-        jLabel22 = new javax.swing.JLabel();
-        jLabel23 = new javax.swing.JLabel();
-        jLabel24 = new javax.swing.JLabel();
-        jComboBox3 = new javax.swing.JComboBox<>();
-        jComboBox4 = new javax.swing.JComboBox<>();
-        jTextField17 = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -281,23 +266,6 @@ public class InserirFarmaceuticoView extends javax.swing.JFrame {
 
         jLabel20.setText("NCTPS");
 
-        jTextField16.setToolTipText("");
-
-        jLabel21.setText("Dia:");
-
-        jLabel22.setText("Ano:");
-
-        jLabel23.setText("Mês:");
-
-        jLabel24.setText("Data de admissão:");
-
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(
-                new String[] { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12" }));
-
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "01", "02", "03", "04", "05", "06",
-                "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23",
-                "24", "25", "26", "27", "28", "29", "30", "31" }));
-
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -313,57 +281,21 @@ public class InserirFarmaceuticoView extends javax.swing.JFrame {
                                         .addComponent(jPasswordField1))
                                 .addGroup(jPanel3Layout.createSequentialGroup().addComponent(jLabel20)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextField16))
-                                .addGroup(jPanel3Layout.createSequentialGroup().addComponent(jLabel22)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextField17, javax.swing.GroupLayout.DEFAULT_SIZE, 130,
-                                                Short.MAX_VALUE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel23)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 96,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jLabel21)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, 55,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(jPanel3Layout.createSequentialGroup().addComponent(jLabel24).addGap(0, 0,
-                                        Short.MAX_VALUE)))
+                                        .addComponent(jTextField16)))
                         .addContainerGap()));
-        jPanel3Layout
-                .setVerticalGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel3Layout.createSequentialGroup().addContainerGap().addGroup(jPanel3Layout
-                                .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(jLabel18)
-                                .addComponent(jTextField15, javax.swing.GroupLayout.PREFERRED_SIZE,
+        jPanel3Layout.setVerticalGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel3Layout.createSequentialGroup().addContainerGap().addGroup(jPanel3Layout
+                        .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE).addComponent(jLabel18)
+                        .addComponent(jTextField15, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel19).addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jTextField16, javax.swing.GroupLayout.PREFERRED_SIZE,
                                         javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel19)
-                                .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel3Layout
-                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jTextField16, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel20))
-                                .addGap(18, 18, 18).addComponent(jLabel24)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(jPanel3Layout
-                                                .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                .addComponent(jLabel21)
-                                                .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addComponent(jTextField17, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel22).addComponent(jLabel23).addComponent(jComboBox3,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addContainerGap(36, Short.MAX_VALUE)));
+                                .addComponent(jLabel20))
+                        .addContainerGap(36, Short.MAX_VALUE)));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -421,26 +353,24 @@ public class InserirFarmaceuticoView extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
         char aux[] = jPasswordField1.getPassword();
         String senha = new String(aux);
-        Date dataNascimento = new Date();
-        Date dataAdmissao = new Date();
-        try {
-            dataNascimento = new SimpleDateFormat("dd/MM/yyyy").parse(jComboBox2.getSelectedItem().toString() + "/"
-                    + jComboBox1.getSelectedItem().toString() + "/" + jTextField7.getText());
-        } catch (ParseException e) {
-            JOptionPane.showMessageDialog(null, "A data esta inválida", "Erro!", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        try {
-            dataAdmissao = new SimpleDateFormat("dd/MM/yyyy").parse(jComboBox4.getSelectedItem().toString() + "/"
-                    + jComboBox3.getSelectedItem().toString() + "/" + jTextField17.getText());
-        } catch (ParseException e) {
-            JOptionPane.showMessageDialog(null, "A data esta inválida", "Erro!", JOptionPane.WARNING_MESSAGE);
+
+        if (jTextField15.getText().equals("") || senha.equals("")) {
+            JOptionPane.showMessageDialog(null, "Preencha os dados de login", "Erro!", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
+        LoginController loginController = new LoginController();
+        if (loginController.existeLogin(jTextField15.getText())) {
+            JOptionPane.showMessageDialog(null, "O login inserido já existe", "Erro!", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        LocalDate dataNascimento = LocalDate.parse(jComboBox2.getSelectedItem().toString() + "/"
+                + jComboBox1.getSelectedItem().toString() + "/" + jTextField7.getText(),
+                DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        LocalDate dataAdmissao = ZonedDateTime.now().toLocalDate();
         Endereco endereco = new Endereco(jTextField9.getText(), jTextField10.getText(), jTextField11.getText(),
                 jTextField12.getText(), jTextField13.getText(), jTextField14.getText());
-
         Farmaceutico farmaceutico = new Farmaceutico(jTextField15.getText(), senha, jTextField16.getText(),
                 dataAdmissao, jTextField5.getText(), jTextField6.getText(), jTextField2.getText(),
                 jTextField8.getText(), dataNascimento, endereco);
@@ -490,8 +420,6 @@ public class InserirFarmaceuticoView extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
-    private javax.swing.JComboBox<String> jComboBox4;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -504,10 +432,6 @@ public class InserirFarmaceuticoView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel23;
-    private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -524,7 +448,6 @@ public class InserirFarmaceuticoView extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField14;
     private javax.swing.JTextField jTextField15;
     private javax.swing.JTextField jTextField16;
-    private javax.swing.JTextField jTextField17;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextField jTextField6;
