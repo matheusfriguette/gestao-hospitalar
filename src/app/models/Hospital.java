@@ -69,6 +69,58 @@ public class Hospital {
         return false;
     }
 
+    public ArrayList<Gerente> getGerentes() {
+        funcionarios = getFuncionarios();
+        ArrayList<Gerente> gerentes = new ArrayList<Gerente>();
+
+        for (Funcionario funcionario : funcionarios) {
+            if (funcionario instanceof Gerente) {
+                gerentes.add((Gerente) funcionario);
+            }
+        }
+
+        return gerentes;
+    }
+
+    public ArrayList<Secretario> getSecretarios() {
+        funcionarios = getFuncionarios();
+        ArrayList<Secretario> secretarios = new ArrayList<Secretario>();
+
+        for (Funcionario funcionario : funcionarios) {
+            if (funcionario instanceof Secretario) {
+                secretarios.add((Secretario) funcionario);
+            }
+        }
+
+        return secretarios;
+    }
+
+    public ArrayList<Medico> getMedicos() {
+        funcionarios = getFuncionarios();
+        ArrayList<Medico> medicos = new ArrayList<Medico>();
+
+        for (Funcionario funcionario : funcionarios) {
+            if (funcionario instanceof Medico) {
+                medicos.add((Medico) funcionario);
+            }
+        }
+
+        return medicos;
+    }
+
+    public ArrayList<Farmaceutico> getFarmaceuticos() {
+        funcionarios = getFuncionarios();
+        ArrayList<Farmaceutico> farmaceuticos = new ArrayList<Farmaceutico>();
+
+        for (Funcionario funcionario : funcionarios) {
+            if (funcionario instanceof Farmaceutico) {
+                farmaceuticos.add((Farmaceutico) funcionario);
+            }
+        }
+
+        return farmaceuticos;
+    }
+
     /*
      * Operações CRUD
      */

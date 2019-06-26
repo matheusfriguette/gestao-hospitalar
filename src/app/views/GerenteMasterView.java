@@ -1,19 +1,12 @@
 package app.views;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.HashMap;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
-import app.controllers.GerenteController;
-import app.dao.FarmaceuticoDAO;
-import app.dao.GerenteDAO;
-import app.dao.MedicoDAO;
-import app.dao.PlanoDAO;
-import app.dao.SecretarioDAO;
 import app.models.Farmaceutico;
-import app.models.Funcionario;
 import app.models.Gerente;
 import app.models.Hospital;
 import app.models.Medico;
@@ -23,136 +16,101 @@ import app.models.Secretario;
 public class GerenteMasterView extends javax.swing.JFrame {
     private static final long serialVersionUID = 1L;
     private Hospital hospital;
-    private GerenteDAO gerenteDAO;
-    private SecretarioDAO secretarioDAO;
-    private MedicoDAO medicoDAO;
-    private FarmaceuticoDAO farmaceuticoDAO;
-    private PlanoDAO planoDAO;
-    private GerenteController gerenteController;
-    private Gerente gerenteLogado;
-    private HashMap<String, Gerente> listaGerentes;
-    private HashMap<String, Secretario> listaSecretarios;
-    private HashMap<String, Medico> listaMedicos;
-    private HashMap<String, Farmaceutico> listaFarmaceuticos;
-    private HashMap<String, Plano> listaPlanos;
-    private String[] listaIdGerentes;
-    private String[] listaIdSecretarios;
-    private String[] listaIdMedicos;
-    private String[] listaIdFarmaceuticos;
-    private String[] listaIdPlanos;
-    private Object[][] tabelaGerentes;
-    private Object[][] tabelaSecretarios;
-    private Object[][] tabelaMedicos;
-    private Object[][] tabelaFarmaceuticos;
-    private Object[][] tabelaPlanos;
+    private DefaultTableModel tabelaGerentes;
+    private DefaultTableModel tabelaSecretarios;
+    private DefaultTableModel tabelaMedicos;
+    private DefaultTableModel tabelaFarmaceuticos;
+    private DefaultTableModel tabelaPlanos;
+    private String[] idsGerentes;
+    private String[] idsSecretarios;
+    private String[] idsMedicos;
+    private String[] idsFarmaceuticos;
+    private String[] idsPlanos;
 
     public GerenteMasterView() {
         this.hospital = new Hospital();
-        this.gerenteDAO = new GerenteDAO();
-        this.secretarioDAO = new SecretarioDAO();
-        this.medicoDAO = new MedicoDAO();
-        this.farmaceuticoDAO = new FarmaceuticoDAO();
-        this.planoDAO = new PlanoDAO();
-        this.gerenteController = new GerenteController();
-        initComponents();
         this.loadTabelas();
+        initComponents();
     }
 
     private void loadTabelas() {
-        this.listaGerentes = gerenteController.getGerentes();
-        this.listaSecretarios = gerenteController.getSecretarios();
-        this.listaMedicos = gerenteController.getMedicos();
-        this.listaFarmaceuticos = gerenteController.getFarmaceuticos();
-        this.listaPlanos = gerenteController.getPlanos();
-
-        this.tabelaGerentes = new Object[listaGerentes.keySet().size()][4];
-        this.listaIdGerentes = new String[listaGerentes.keySet().size()];
         int index = 0;
-        for (String id : listaGerentes.keySet()) {
-            Gerente gerente = listaGerentes.get(id);
-            listaIdGerentes[index] = id;
-            tabelaGerentes[index][0] = gerente.getNome();
-            tabelaGerentes[index][1] = gerente.getTelefone();
-            tabelaGerentes[index][2] = gerente.getDataAdmissao() != null
-                    ? new SimpleDateFormat("dd/MM/yyyy").format(gerente.getDataAdmissao())
-                    : "";
-            tabelaGerentes[index][3] = gerente.getNCTPS();
+        ArrayList<Gerente> gerentes = hospital.getGerentes();
+        Object[][] gerentesData = new Object[gerentes.size()][4];
+        this.idsGerentes = new String[gerentes.size()];
+        for (Gerente gerente : gerentes) {
+            idsGerentes[index] = gerente.getId();
+            gerentesData[index][0] = gerente.getNome();
+            gerentesData[index][1] = gerente.getTelefone();
+            gerentesData[index][2] = gerente.getDataAdmissao().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            gerentesData[index][3] = gerente.getNCTPS();
             index++;
         }
+        this.tabelaGerentes = new DefaultTableModel(gerentesData,
+                new String[] { "Nome", "Telefone", "Data de admissão", "NCTPS" });
 
-        this.tabelaSecretarios = new Object[listaSecretarios.keySet().size()][5];
-        this.listaIdSecretarios = new String[listaSecretarios.keySet().size()];
         index = 0;
-        for (String id : listaSecretarios.keySet()) {
-            Secretario secretario = listaSecretarios.get(id);
-            listaIdSecretarios[index] = id;
-            tabelaSecretarios[index][0] = secretario.getNome();
-            tabelaSecretarios[index][1] = secretario.getTelefone();
-            tabelaSecretarios[index][2] = secretario.getDataAdmissao() != null
-                    ? new SimpleDateFormat("dd/MM/yyyy").format(secretario.getDataAdmissao())
-                    : "";
-            tabelaSecretarios[index][3] = secretario.getNCTPS();
-            tabelaSecretarios[index][4] = secretario.getHorarioEntrada() != null && secretario.getHorarioSaida() != null
-                    ? new SimpleDateFormat("hh:mm").format(secretario.getHorarioEntrada()) + " - "
-                            + new SimpleDateFormat("hh:mm").format(secretario.getHorarioSaida())
-                    : "";
+        ArrayList<Secretario> secretarios = hospital.getSecretarios();
+        Object[][] secretariosData = new Object[secretarios.size()][5];
+        this.idsSecretarios = new String[secretarios.size()];
+        for (Secretario secretario : secretarios) {
+            idsSecretarios[index] = secretario.getId();
+            secretariosData[index][0] = secretario.getNome();
+            secretariosData[index][1] = secretario.getTelefone();
+            secretariosData[index][2] = secretario.getDataAdmissao().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            secretariosData[index][3] = secretario.getNCTPS();
+            secretariosData[index][4] = secretario.getHorarioEntrada().format(DateTimeFormatter.ofPattern("HH:mm"))
+                    + " - " + secretario.getHorarioSaida().format(DateTimeFormatter.ofPattern("HH:mm"));
             index++;
         }
+        this.tabelaSecretarios = new DefaultTableModel(secretariosData,
+                new String[] { "Nome", "Telefone", "Data de admissão", "NCTPS", "Horário" });
 
-        this.tabelaMedicos = new Object[listaMedicos.keySet().size()][5];
-        this.listaIdMedicos = new String[listaMedicos.keySet().size()];
         index = 0;
-        for (String id : listaMedicos.keySet()) {
-            Medico medico = listaMedicos.get(id);
-            listaIdMedicos[index] = id;
-            tabelaMedicos[index][0] = medico.getNome();
-            tabelaMedicos[index][1] = medico.getTelefone();
-            tabelaMedicos[index][2] = medico.getDataAdmissao() != null
-                    ? new SimpleDateFormat("dd/MM/yyyy").format(medico.getDataAdmissao())
-                    : "";
-            tabelaMedicos[index][3] = medico.getNCTPS();
-            tabelaMedicos[index][4] = medico.getEspecialidade();
-            index++;
+        ArrayList<Medico> medicos = hospital.getMedicos();
+        Object[][] medicosData = new Object[medicos.size()][5];
+        this.idsMedicos = new String[medicos.size()];
+        for (Medico medico : medicos) {
+            idsMedicos[index] = medico.getId();
+            medicosData[index][0] = medico.getNome();
+            medicosData[index][1] = medico.getTelefone();
+            medicosData[index][2] = medico.getDataAdmissao().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            medicosData[index][3] = medico.getNCTPS();
+            medicosData[index][4] = medico.getEspecialidade();
         }
+        this.tabelaMedicos = new DefaultTableModel(medicosData,
+                new String[] { "Nome", "Telefone", "Data de admissão", "NCTPS", "Especialidade" });
 
-        this.tabelaFarmaceuticos = new Object[listaFarmaceuticos.keySet().size()][4];
-        this.listaIdFarmaceuticos = new String[listaFarmaceuticos.keySet().size()];
         index = 0;
-        for (String id : listaFarmaceuticos.keySet()) {
-            Farmaceutico farmaceutico = listaFarmaceuticos.get(id);
-            listaIdFarmaceuticos[index] = id;
-            tabelaFarmaceuticos[index][0] = farmaceutico.getNome();
-            tabelaFarmaceuticos[index][1] = farmaceutico.getTelefone();
-            tabelaFarmaceuticos[index][2] = farmaceutico.getDataAdmissao() != null
-                    ? new SimpleDateFormat("dd/MM/yyyy").format(farmaceutico.getDataAdmissao())
-                    : "";
-            tabelaFarmaceuticos[index][3] = farmaceutico.getNCTPS();
+        ArrayList<Farmaceutico> farmaceuticos = hospital.getFarmaceuticos();
+        Object[][] farmaceuticosData = new Object[farmaceuticos.size()][4];
+        this.idsFarmaceuticos = new String[farmaceuticos.size()];
+        for (Farmaceutico farmaceutico : farmaceuticos) {
+            idsFarmaceuticos[index] = farmaceutico.getId();
+            farmaceuticosData[index][0] = farmaceutico.getNome();
+            farmaceuticosData[index][1] = farmaceutico.getTelefone();
+            farmaceuticosData[index][2] = farmaceutico.getDataAdmissao()
+                    .format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            farmaceuticosData[index][3] = farmaceutico.getNCTPS();
             index++;
         }
+        this.tabelaFarmaceuticos = new DefaultTableModel(farmaceuticosData,
+                new String[] { "Nome", "Telefone", "Data de admissão", "NCTPS" });
 
-        this.tabelaPlanos = new Object[listaPlanos.keySet().size()][4];
-        this.listaIdPlanos = new String[listaPlanos.keySet().size()];
         index = 0;
-        for (String id : listaPlanos.keySet()) {
-            Plano farmaceutico = listaPlanos.get(id);
-            listaIdPlanos[index] = id;
-            tabelaPlanos[index][0] = farmaceutico.getNome();
-            tabelaPlanos[index][1] = "R$ " + farmaceutico.getValor();
-            tabelaPlanos[index][2] = farmaceutico.getConsultasDisponiveis();
-            tabelaPlanos[index][3] = farmaceutico.getIdadeMinima() + " - " + farmaceutico.getIdadeMaxima();
+        ArrayList<Plano> planos = hospital.getPlanos();
+        Object[][] planosData = new Object[planos.size()][4];
+        this.idsPlanos = new String[planos.size()];
+        for (Plano plano : planos) {
+            idsPlanos[index] = plano.getId();
+            planosData[index][0] = plano.getNome();
+            planosData[index][1] = "R$ " + plano.getValor();
+            planosData[index][2] = plano.getConsultasDisponiveis();
+            planosData[index][3] = plano.getIdadeMinima() + " - " + plano.getIdadeMaxima();
             index++;
         }
-
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(this.tabelaGerentes,
-                new String[] { "Nome", "Telefone", "Data de admissão", "NCTPS" }));
-        jTable4.setModel(new javax.swing.table.DefaultTableModel(this.tabelaSecretarios,
-                new String[] { "Nome", "Telefone", "Data de admissão", "NCTPS", "Horário" }));
-        jTable5.setModel(new javax.swing.table.DefaultTableModel(this.tabelaMedicos,
-                new String[] { "Nome", "Telefone", "Data de admissão", "NCTPS", "Especialidade" }));
-        jTable6.setModel(new javax.swing.table.DefaultTableModel(this.tabelaFarmaceuticos,
-                new String[] { "Nome", "Telefone", "Data de admissão", "NCTPS" }));
-        jTable7.setModel(new javax.swing.table.DefaultTableModel(this.tabelaPlanos,
-                new String[] { "Nome", "Valor", "Consultas", "Faixa etária" }));
+        this.tabelaPlanos = new DefaultTableModel(planosData,
+                new String[] { "Nome", "Valor", "Consultas", "Faixa etária" });
     }
 
     private void initComponents() {
@@ -256,8 +214,7 @@ public class GerenteMasterView extends javax.swing.JFrame {
         jPanel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(this.tabelaGerentes,
-                new String[] { "Nome", "Telefone", "Data de admissão", "NCTPS" }));
+        jTable1.setModel(tabelaGerentes);
         jScrollPane1.setViewportView(jTable1);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -330,8 +287,7 @@ public class GerenteMasterView extends javax.swing.JFrame {
         jPanel10.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
         jPanel10.setLayout(new java.awt.GridBagLayout());
 
-        jTable4.setModel(new javax.swing.table.DefaultTableModel(this.tabelaSecretarios,
-                new String[] { "Nome", "Telefone", "Data de admissão", "NCTPS", "Horário" }));
+        jTable4.setModel(tabelaSecretarios);
         jScrollPane4.setViewportView(jTable4);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -404,8 +360,7 @@ public class GerenteMasterView extends javax.swing.JFrame {
         jPanel12.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
         jPanel12.setLayout(new java.awt.GridBagLayout());
 
-        jTable5.setModel(new javax.swing.table.DefaultTableModel(this.tabelaMedicos,
-                new String[] { "Nome", "Telefone", "Data de admissão", "NCTPS", "Especialidade" }));
+        jTable5.setModel(tabelaMedicos);
         jScrollPane5.setViewportView(jTable5);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -478,8 +433,7 @@ public class GerenteMasterView extends javax.swing.JFrame {
         jPanel14.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
         jPanel14.setLayout(new java.awt.GridBagLayout());
 
-        jTable6.setModel(new javax.swing.table.DefaultTableModel(this.tabelaFarmaceuticos,
-                new String[] { "Nome", "Telefone", "Data de admissão", "NCTPS" }));
+        jTable6.setModel(tabelaFarmaceuticos);
         jScrollPane6.setViewportView(jTable6);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -552,8 +506,7 @@ public class GerenteMasterView extends javax.swing.JFrame {
         jPanel16.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
         jPanel16.setLayout(new java.awt.GridBagLayout());
 
-        jTable7.setModel(new javax.swing.table.DefaultTableModel(this.tabelaPlanos,
-                new String[] { "Nome", "Valor", "Consultas", "Faixa etária" }));
+        jTable7.setModel(tabelaPlanos);
         jScrollPane7.setViewportView(jTable7);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -650,7 +603,7 @@ public class GerenteMasterView extends javax.swing.JFrame {
      * Botão alterar senha
      */
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
-        AlterarSenhaView alterarSenhaView = new AlterarSenhaView("gerente", gerenteLogado.getId());
+        AlterarSenhaView alterarSenhaView = new AlterarSenhaView(hospital.getUsuarioLogado().getId());
         alterarSenhaView.pack();
         alterarSenhaView.setLocationRelativeTo(null);
         alterarSenhaView.setVisible(true);
@@ -674,17 +627,13 @@ public class GerenteMasterView extends javax.swing.JFrame {
         if (jTable1.getSelectionModel().isSelectionEmpty()) {
             JOptionPane.showMessageDialog(null, "Selecione um gerente", "Erro!", JOptionPane.WARNING_MESSAGE);
         } else {
-            try {
-                Gerente gerente = gerenteDAO
-                        .getGerente(this.listaIdGerentes[jTable1.getSelectionModel().getAnchorSelectionIndex()]);
-                InserirGerenteView inserirGerenteView = new InserirGerenteView(gerente);
-                inserirGerenteView.pack();
-                inserirGerenteView.setLocationRelativeTo(null);
-                inserirGerenteView.setVisible(true);
-                this.dispose();
-            } catch (ClassNotFoundException | IOException e) {
-                JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-            }
+            Gerente gerente = (Gerente) hospital
+                    .getFuncionario(this.idsGerentes[jTable1.getSelectionModel().getAnchorSelectionIndex()]);
+            InserirGerenteView inserirGerenteView = new InserirGerenteView(gerente);
+            inserirGerenteView.pack();
+            inserirGerenteView.setLocationRelativeTo(null);
+            inserirGerenteView.setVisible(true);
+            this.dispose();
         }
     }
 
@@ -695,8 +644,8 @@ public class GerenteMasterView extends javax.swing.JFrame {
         if (jTable1.getSelectionModel().isSelectionEmpty()) {
             JOptionPane.showMessageDialog(null, "Selecione um gerente", "Erro!", JOptionPane.WARNING_MESSAGE);
         } else {
-            if (this.listaIdGerentes[jTable1.getSelectionModel().getAnchorSelectionIndex()]
-                    .equals(this.gerenteLogado.getId())) {
+            if (this.idsGerentes[jTable1.getSelectionModel().getAnchorSelectionIndex()]
+                    .equals(this.hospital.getUsuarioLogado().getId())) {
                 JOptionPane.showMessageDialog(null, "Você não pode deletar seu próprio usuário", "Erro!",
                         JOptionPane.WARNING_MESSAGE);
             } else {
@@ -704,14 +653,8 @@ public class GerenteMasterView extends javax.swing.JFrame {
                         "Deletar gerente?", JOptionPane.YES_NO_OPTION);
 
                 if (option == JOptionPane.YES_OPTION) {
-                    try {
-                        gerenteDAO.deleteGerente(
-                                this.listaIdGerentes[jTable1.getSelectionModel().getAnchorSelectionIndex()]);
-                        this.loadTabelas();
-                    } catch (ClassNotFoundException | IOException e) {
-                        JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!",
-                                JOptionPane.WARNING_MESSAGE);
-                    }
+                    hospital.deleteFuncionario(this.idsGerentes[jTable1.getSelectionModel().getAnchorSelectionIndex()]);
+                    this.loadTabelas();
                 }
             }
         }
@@ -735,17 +678,13 @@ public class GerenteMasterView extends javax.swing.JFrame {
         if (jTable4.getSelectionModel().isSelectionEmpty()) {
             JOptionPane.showMessageDialog(null, "Selecione um secretário", "Erro!", JOptionPane.WARNING_MESSAGE);
         } else {
-            try {
-                Secretario secretario = secretarioDAO
-                        .getSecretario(this.listaIdSecretarios[jTable4.getSelectionModel().getAnchorSelectionIndex()]);
-                InserirSecretarioView inserirSecretarioView = new InserirSecretarioView(secretario);
-                inserirSecretarioView.pack();
-                inserirSecretarioView.setLocationRelativeTo(null);
-                inserirSecretarioView.setVisible(true);
-                this.dispose();
-            } catch (ClassNotFoundException | IOException e) {
-                JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-            }
+            Secretario secretario = (Secretario) hospital
+                    .getFuncionario(this.idsSecretarios[jTable4.getSelectionModel().getAnchorSelectionIndex()]);
+            InserirSecretarioView inserirSecretarioView = new InserirSecretarioView(secretario);
+            inserirSecretarioView.pack();
+            inserirSecretarioView.setLocationRelativeTo(null);
+            inserirSecretarioView.setVisible(true);
+            this.dispose();
         }
     }
 
@@ -760,13 +699,8 @@ public class GerenteMasterView extends javax.swing.JFrame {
                     "Deletar secretário?", JOptionPane.YES_NO_OPTION);
 
             if (option == JOptionPane.YES_OPTION) {
-                try {
-                    secretarioDAO.deleteSecretario(
-                            this.listaIdSecretarios[jTable4.getSelectionModel().getAnchorSelectionIndex()]);
-                    this.loadTabelas();
-                } catch (ClassNotFoundException | IOException e) {
-                    JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-                }
+                hospital.deleteFuncionario(this.idsSecretarios[jTable4.getSelectionModel().getAnchorSelectionIndex()]);
+                this.loadTabelas();
             }
         }
     }
@@ -789,17 +723,13 @@ public class GerenteMasterView extends javax.swing.JFrame {
         if (jTable5.getSelectionModel().isSelectionEmpty()) {
             JOptionPane.showMessageDialog(null, "Selecione um médico", "Erro!", JOptionPane.WARNING_MESSAGE);
         } else {
-            try {
-                Medico medico = medicoDAO
-                        .getMedico(this.listaIdMedicos[jTable5.getSelectionModel().getAnchorSelectionIndex()]);
-                InserirMedicoView inserirMedicoView = new InserirMedicoView(medico);
-                inserirMedicoView.pack();
-                inserirMedicoView.setLocationRelativeTo(null);
-                inserirMedicoView.setVisible(true);
-                this.dispose();
-            } catch (ClassNotFoundException | IOException e) {
-                JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-            }
+            Medico medico = (Medico) hospital
+                    .getFuncionario(this.idsMedicos[jTable5.getSelectionModel().getAnchorSelectionIndex()]);
+            InserirMedicoView inserirMedicoView = new InserirMedicoView(medico);
+            inserirMedicoView.pack();
+            inserirMedicoView.setLocationRelativeTo(null);
+            inserirMedicoView.setVisible(true);
+            this.dispose();
         }
     }
 
@@ -814,12 +744,8 @@ public class GerenteMasterView extends javax.swing.JFrame {
                     "Deletar médico?", JOptionPane.YES_NO_OPTION);
 
             if (option == JOptionPane.YES_OPTION) {
-                try {
-                    medicoDAO.deleteMedico(this.listaIdMedicos[jTable5.getSelectionModel().getAnchorSelectionIndex()]);
-                    this.loadTabelas();
-                } catch (ClassNotFoundException | IOException e) {
-                    JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-                }
+                hospital.deleteFuncionario(this.idsMedicos[jTable5.getSelectionModel().getAnchorSelectionIndex()]);
+                this.loadTabelas();
             }
         }
     }
@@ -842,17 +768,13 @@ public class GerenteMasterView extends javax.swing.JFrame {
         if (jTable6.getSelectionModel().isSelectionEmpty()) {
             JOptionPane.showMessageDialog(null, "Selecione um farmacêutico", "Erro!", JOptionPane.WARNING_MESSAGE);
         } else {
-            try {
-                Farmaceutico farmaceutico = farmaceuticoDAO.getFarmaceutico(
-                        this.listaIdFarmaceuticos[jTable6.getSelectionModel().getAnchorSelectionIndex()]);
-                InserirFarmaceuticoView inserirFarmaceuticoView = new InserirFarmaceuticoView(farmaceutico);
-                inserirFarmaceuticoView.pack();
-                inserirFarmaceuticoView.setLocationRelativeTo(null);
-                inserirFarmaceuticoView.setVisible(true);
-                this.dispose();
-            } catch (ClassNotFoundException | IOException e) {
-                JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-            }
+            Farmaceutico farmaceutico = (Farmaceutico) hospital
+                    .getFuncionario(this.idsFarmaceuticos[jTable6.getSelectionModel().getAnchorSelectionIndex()]);
+            InserirFarmaceuticoView inserirFarmaceuticoView = new InserirFarmaceuticoView(farmaceutico);
+            inserirFarmaceuticoView.pack();
+            inserirFarmaceuticoView.setLocationRelativeTo(null);
+            inserirFarmaceuticoView.setVisible(true);
+            this.dispose();
         }
     }
 
@@ -867,13 +789,9 @@ public class GerenteMasterView extends javax.swing.JFrame {
                     "Deletar farmacêutico?", JOptionPane.YES_NO_OPTION);
 
             if (option == JOptionPane.YES_OPTION) {
-                try {
-                    farmaceuticoDAO.deleteFarmaceutico(
-                            this.listaIdFarmaceuticos[jTable6.getSelectionModel().getAnchorSelectionIndex()]);
-                    this.loadTabelas();
-                } catch (ClassNotFoundException | IOException e) {
-                    JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-                }
+                hospital.deleteFuncionario(
+                        this.idsFarmaceuticos[jTable6.getSelectionModel().getAnchorSelectionIndex()]);
+                this.loadTabelas();
             }
         }
     }
@@ -896,17 +814,12 @@ public class GerenteMasterView extends javax.swing.JFrame {
         if (jTable7.getSelectionModel().isSelectionEmpty()) {
             JOptionPane.showMessageDialog(null, "Selecione um plano", "Erro!", JOptionPane.WARNING_MESSAGE);
         } else {
-            try {
-                Plano plano = planoDAO
-                        .getPlano(this.listaIdPlanos[jTable7.getSelectionModel().getAnchorSelectionIndex()]);
-                InserirPlanoView inserirPlanoView = new InserirPlanoView(plano);
-                inserirPlanoView.pack();
-                inserirPlanoView.setLocationRelativeTo(null);
-                inserirPlanoView.setVisible(true);
-                this.dispose();
-            } catch (ClassNotFoundException | IOException e) {
-                JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-            }
+            Plano plano = hospital.getPlano(this.idsPlanos[jTable7.getSelectionModel().getAnchorSelectionIndex()]);
+            InserirPlanoView inserirPlanoView = new InserirPlanoView(plano);
+            inserirPlanoView.pack();
+            inserirPlanoView.setLocationRelativeTo(null);
+            inserirPlanoView.setVisible(true);
+            this.dispose();
         }
     }
 
@@ -921,12 +834,8 @@ public class GerenteMasterView extends javax.swing.JFrame {
                     "Deletar plano?", JOptionPane.YES_NO_OPTION);
 
             if (option == JOptionPane.YES_OPTION) {
-                try {
-                    planoDAO.deletePlano(this.listaIdPlanos[jTable7.getSelectionModel().getAnchorSelectionIndex()]);
-                    this.loadTabelas();
-                } catch (ClassNotFoundException | IOException e) {
-                    JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-                }
+                hospital.deletePlano(this.idsPlanos[jTable7.getSelectionModel().getAnchorSelectionIndex()]);
+                this.loadTabelas();
             }
         }
     }

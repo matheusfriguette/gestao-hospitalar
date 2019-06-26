@@ -1,62 +1,41 @@
 package app.views;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
-import app.dao.ConsultaDAO;
-import app.dao.ExameDAO;
-import app.dao.RemedioDAO;
 import app.models.Consulta;
 import app.models.Exame;
+import app.models.Hospital;
 import app.models.Prontuario;
 import app.models.Remedio;
 
 public class RealizarConsultaView extends javax.swing.JFrame {
     private static final long serialVersionUID = 1L;
-    private ConsultaDAO consultaDAO;
-    private ExameDAO exameDAO;
-    private RemedioDAO remedioDAO;
+    private Hospital hospital;
     private Consulta consultaSelecionada;
-    private HashMap<String, Exame> listaExames;
-    DefaultListModel<Exame> listModelExames;
-    DefaultListModel<Exame> listModelExamesSelecionados;
-    DefaultListModel<Exame> listaIdOpcoesExames;
-    DefaultListModel<Exame> listaIdSelecionadoExames;
-    private HashMap<String, Remedio> listaRemedios;
-    DefaultListModel<Remedio> listModelRemedios;
-    DefaultListModel<Remedio> listModelRemediosSelecionados;
-    DefaultListModel<Remedio> listaIdOpcoesRemedios;
-    DefaultListModel<Remedio> listaIdSelecionadoRemedios;
+    DefaultListModel<Exame> listaExames;
+    DefaultListModel<Exame> listaExamesSelecionados;
+    DefaultListModel<Remedio> listaRemedios;
+    DefaultListModel<Remedio> listaRemediosSelecionados;
 
     public RealizarConsultaView(Consulta consulta) {
-        consultaDAO = new ConsultaDAO();
-        exameDAO = new ExameDAO();
-        remedioDAO = new RemedioDAO();
+        hospital = new Hospital();
         this.consultaSelecionada = consulta;
 
-        try {
-            this.listaExames = exameDAO.getExames();
-            this.listaRemedios = remedioDAO.getRemedios();
-        } catch (ClassNotFoundException | IOException e) {
-            JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
+        ArrayList<Exame> exames = hospital.getExames();
+        listaExames = new DefaultListModel<Exame>();
+        listaExamesSelecionados = new DefaultListModel<Exame>();
+        for (Exame exame : exames) {
+            listaExames.addElement(exame);
         }
 
-        listModelExames = new DefaultListModel<Exame>();
-        listModelExamesSelecionados = new DefaultListModel<Exame>();
-        for (String id : listaExames.keySet()) {
-            Exame exame = listaExames.get(id);
-            listModelExames.addElement(exame);
-        }
-
-        listModelRemedios = new DefaultListModel<Remedio>();
-        listModelRemediosSelecionados = new DefaultListModel<Remedio>();
-        for (String id : listaRemedios.keySet()) {
-            Remedio remedio = listaRemedios.get(id);
-            listModelRemedios.addElement(remedio);
+        ArrayList<Remedio> remedios = hospital.getRemedios();
+        listaRemedios = new DefaultListModel<Remedio>();
+        listaRemediosSelecionados = new DefaultListModel<Remedio>();
+        for (Remedio remedio : remedios) {
+            listaRemedios.addElement(remedio);
         }
 
         initComponents();
@@ -136,10 +115,10 @@ public class RealizarConsultaView extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Exames"));
 
-        jList1.setModel(listModelExames);
+        jList1.setModel(listaExames);
         jScrollPane1.setViewportView(jList1);
 
-        jList2.setModel(listModelExamesSelecionados);
+        jList2.setModel(listaExamesSelecionados);
         jScrollPane2.setViewportView(jList2);
 
         jLabel3.setText("Opções");
@@ -218,10 +197,10 @@ public class RealizarConsultaView extends javax.swing.JFrame {
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Remédios"));
 
-        jList3.setModel(listModelRemedios);
+        jList3.setModel(listaRemedios);
         jScrollPane3.setViewportView(jList3);
 
-        jList4.setModel(listModelRemediosSelecionados);
+        jList4.setModel(listaRemediosSelecionados);
         jScrollPane4.setViewportView(jList4);
 
         jLabel5.setText("Opções");
@@ -344,39 +323,27 @@ public class RealizarConsultaView extends javax.swing.JFrame {
         ArrayList<Exame> exames = new ArrayList<Exame>();
         ArrayList<Remedio> remedios = new ArrayList<Remedio>();
 
-        for (int i = 0; i < listModelExamesSelecionados.getSize(); i++) {
-            try {
-                exames.add(this.exameDAO.getExame(listModelExamesSelecionados.getElementAt(i).getId()));
-            } catch (ClassNotFoundException | IOException e) {
-                JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-            }
+        for (int i = 0; i < listaExamesSelecionados.getSize(); i++) {
+            exames.add(listaExamesSelecionados.getElementAt(i));
         }
 
-        for (int i = 0; i < listModelRemediosSelecionados.getSize(); i++) {
-            try {
-                exames.add(this.exameDAO.getExame(listModelRemediosSelecionados.getElementAt(i).getId()));
-            } catch (ClassNotFoundException | IOException e) {
-                JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-            }
+        for (int i = 0; i < listaRemediosSelecionados.getSize(); i++) {
+            remedios.add(listaRemediosSelecionados.getElementAt(i));
         }
 
         Prontuario prontuario = new Prontuario(jTextField1.getText(), jTextField2.getText(), exames, remedios);
 
         this.consultaSelecionada.setConsultaRealizada(true);
         this.consultaSelecionada.setProntuario(prontuario);
+        this.hospital.editConsulta(consultaSelecionada.getId(), consultaSelecionada);
 
-        try {
-            this.consultaDAO.editConsulta(consultaSelecionada.getId(), consultaSelecionada);
-            JOptionPane.showMessageDialog(null, "Consulta realizada com sucesso", "Sucesso!",
-                    JOptionPane.INFORMATION_MESSAGE);
-            MedicoMasterView medicoMasterView = new MedicoMasterView();
-            medicoMasterView.pack();
-            medicoMasterView.setLocationRelativeTo(null);
-            medicoMasterView.setVisible(true);
-            this.dispose();
-        } catch (ClassNotFoundException | IOException e) {
-            JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-        }
+        JOptionPane.showMessageDialog(null, "Consulta realizada com sucesso", "Sucesso!",
+                JOptionPane.INFORMATION_MESSAGE);
+        MedicoMasterView medicoMasterView = new MedicoMasterView();
+        medicoMasterView.pack();
+        medicoMasterView.setLocationRelativeTo(null);
+        medicoMasterView.setVisible(true);
+        this.dispose();
     }
 
     /*
@@ -396,8 +363,8 @@ public class RealizarConsultaView extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
         if (jList1.getSelectedValue() != null) {
             jList1.getSelectedValuesList().stream().forEach((data) -> {
-                listModelExamesSelecionados.addElement(data);
-                listModelExames.removeElement(data);
+                listaExamesSelecionados.addElement(data);
+                listaExames.removeElement(data);
             });
         }
     }
@@ -408,8 +375,8 @@ public class RealizarConsultaView extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {
         if (jList2.getSelectedValue() != null) {
             jList2.getSelectedValuesList().stream().forEach((data) -> {
-                listModelExames.addElement(data);
-                listModelExamesSelecionados.removeElement(data);
+                listaExames.addElement(data);
+                listaExamesSelecionados.removeElement(data);
             });
         }
     }
@@ -420,8 +387,8 @@ public class RealizarConsultaView extends javax.swing.JFrame {
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {
         if (jList3.getSelectedValue() != null) {
             jList3.getSelectedValuesList().stream().forEach((data) -> {
-                listModelRemediosSelecionados.addElement(data);
-                listModelRemedios.removeElement(data);
+                listaRemediosSelecionados.addElement(data);
+                listaRemedios.removeElement(data);
             });
         }
     }
@@ -432,8 +399,8 @@ public class RealizarConsultaView extends javax.swing.JFrame {
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {
         if (jList4.getSelectedValue() != null) {
             jList4.getSelectedValuesList().stream().forEach((data) -> {
-                listModelRemedios.addElement(data);
-                listModelRemediosSelecionados.removeElement(data);
+                listaRemedios.addElement(data);
+                listaRemediosSelecionados.removeElement(data);
             });
         }
     }

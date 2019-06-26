@@ -1,40 +1,29 @@
 package app.views;
 
-import java.io.IOException;
-import java.util.HashMap;
+import java.util.ArrayList;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
-import app.dao.PacienteDAO;
-import app.dao.PlanoDAO;
+import app.models.Hospital;
 import app.models.Paciente;
 import app.models.Plano;
 import app.models.PlanoPaciente;
 
 public class AtribuirPlanoView extends javax.swing.JFrame {
     private static final long serialVersionUID = 1L;
+    private Hospital hospital;
     private Paciente pacienteSelecionado;
-    private PlanoDAO planoDAO;
-    private PacienteDAO pacienteDAO;
-    private HashMap<String, Plano> listaPlanos;
-    DefaultComboBoxModel<Plano> listModelPlanos;
+    DefaultComboBoxModel<Plano> listaPlanos;
 
     public AtribuirPlanoView(Paciente paciente) {
-        planoDAO = new PlanoDAO();
-        pacienteDAO = new PacienteDAO();
+        this.hospital = new Hospital();
         this.pacienteSelecionado = paciente;
 
-        try {
-            this.listaPlanos = planoDAO.getPlanos();
-        } catch (ClassNotFoundException | IOException e) {
-            JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-        }
-
-        listModelPlanos = new DefaultComboBoxModel<Plano>();
-        for (String id : listaPlanos.keySet()) {
-            Plano plano = listaPlanos.get(id);
-            listModelPlanos.addElement(plano);
+        ArrayList<Plano> planos = hospital.getPlanos();
+        this.listaPlanos = new DefaultComboBoxModel<Plano>();
+        for (Plano plano : planos) {
+            listaPlanos.addElement(plano);
         }
 
         initComponents();
@@ -61,7 +50,7 @@ public class AtribuirPlanoView extends javax.swing.JFrame {
 
         jLabel1.setText("Caso o paciente já possua plano, suas consultas disponíveis serão resetadas");
 
-        jComboBox1.setModel(listModelPlanos);
+        jComboBox1.setModel(listaPlanos);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -138,19 +127,14 @@ public class AtribuirPlanoView extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
         PlanoPaciente planoPaciente = new PlanoPaciente((Plano) jComboBox1.getSelectedItem());
         this.pacienteSelecionado.setPlano(planoPaciente);
+        this.hospital.editPaciente(pacienteSelecionado.getId(), pacienteSelecionado);
 
-        try {
-            this.pacienteDAO.editPaciente(pacienteSelecionado.getId(), pacienteSelecionado);
-            JOptionPane.showMessageDialog(null, "Plano atribuido com sucesso", "Sucesso!",
-                    JOptionPane.INFORMATION_MESSAGE);
-            SecretarioMasterView secretarioMasterView = new SecretarioMasterView();
-            secretarioMasterView.pack();
-            secretarioMasterView.setLocationRelativeTo(null);
-            secretarioMasterView.setVisible(true);
-            this.dispose();
-        } catch (ClassNotFoundException | IOException e) {
-            JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-        }
+        JOptionPane.showMessageDialog(null, "Plano atribuido com sucesso", "Sucesso!", JOptionPane.INFORMATION_MESSAGE);
+        SecretarioMasterView secretarioMasterView = new SecretarioMasterView();
+        secretarioMasterView.pack();
+        secretarioMasterView.setLocationRelativeTo(null);
+        secretarioMasterView.setVisible(true);
+        this.dispose();
     }
 
     /*

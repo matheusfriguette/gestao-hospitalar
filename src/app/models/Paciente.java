@@ -62,10 +62,6 @@ public class Paciente extends Pessoa implements Serializable {
     /*
      * Métodos
      */
-    public void renovarPlano() {
-        this.plano.setConsultasRestantes(this.plano.getPlano().getConsultasDisponiveis());
-    }
-
     public void addConsulta(Consulta consulta) {
         this.consultas.add(consulta);
         this.plano.diminuiConsultasRestantes();

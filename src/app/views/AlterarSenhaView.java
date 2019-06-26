@@ -1,21 +1,16 @@
 package app.views;
 
-import java.io.IOException;
 import javax.swing.JOptionPane;
 
-import app.dao.FarmaceuticoDAO;
-import app.dao.GerenteDAO;
-import app.dao.MedicoDAO;
-import app.dao.SecretarioDAO;
 import app.models.*;
 
 public class AlterarSenhaView extends javax.swing.JFrame {
     private static final long serialVersionUID = 1L;
-    private String tipoFuncionario;
+    private Hospital hospital;
     private String funcionarioId;
 
-    public AlterarSenhaView(String tipoFuncionario, String funcionarioId) {
-        this.tipoFuncionario = tipoFuncionario;
+    public AlterarSenhaView(String funcionarioId) {
+        this.hospital = new Hospital();
         this.funcionarioId = funcionarioId;
         initComponents();
     }
@@ -111,91 +106,12 @@ public class AlterarSenhaView extends javax.swing.JFrame {
         if (senha == "" || senha == null) {
             JOptionPane.showMessageDialog(null, "O campo senha é obrigatório", "Atenção!", JOptionPane.WARNING_MESSAGE);
         } else {
-            if (tipoFuncionario == "gerente") {
-                GerenteDAO gerenteDAO = new GerenteDAO();
-                Gerente gerente = new Gerente();
+            Funcionario funcionario = hospital.getFuncionario(this.funcionarioId);
+            funcionario.setSenha(senha);
+            hospital.editFuncionario(funcionarioId, funcionario);
 
-                try {
-                    gerente = gerenteDAO.getGerente(funcionarioId);
-                } catch (ClassNotFoundException | IOException e) {
-                    JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-                }
-
-                gerente.setSenha(senha);
-
-                try {
-                    gerenteDAO.editGerente(funcionarioId, gerente);
-                } catch (ClassNotFoundException | IOException e) {
-                    JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-                }
-
-                JOptionPane.showMessageDialog(null, "Senha alterada com sucesso!", "Sucesso!",
-                        JOptionPane.WARNING_MESSAGE);
-                this.dispose();
-            } else if (tipoFuncionario == "secretario") {
-                SecretarioDAO secretarioDAO = new SecretarioDAO();
-                Secretario secretario = new Secretario();
-
-                try {
-                    secretario = secretarioDAO.getSecretario(funcionarioId);
-                } catch (ClassNotFoundException | IOException e) {
-                    JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-                }
-
-                secretario.setSenha(senha);
-
-                try {
-                    secretarioDAO.editSecretario(funcionarioId, secretario);
-                } catch (ClassNotFoundException | IOException e) {
-                    JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-                }
-
-                JOptionPane.showMessageDialog(null, "Senha alterada com sucesso!", "Sucesso!",
-                        JOptionPane.WARNING_MESSAGE);
-                this.dispose();
-            } else if (tipoFuncionario == "medico") {
-                MedicoDAO medicoDAO = new MedicoDAO();
-                Medico medico = new Medico();
-
-                try {
-                    medico = medicoDAO.getMedico(funcionarioId);
-                } catch (ClassNotFoundException | IOException e) {
-                    JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-                }
-
-                medico.setSenha(senha);
-
-                try {
-                    medicoDAO.editMedico(funcionarioId, medico);
-                } catch (ClassNotFoundException | IOException e) {
-                    JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-                }
-
-                JOptionPane.showMessageDialog(null, "Senha alterada com sucesso!", "Sucesso!",
-                        JOptionPane.WARNING_MESSAGE);
-                this.dispose();
-            } else if (tipoFuncionario == "farmaceutico") {
-                FarmaceuticoDAO farmaceuticoDAO = new FarmaceuticoDAO();
-                Farmaceutico farmaceutico = new Farmaceutico();
-
-                try {
-                    farmaceutico = farmaceuticoDAO.getFarmaceutico(funcionarioId);
-                } catch (ClassNotFoundException | IOException e) {
-                    JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-                }
-
-                farmaceutico.setSenha(senha);
-
-                try {
-                    farmaceuticoDAO.editFarmaceutico(funcionarioId, farmaceutico);
-                } catch (ClassNotFoundException | IOException e) {
-                    JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-                }
-
-                JOptionPane.showMessageDialog(null, "Senha alterada com sucesso!", "Sucesso!",
-                        JOptionPane.WARNING_MESSAGE);
-                this.dispose();
-            }
+            JOptionPane.showMessageDialog(null, "Senha alterada com sucesso!", "Sucesso!", JOptionPane.WARNING_MESSAGE);
+            this.dispose();
         }
     }
 

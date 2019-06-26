@@ -1,26 +1,25 @@
 package app.views;
 
-import java.io.IOException;
-
 import javax.swing.JOptionPane;
 
-import app.dao.PlanoDAO;
+import app.models.Hospital;
 import app.models.Plano;
 
 public class InserirPlanoView extends javax.swing.JFrame {
     private static final long serialVersionUID = 1L;
-    private PlanoDAO planoDAO;
+    private Hospital hospital;
     private String planoId;
 
     public InserirPlanoView() {
-        planoDAO = new PlanoDAO();
+        hospital = new Hospital();
         initComponents();
     }
 
     public InserirPlanoView(Plano plano) {
-        planoDAO = new PlanoDAO();
-        initComponents();
+        hospital = new Hospital();
         this.planoId = plano.getId();
+        initComponents();
+
         jTextField2.setText(plano.getNome());
         jTextField15.setText(Double.toString(plano.getValor()));
         jSpinner3.setValue(plano.getConsultasDisponiveis());
@@ -175,32 +174,26 @@ public class InserirPlanoView extends javax.swing.JFrame {
                 Integer.parseInt(jSpinner2.getValue().toString()));
 
         if (this.planoId != null) {
-            try {
-                plano.setId(this.planoId);
-                this.planoDAO.editPlano(this.planoId, plano);
-                JOptionPane.showMessageDialog(null, "Plano editado com sucesso", "Sucesso!",
-                        JOptionPane.INFORMATION_MESSAGE);
-                GerenteMasterView gerenteMasterView = new GerenteMasterView();
-                gerenteMasterView.pack();
-                gerenteMasterView.setLocationRelativeTo(null);
-                gerenteMasterView.setVisible(true);
-                this.dispose();
-            } catch (ClassNotFoundException | IOException e) {
-                JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-            }
+            plano.setId(this.planoId);
+            this.hospital.editPlano(this.planoId, plano);
+
+            JOptionPane.showMessageDialog(null, "Plano editado com sucesso", "Sucesso!",
+                    JOptionPane.INFORMATION_MESSAGE);
+            GerenteMasterView gerenteMasterView = new GerenteMasterView();
+            gerenteMasterView.pack();
+            gerenteMasterView.setLocationRelativeTo(null);
+            gerenteMasterView.setVisible(true);
+            this.dispose();
         } else {
-            try {
-                this.planoDAO.addPlano(plano);
-                JOptionPane.showMessageDialog(null, "Plano inserido com sucesso", "Sucesso!",
-                        JOptionPane.INFORMATION_MESSAGE);
-                GerenteMasterView gerenteMasterView = new GerenteMasterView();
-                gerenteMasterView.pack();
-                gerenteMasterView.setLocationRelativeTo(null);
-                gerenteMasterView.setVisible(true);
-                this.dispose();
-            } catch (ClassNotFoundException | IOException e) {
-                JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-            }
+            this.hospital.addPlano(plano);
+
+            JOptionPane.showMessageDialog(null, "Plano inserido com sucesso", "Sucesso!",
+                    JOptionPane.INFORMATION_MESSAGE);
+            GerenteMasterView gerenteMasterView = new GerenteMasterView();
+            gerenteMasterView.pack();
+            gerenteMasterView.setLocationRelativeTo(null);
+            gerenteMasterView.setVisible(true);
+            this.dispose();
         }
     }
 

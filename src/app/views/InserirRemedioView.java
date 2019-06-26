@@ -1,26 +1,25 @@
 package app.views;
 
-import java.io.IOException;
-
 import javax.swing.JOptionPane;
 
-import app.dao.RemedioDAO;
+import app.models.Hospital;
 import app.models.Remedio;
 
 public class InserirRemedioView extends javax.swing.JFrame {
     private static final long serialVersionUID = 1L;
-    private RemedioDAO remedioDAO;
+    private Hospital hospital;
     private String remedioId;
 
     public InserirRemedioView() {
-        remedioDAO = new RemedioDAO();
+        hospital = new Hospital();
         initComponents();
     }
 
     public InserirRemedioView(Remedio remedio) {
-        remedioDAO = new RemedioDAO();
-        initComponents();
+        hospital = new Hospital();
         this.remedioId = remedio.getId();
+        initComponents();
+
         jTextField2.setText(remedio.getNome());
         jTextField3.setText(remedio.getObservacoes());
         jSpinner1.setValue(remedio.getQuantidadeDisponivel());
@@ -157,32 +156,26 @@ public class InserirRemedioView extends javax.swing.JFrame {
                 Integer.parseInt(jSpinner1.getValue().toString()), Double.parseDouble(jTextField5.getText()));
 
         if (this.remedioId != null) {
-            try {
-                remedio.setId(this.remedioId);
-                this.remedioDAO.editRemedio(this.remedioId, remedio);
-                JOptionPane.showMessageDialog(null, "Remédio editado com sucesso", "Sucesso!",
-                        JOptionPane.INFORMATION_MESSAGE);
-                FarmaceuticoMasterView farmaceuticoMasterView = new FarmaceuticoMasterView();
-                farmaceuticoMasterView.pack();
-                farmaceuticoMasterView.setLocationRelativeTo(null);
-                farmaceuticoMasterView.setVisible(true);
-                this.dispose();
-            } catch (ClassNotFoundException | IOException e) {
-                JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-            }
+            remedio.setId(this.remedioId);
+            this.hospital.editRemedio(this.remedioId, remedio);
+
+            JOptionPane.showMessageDialog(null, "Remédio editado com sucesso", "Sucesso!",
+                    JOptionPane.INFORMATION_MESSAGE);
+            FarmaceuticoMasterView farmaceuticoMasterView = new FarmaceuticoMasterView();
+            farmaceuticoMasterView.pack();
+            farmaceuticoMasterView.setLocationRelativeTo(null);
+            farmaceuticoMasterView.setVisible(true);
+            this.dispose();
         } else {
-            try {
-                this.remedioDAO.addRemedio(remedio);
-                JOptionPane.showMessageDialog(null, "Remédio inserido com sucesso", "Sucesso!",
-                        JOptionPane.INFORMATION_MESSAGE);
-                FarmaceuticoMasterView farmaceuticoMasterView = new FarmaceuticoMasterView();
-                farmaceuticoMasterView.pack();
-                farmaceuticoMasterView.setLocationRelativeTo(null);
-                farmaceuticoMasterView.setVisible(true);
-                this.dispose();
-            } catch (ClassNotFoundException | IOException e) {
-                JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-            }
+            this.hospital.addRemedio(remedio);
+
+            JOptionPane.showMessageDialog(null, "Remédio inserido com sucesso", "Sucesso!",
+                    JOptionPane.INFORMATION_MESSAGE);
+            FarmaceuticoMasterView farmaceuticoMasterView = new FarmaceuticoMasterView();
+            farmaceuticoMasterView.pack();
+            farmaceuticoMasterView.setLocationRelativeTo(null);
+            farmaceuticoMasterView.setVisible(true);
+            this.dispose();
         }
     }
 

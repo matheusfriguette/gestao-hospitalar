@@ -1,35 +1,31 @@
 package app.views;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 
 import javax.swing.JOptionPane;
 
-import app.dao.PacienteDAO;
 import app.models.Consulta;
 import app.models.Endereco;
+import app.models.Hospital;
 import app.models.Paciente;
 
 public class InserirPacienteView extends javax.swing.JFrame {
     private static final long serialVersionUID = 1L;
-    private PacienteDAO pacienteDAO;
+    private Hospital hospital;
     private String pacienteId;
 
     public InserirPacienteView() {
-        pacienteDAO = new PacienteDAO();
+        hospital = new Hospital();
         initComponents();
     }
 
     public InserirPacienteView(Paciente paciente) {
-        pacienteDAO = new PacienteDAO();
-        initComponents();
+        hospital = new Hospital();
         this.pacienteId = paciente.getId();
+        initComponents();
+
         jTextField3.setText(paciente.getCPF());
         jTextField4.setText(paciente.getRG());
         jTextField1.setText(paciente.getNome());
@@ -309,33 +305,27 @@ public class InserirPacienteView extends javax.swing.JFrame {
                 jTextField2.getText(), dataNascimento, endereco, consultas, null);
 
         if (this.pacienteId != null) {
-            try {
-                paciente.setId(this.pacienteId);
-                paciente.setConsultas(this.pacienteDAO.getPaciente(this.pacienteId).getConsultas());
-                this.pacienteDAO.editPaciente(this.pacienteId, paciente);
-                JOptionPane.showMessageDialog(null, "Paciente editado com sucesso", "Sucesso!",
-                        JOptionPane.INFORMATION_MESSAGE);
-                SecretarioMasterView secretarioMasterView = new SecretarioMasterView();
-                secretarioMasterView.pack();
-                secretarioMasterView.setLocationRelativeTo(null);
-                secretarioMasterView.setVisible(true);
-                this.dispose();
-            } catch (ClassNotFoundException | IOException e) {
-                JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-            }
+            paciente.setId(this.pacienteId);
+            paciente.setConsultas(this.hospital.getPaciente(this.pacienteId).getConsultas());
+            this.hospital.editPaciente(this.pacienteId, paciente);
+
+            JOptionPane.showMessageDialog(null, "Paciente editado com sucesso", "Sucesso!",
+                    JOptionPane.INFORMATION_MESSAGE);
+            SecretarioMasterView secretarioMasterView = new SecretarioMasterView();
+            secretarioMasterView.pack();
+            secretarioMasterView.setLocationRelativeTo(null);
+            secretarioMasterView.setVisible(true);
+            this.dispose();
         } else {
-            try {
-                this.pacienteDAO.addPaciente(paciente);
-                JOptionPane.showMessageDialog(null, "Paciente inserido com sucesso", "Sucesso!",
-                        JOptionPane.INFORMATION_MESSAGE);
-                SecretarioMasterView secretarioMasterView = new SecretarioMasterView();
-                secretarioMasterView.pack();
-                secretarioMasterView.setLocationRelativeTo(null);
-                secretarioMasterView.setVisible(true);
-                this.dispose();
-            } catch (ClassNotFoundException | IOException e) {
-                JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-            }
+            this.hospital.addPaciente(paciente);
+
+            JOptionPane.showMessageDialog(null, "Paciente inserido com sucesso", "Sucesso!",
+                    JOptionPane.INFORMATION_MESSAGE);
+            SecretarioMasterView secretarioMasterView = new SecretarioMasterView();
+            secretarioMasterView.pack();
+            secretarioMasterView.setLocationRelativeTo(null);
+            secretarioMasterView.setVisible(true);
+            this.dispose();
         }
     }
 

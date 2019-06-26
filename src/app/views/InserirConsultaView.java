@@ -1,54 +1,34 @@
 package app.views;
 
-import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
+import java.util.ArrayList;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 
-import app.dao.ConsultaDAO;
-import app.dao.MedicoDAO;
-import app.dao.PacienteDAO;
 import app.models.Consulta;
+import app.models.Hospital;
 import app.models.Medico;
 import app.models.Paciente;
 
 public class InserirConsultaView extends javax.swing.JFrame {
     private static final long serialVersionUID = 1L;
-    private ConsultaDAO consultaDAO;
-    private MedicoDAO medicoDAO;
-    private PacienteDAO pacienteDAO;
+    private Hospital hospital;
     private Paciente pacienteSelecionado;
-    private HashMap<String, Medico> listaMedicos;
-    private String[] selectMedicos;
-    private String[] listaIdMedicos;
+    DefaultComboBoxModel<Medico> listaMedicos;
 
     public InserirConsultaView(Paciente paciente) {
-        consultaDAO = new ConsultaDAO();
-        medicoDAO = new MedicoDAO();
-        pacienteDAO = new PacienteDAO();
+        hospital = new Hospital();
         this.pacienteSelecionado = paciente;
+
+        ArrayList<Medico> medicos = hospital.getMedicos();
+        this.listaMedicos = new DefaultComboBoxModel<Medico>();
+        for (Medico medico : medicos) {
+            listaMedicos.addElement(medico);
+        }
+
         initComponents();
-        jTextField2.setText(paciente.getNome());
-
-        try {
-            this.listaMedicos = medicoDAO.getMedicos();
-        } catch (ClassNotFoundException | IOException e) {
-            JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-        }
-
-        this.selectMedicos = new String[listaMedicos.keySet().size()];
-        this.listaIdMedicos = new String[listaMedicos.keySet().size()];
-        int index = 0;
-        for (String id : listaMedicos.keySet()) {
-            Medico medico = listaMedicos.get(id);
-            listaIdMedicos[index] = id;
-            selectMedicos[index] = medico.getNome();
-            index++;
-        }
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(this.selectMedicos));
     }
 
     private void initComponents() {
@@ -58,7 +38,7 @@ public class InserirConsultaView extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        jComboBox1 = new javax.swing.JComboBox<Medico>();
         jLabel6 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jTextField15 = new javax.swing.JTextField();
@@ -87,7 +67,7 @@ public class InserirConsultaView extends javax.swing.JFrame {
 
         jLabel10.setText("Médico:");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>());
+        jComboBox1.setModel(this.listaMedicos);
 
         jLabel6.setText("Data da consulta");
 
@@ -263,52 +243,35 @@ public class InserirConsultaView extends javax.swing.JFrame {
      * Botão enviar
      */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
-        Consulta consulta;
         LocalDateTime data = LocalDateTime.parse(
                 jComboBox4.getSelectedItem().toString() + "/" + jComboBox3.getSelectedItem().toString() + "/"
                         + jTextField15.getText() + " " + jComboBox5.getSelectedItem().toString() + ":"
                         + jComboBox2.getSelectedItem().toString() + ":00",
                 DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
-        HashMap<String, Consulta> consultas;
-        try {
-            consultas = consultaDAO.getConsultas();
-            for (String id : consultas.keySet()) {
-                Consulta _consulta = consultas.get(id);
-                if (_consulta.getMedico().getId()
-                        .equals(medicoDAO.getMedico(listaIdMedicos[jComboBox1.getSelectedIndex()]).getId())
-                        && data.compareTo(_consulta.getData()) == 0) {
-                    JOptionPane.showMessageDialog(null, "O médico já possui uma consulta neste horário", "Erro!",
-                            JOptionPane.WARNING_MESSAGE);
-                    return;
-                }
+
+        ArrayList<Consulta> consultas = hospital.getConsultas();
+        for (Consulta _consulta : consultas) {
+            if (_consulta.getMedico().getId().equals(((Medico) jComboBox1.getSelectedItem()).getId())
+                    && data.compareTo(_consulta.getData()) == 0) {
+                JOptionPane.showMessageDialog(null, "O médico já possui uma consulta neste horário", "Erro!",
+                        JOptionPane.WARNING_MESSAGE);
+                return;
             }
-        } catch (ClassNotFoundException | IOException e) {
-            JOptionPane.showMessageDialog(null, "A data esta inválida", "Erro!", JOptionPane.WARNING_MESSAGE);
-            return;
         }
 
-        try {
-            consulta = new Consulta(pacienteDAO.getPaciente(this.pacienteSelecionado.getId()),
-                    medicoDAO.getMedico(listaIdMedicos[jComboBox1.getSelectedIndex()]), data, false, null);
-            this.pacienteSelecionado.addConsulta(consulta);
-            this.pacienteDAO.editPaciente(this.pacienteSelecionado.getId(), this.pacienteSelecionado);
-        } catch (ClassNotFoundException | IOException e) {
-            JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+        Consulta consulta = new Consulta(this.pacienteSelecionado, (Medico) jComboBox1.getSelectedItem(), data, false,
+                null);
+        this.pacienteSelecionado.addConsulta(consulta);
+        this.hospital.editPaciente(this.pacienteSelecionado.getId(), this.pacienteSelecionado);
+        this.hospital.addConsulta(consulta);
 
-        try {
-            this.consultaDAO.addConsulta(consulta);
-            JOptionPane.showMessageDialog(null, "Consulta marcada com sucesso", "Sucesso!",
-                    JOptionPane.INFORMATION_MESSAGE);
-            SecretarioMasterView secretarioMasterView = new SecretarioMasterView();
-            secretarioMasterView.pack();
-            secretarioMasterView.setLocationRelativeTo(null);
-            secretarioMasterView.setVisible(true);
-            this.dispose();
-        } catch (ClassNotFoundException | IOException e) {
-            JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-        }
+        JOptionPane.showMessageDialog(null, "Consulta marcada com sucesso", "Sucesso!",
+                JOptionPane.INFORMATION_MESSAGE);
+        SecretarioMasterView secretarioMasterView = new SecretarioMasterView();
+        secretarioMasterView.pack();
+        secretarioMasterView.setLocationRelativeTo(null);
+        secretarioMasterView.setVisible(true);
+        this.dispose();
     }
 
     /*
@@ -324,7 +287,7 @@ public class InserirConsultaView extends javax.swing.JFrame {
 
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<Medico> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JComboBox<String> jComboBox4;

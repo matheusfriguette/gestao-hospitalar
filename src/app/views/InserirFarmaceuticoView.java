@@ -1,6 +1,5 @@
 package app.views;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -8,24 +7,25 @@ import java.time.format.DateTimeFormatter;
 import javax.swing.JOptionPane;
 
 import app.controllers.LoginController;
-import app.dao.FarmaceuticoDAO;
 import app.models.Endereco;
 import app.models.Farmaceutico;
+import app.models.Hospital;
 
 public class InserirFarmaceuticoView extends javax.swing.JFrame {
     private static final long serialVersionUID = 1L;
-    private FarmaceuticoDAO farmaceuticoDAO;
+    private Hospital hospital;
     private String farmaceuticoId;
 
     public InserirFarmaceuticoView() {
-        farmaceuticoDAO = new FarmaceuticoDAO();
+        hospital = new Hospital();
         initComponents();
     }
 
     public InserirFarmaceuticoView(Farmaceutico farmaceutico) {
-        farmaceuticoDAO = new FarmaceuticoDAO();
-        initComponents();
+        hospital = new Hospital();
         this.farmaceuticoId = farmaceutico.getId();
+        initComponents();
+
         jTextField5.setText(farmaceutico.getCPF());
         jTextField6.setText(farmaceutico.getRG());
         jTextField2.setText(farmaceutico.getNome());
@@ -376,32 +376,26 @@ public class InserirFarmaceuticoView extends javax.swing.JFrame {
                 jTextField8.getText(), dataNascimento, endereco);
 
         if (this.farmaceuticoId != null) {
-            try {
-                farmaceutico.setId(this.farmaceuticoId);
-                this.farmaceuticoDAO.editFarmaceutico(this.farmaceuticoId, farmaceutico);
-                JOptionPane.showMessageDialog(null, "Farmacêutico editado com sucesso", "Sucesso!",
-                        JOptionPane.INFORMATION_MESSAGE);
-                GerenteMasterView gerenteMasterView = new GerenteMasterView();
-                gerenteMasterView.pack();
-                gerenteMasterView.setLocationRelativeTo(null);
-                gerenteMasterView.setVisible(true);
-                this.dispose();
-            } catch (ClassNotFoundException | IOException e) {
-                JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-            }
+            farmaceutico.setId(this.farmaceuticoId);
+            this.hospital.editFuncionario(this.farmaceuticoId, farmaceutico);
+
+            JOptionPane.showMessageDialog(null, "Farmacêutico editado com sucesso", "Sucesso!",
+                    JOptionPane.INFORMATION_MESSAGE);
+            GerenteMasterView gerenteMasterView = new GerenteMasterView();
+            gerenteMasterView.pack();
+            gerenteMasterView.setLocationRelativeTo(null);
+            gerenteMasterView.setVisible(true);
+            this.dispose();
         } else {
-            try {
-                this.farmaceuticoDAO.addFarmaceutico(farmaceutico);
-                JOptionPane.showMessageDialog(null, "Farmacêutico inserido com sucesso", "Sucesso!",
-                        JOptionPane.INFORMATION_MESSAGE);
-                GerenteMasterView gerenteMasterView = new GerenteMasterView();
-                gerenteMasterView.pack();
-                gerenteMasterView.setLocationRelativeTo(null);
-                gerenteMasterView.setVisible(true);
-                this.dispose();
-            } catch (ClassNotFoundException | IOException e) {
-                JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-            }
+            this.hospital.addFuncionario(farmaceutico);
+
+            JOptionPane.showMessageDialog(null, "Farmacêutico inserido com sucesso", "Sucesso!",
+                    JOptionPane.INFORMATION_MESSAGE);
+            GerenteMasterView gerenteMasterView = new GerenteMasterView();
+            gerenteMasterView.pack();
+            gerenteMasterView.setLocationRelativeTo(null);
+            gerenteMasterView.setVisible(true);
+            this.dispose();
         }
     }
 

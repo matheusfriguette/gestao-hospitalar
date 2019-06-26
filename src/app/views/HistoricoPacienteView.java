@@ -1,28 +1,28 @@
 package app.views;
 
-import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+
+import javax.swing.table.DefaultTableModel;
 
 import app.models.Consulta;
 import app.models.Paciente;
 
 public class HistoricoPacienteView extends javax.swing.JFrame {
     private static final long serialVersionUID = 1L;
-    private Object[][] tabelaConsultas;
+    private DefaultTableModel tabelaConsultas;
 
     public HistoricoPacienteView(Paciente paciente) {
-        initComponents();
-        this.tabelaConsultas = new Object[paciente.getConsultas().size()][4];
         int index = 0;
+        Object[][] consultasData = new Object[paciente.getConsultas().size()][3];
         for (Consulta consulta : paciente.getConsultas()) {
-            tabelaConsultas[index][0] = consulta.getData() != null
-                    ? new SimpleDateFormat("dd/MM/yyyy hh:mm").format(consulta.getData())
-                    : "";
-            tabelaConsultas[index][1] = consulta.getMedico() != null ? consulta.getPaciente().getNome() : "";
-            tabelaConsultas[index][1] = consulta.getConsultaRealizada() ? "Sim" : "Não";
+            consultasData[index][0] = consulta.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+            consultasData[index][1] = consulta.getMedico() != null ? consulta.getPaciente().getNome() : "";
+            consultasData[index][2] = consulta.getConsultaRealizada() ? "Sim" : "Não";
+            index++;
         }
-
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(this.tabelaConsultas,
-                new String[] { "Data", "Médico", "Realizada?" }));
+        this.tabelaConsultas = new DefaultTableModel(consultasData,
+                new String[] { "Nome", "Telefone", "Data de admissão", "NCTPS" });
+        initComponents();
     }
 
     private void initComponents() {
@@ -38,8 +38,7 @@ public class HistoricoPacienteView extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Tabela com o histórico"));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(this.tabelaConsultas,
-                new String[] { "Data", "Médico", "Realizada?" }));
+        jTable1.setModel(this.tabelaConsultas);
         jScrollPane1.setViewportView(jTable1);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);

@@ -2,7 +2,6 @@ package app.views;
 
 import javax.swing.JOptionPane;
 
-import app.controllers.LoginController;
 import app.models.Gerente;
 import app.models.Hospital;
 import app.models.Medico;

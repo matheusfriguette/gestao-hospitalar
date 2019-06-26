@@ -1,27 +1,27 @@
 package app.views;
 
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import javax.swing.JOptionPane;
 
-import app.dao.ExameDAO;
 import app.models.Exame;
+import app.models.Hospital;
 
 public class InserirExameView extends javax.swing.JFrame {
     private static final long serialVersionUID = 1L;
-    private ExameDAO exameDAO;
+    private Hospital hospital;
     private String exameId;
 
     public InserirExameView() {
-        exameDAO = new ExameDAO();
+        hospital = new Hospital();
         initComponents();
     }
 
     public InserirExameView(Exame exame) {
-        exameDAO = new ExameDAO();
-        initComponents();
+        hospital = new Hospital();
         this.exameId = exame.getId();
+        initComponents();
+        
         jTextField2.setText(exame.getNome());
         jTextField3.setText(exame.getObservacoes());
 
@@ -205,32 +205,26 @@ public class InserirExameView extends javax.swing.JFrame {
         Exame exame = new Exame(jTextField2.getText(), jTextField3.getText(), tempoDuracao, tempoResultado);
 
         if (this.exameId != null) {
-            try {
-                exame.setId(this.exameId);
-                this.exameDAO.editExame(this.exameId, exame);
-                JOptionPane.showMessageDialog(null, "Exame editado com sucesso", "Sucesso!",
-                        JOptionPane.INFORMATION_MESSAGE);
-                SecretarioMasterView secretarioMasterView = new SecretarioMasterView();
-                secretarioMasterView.pack();
-                secretarioMasterView.setLocationRelativeTo(null);
-                secretarioMasterView.setVisible(true);
-                this.dispose();
-            } catch (ClassNotFoundException | IOException e) {
-                JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-            }
+            exame.setId(this.exameId);
+            this.hospital.editExame(this.exameId, exame);
+            
+            JOptionPane.showMessageDialog(null, "Exame editado com sucesso", "Sucesso!",
+                    JOptionPane.INFORMATION_MESSAGE);
+            SecretarioMasterView secretarioMasterView = new SecretarioMasterView();
+            secretarioMasterView.pack();
+            secretarioMasterView.setLocationRelativeTo(null);
+            secretarioMasterView.setVisible(true);
+            this.dispose();
         } else {
-            try {
-                this.exameDAO.addExame(exame);
-                JOptionPane.showMessageDialog(null, "Exame inserido com sucesso", "Sucesso!",
-                        JOptionPane.INFORMATION_MESSAGE);
-                SecretarioMasterView secretarioMasterView = new SecretarioMasterView();
-                secretarioMasterView.pack();
-                secretarioMasterView.setLocationRelativeTo(null);
-                secretarioMasterView.setVisible(true);
-                this.dispose();
-            } catch (ClassNotFoundException | IOException e) {
-                JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-            }
+            this.hospital.addExame(exame);
+
+            JOptionPane.showMessageDialog(null, "Exame inserido com sucesso", "Sucesso!",
+                    JOptionPane.INFORMATION_MESSAGE);
+            SecretarioMasterView secretarioMasterView = new SecretarioMasterView();
+            secretarioMasterView.pack();
+            secretarioMasterView.setLocationRelativeTo(null);
+            secretarioMasterView.setVisible(true);
+            this.dispose();
         }
     }
 

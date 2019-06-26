@@ -1,54 +1,43 @@
 package app.views;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.HashMap;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
-import app.controllers.MedicoController;
-import app.models.Medico;
-import app.dao.ConsultaDAO;
 import app.models.Consulta;
+import app.models.Hospital;
 
 public class MedicoMasterView extends javax.swing.JFrame {
     private static final long serialVersionUID = 1L;
-    private ConsultaDAO consultaDAO;
-    private Medico medicoLogado;
-    private MedicoController medicoController;
-    private HashMap<String, Consulta> listaConsultas;
-    private String[] listaIdConsultas;
-    private Object[][] tabelaConsultas;
+    private Hospital hospital;
+    private DefaultTableModel tabelaConsultas;
+    private String[] idsConsultas;
 
     public MedicoMasterView() {
-        this.consultaDAO = new ConsultaDAO();
-        this.medicoController = new MedicoController();
-        this.medicoLogado = medicoController.getMedicoLogado();
-        initComponents();
+        this.hospital = new Hospital();
         this.loadTabelas();
+        initComponents();
     }
 
     private void loadTabelas() {
-        this.listaConsultas = medicoController.getConsultas();
-
-        this.tabelaConsultas = new Object[listaConsultas.keySet().size()][4];
-        this.listaIdConsultas = new String[listaConsultas.keySet().size()];
         int index = 0;
-        for (String id : listaConsultas.keySet()) {
-            Consulta consulta = listaConsultas.get(id);
+        ArrayList<Consulta> consultas = hospital.getConsultas();
+        Object[][] consultasData = new Object[consultas.size()][3];
+        this.idsConsultas = new String[consultas.size()];
+        for (Consulta consulta : consultas) {
             if (!consulta.getConsultaRealizada()) {
-                listaIdConsultas[index] = id;
-                tabelaConsultas[index][0] = consulta.getId().substring(0, consulta.getId().indexOf("-"));
-                tabelaConsultas[index][1] = consulta.getPaciente() != null ? consulta.getPaciente().getNome() : "";
-                tabelaConsultas[index][2] = consulta.getData() != null
-                        ? new SimpleDateFormat("dd/MM/yyyy HH:mm").format(consulta.getData())
+                idsConsultas[index] = consulta.getId();
+                consultasData[index][0] = consulta.getId().substring(0, consulta.getId().indexOf("-"));
+                consultasData[index][1] = consulta.getPaciente() != null ? consulta.getPaciente().getNome() : "";
+                consultasData[index][2] = consulta.getData() != null
+                        ? consulta.getData().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
                         : "";
                 index++;
             }
         }
-
-        jTable8.setModel(new javax.swing.table.DefaultTableModel(this.tabelaConsultas,
-                new String[] { "ID", "Paciente", "Data" }));
+        this.tabelaConsultas = new DefaultTableModel(consultasData, new String[] { "ID", "Paciente", "Data" });
     }
 
     private void initComponents() {
@@ -69,7 +58,7 @@ public class MedicoMasterView extends javax.swing.JFrame {
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18));
-        jLabel1.setText("Bem vindo, " + this.medicoLogado.getNome());
+        jLabel1.setText("Bem vindo, " + this.hospital.getUsuarioLogado().getNome());
 
         jButton1.setText("Sair");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -116,9 +105,7 @@ public class MedicoMasterView extends javax.swing.JFrame {
         jPanel18.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
         jPanel18.setLayout(new java.awt.GridBagLayout());
 
-        jTable8.setModel(new javax.swing.table.DefaultTableModel(new Object[][] {
-
-        }, new String[] { "ID", "Paciente", "Data" }));
+        jTable8.setModel(tabelaConsultas);
         jScrollPane8.setViewportView(jTable8);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -186,7 +173,7 @@ public class MedicoMasterView extends javax.swing.JFrame {
      * Botão alterar senha
      */
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
-        AlterarSenhaView alterarSenhaView = new AlterarSenhaView("medico", medicoLogado.getId());
+        AlterarSenhaView alterarSenhaView = new AlterarSenhaView(hospital.getUsuarioLogado().getId());
         alterarSenhaView.pack();
         alterarSenhaView.setLocationRelativeTo(null);
         alterarSenhaView.setVisible(true);
@@ -199,17 +186,13 @@ public class MedicoMasterView extends javax.swing.JFrame {
         if (jTable8.getSelectionModel().isSelectionEmpty()) {
             JOptionPane.showMessageDialog(null, "Selecione um paciente", "Erro!", JOptionPane.WARNING_MESSAGE);
         } else {
-            try {
-                Consulta consulta = consultaDAO
-                        .getConsulta(this.listaIdConsultas[jTable8.getSelectionModel().getAnchorSelectionIndex()]);
-                RealizarConsultaView realizarConsultaView = new RealizarConsultaView(consulta);
-                realizarConsultaView.pack();
-                realizarConsultaView.setLocationRelativeTo(null);
-                realizarConsultaView.setVisible(true);
-                this.dispose();
-            } catch (ClassNotFoundException | IOException e) {
-                JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-            }
+            Consulta consulta = hospital
+                    .getConsulta(this.idsConsultas[jTable8.getSelectionModel().getAnchorSelectionIndex()]);
+            RealizarConsultaView realizarConsultaView = new RealizarConsultaView(consulta);
+            realizarConsultaView.pack();
+            realizarConsultaView.setLocationRelativeTo(null);
+            realizarConsultaView.setVisible(true);
+            this.dispose();
         }
     }
 

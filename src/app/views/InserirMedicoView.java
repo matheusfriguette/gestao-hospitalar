@@ -1,6 +1,5 @@
 package app.views;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -8,24 +7,25 @@ import java.time.format.DateTimeFormatter;
 import javax.swing.JOptionPane;
 
 import app.controllers.LoginController;
-import app.dao.MedicoDAO;
 import app.models.Endereco;
+import app.models.Hospital;
 import app.models.Medico;
 
 public class InserirMedicoView extends javax.swing.JFrame {
     private static final long serialVersionUID = 1L;
-    private MedicoDAO medicoDAO;
+    private Hospital hospital;
     private String medicoId;
 
     public InserirMedicoView() {
-        medicoDAO = new MedicoDAO();
+        hospital = new Hospital();
         initComponents();
     }
 
     public InserirMedicoView(Medico medico) {
-        medicoDAO = new MedicoDAO();
-        initComponents();
+        hospital = new Hospital();
         this.medicoId = medico.getId();
+        initComponents();
+
         jTextField3.setText(medico.getCPF());
         jTextField4.setText(medico.getRG());
         jTextField1.setText(medico.getNome());
@@ -450,32 +450,26 @@ public class InserirMedicoView extends javax.swing.JFrame {
                 jTextField1.getText(), jTextField2.getText(), dataNascimento, endereco);
 
         if (this.medicoId != null) {
-            try {
-                medico.setId(this.medicoId);
-                this.medicoDAO.editMedico(this.medicoId, medico);
-                JOptionPane.showMessageDialog(null, "Médico editado com sucesso", "Sucesso!",
-                        JOptionPane.INFORMATION_MESSAGE);
-                GerenteMasterView gerenteMasterView = new GerenteMasterView();
-                gerenteMasterView.pack();
-                gerenteMasterView.setLocationRelativeTo(null);
-                gerenteMasterView.setVisible(true);
-                this.dispose();
-            } catch (ClassNotFoundException | IOException e) {
-                JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-            }
+            medico.setId(this.medicoId);
+            this.hospital.editFuncionario(this.medicoId, medico);
+
+            JOptionPane.showMessageDialog(null, "Médico editado com sucesso", "Sucesso!",
+                    JOptionPane.INFORMATION_MESSAGE);
+            GerenteMasterView gerenteMasterView = new GerenteMasterView();
+            gerenteMasterView.pack();
+            gerenteMasterView.setLocationRelativeTo(null);
+            gerenteMasterView.setVisible(true);
+            this.dispose();
         } else {
-            try {
-                this.medicoDAO.addMedico(medico);
-                JOptionPane.showMessageDialog(null, "Médico inserido com sucesso", "Sucesso!",
-                        JOptionPane.INFORMATION_MESSAGE);
-                GerenteMasterView gerenteMasterView = new GerenteMasterView();
-                gerenteMasterView.pack();
-                gerenteMasterView.setLocationRelativeTo(null);
-                gerenteMasterView.setVisible(true);
-                this.dispose();
-            } catch (ClassNotFoundException | IOException e) {
-                JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-            }
+            this.hospital.addFuncionario(medico);
+
+            JOptionPane.showMessageDialog(null, "Médico inserido com sucesso", "Sucesso!",
+                    JOptionPane.INFORMATION_MESSAGE);
+            GerenteMasterView gerenteMasterView = new GerenteMasterView();
+            gerenteMasterView.pack();
+            gerenteMasterView.setLocationRelativeTo(null);
+            gerenteMasterView.setVisible(true);
+            this.dispose();
         }
     }
 
