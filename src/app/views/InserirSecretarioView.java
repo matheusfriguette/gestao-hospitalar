@@ -1,44 +1,36 @@
 package app.views;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
+import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 
-import app.controllers.GerenteController;
-import app.controllers.LoginController;
-import app.dao.SecretarioDAO;
 import app.models.Endereco;
+import app.models.Hospital;
 import app.models.Secretario;
 
 public class InserirSecretarioView extends javax.swing.JFrame {
     private static final long serialVersionUID = 1L;
-    private SecretarioDAO secretarioDAO;
-    private GerenteController gerenteController;
+    private Hospital hospital;
     private String secretarioId;
-    private HashMap<String, Secretario> listaSecretarios;
     DefaultListModel<String> horariosVagos;
 
     public InserirSecretarioView() {
-        secretarioDAO = new SecretarioDAO();
-        this.gerenteController = new GerenteController();
-        this.listaSecretarios = gerenteController.getSecretarios();
+        hospital = new Hospital();
         this.getHorariosVagos();
         initComponents();
     }
 
     public InserirSecretarioView(Secretario secretario) {
-        secretarioDAO = new SecretarioDAO();
-        this.gerenteController = new GerenteController();
-        this.listaSecretarios = gerenteController.getSecretarios();
+        hospital = new Hospital();
+        this.secretarioId = secretario.getId();
         this.getHorariosVagos();
         initComponents();
-        this.secretarioId = secretario.getId();
+
         jTextField3.setText(secretario.getCPF());
         jTextField4.setText(secretario.getRG());
         jTextField1.setText(secretario.getNome());
@@ -62,9 +54,10 @@ public class InserirSecretarioView extends javax.swing.JFrame {
     }
 
     public void getHorariosVagos() {
+        ArrayList<Secretario> secretarios = hospital.getSecretarios();
+
         int[] horarios = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23 };
-        for (String id : listaSecretarios.keySet()) {
-            Secretario secretario = listaSecretarios.get(id);
+        for (Secretario secretario : secretarios) {
             for (int x = secretario.getHorarioEntrada().getHour(); x <= secretario.getHorarioSaida().getHour(); x++) {
                 if (horarios[x] != -1) {
                     horarios[x] = -1;
@@ -485,8 +478,7 @@ public class InserirSecretarioView extends javax.swing.JFrame {
             return;
         }
 
-        LoginController loginController = new LoginController();
-        if (loginController.existeLogin(jTextField5.getText())) {
+        if (hospital.existeLogin(jTextField5.getText())) {
             JOptionPane.showMessageDialog(null, "O login inserido já existe", "Erro!", JOptionPane.WARNING_MESSAGE);
             return;
         }
@@ -506,32 +498,26 @@ public class InserirSecretarioView extends javax.swing.JFrame {
                 jTextField1.getText(), jTextField2.getText(), dataNascimento, endereco);
 
         if (this.secretarioId != null) {
-            try {
-                secretario.setId(this.secretarioId);
-                this.secretarioDAO.editSecretario(this.secretarioId, secretario);
-                JOptionPane.showMessageDialog(null, "Secretário editado com sucesso", "Sucesso!",
-                        JOptionPane.INFORMATION_MESSAGE);
-                GerenteMasterView gerenteMasterView = new GerenteMasterView();
-                gerenteMasterView.pack();
-                gerenteMasterView.setLocationRelativeTo(null);
-                gerenteMasterView.setVisible(true);
-                this.dispose();
-            } catch (ClassNotFoundException | IOException e) {
-                JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-            }
+            secretario.setId(this.secretarioId);
+            this.hospital.editFuncionario(this.secretarioId, secretario);
+
+            JOptionPane.showMessageDialog(null, "Secretário editado com sucesso", "Sucesso!",
+                    JOptionPane.INFORMATION_MESSAGE);
+            GerenteMasterView gerenteMasterView = new GerenteMasterView();
+            gerenteMasterView.pack();
+            gerenteMasterView.setLocationRelativeTo(null);
+            gerenteMasterView.setVisible(true);
+            this.dispose();
         } else {
-            try {
-                this.secretarioDAO.addSecretario(secretario);
-                JOptionPane.showMessageDialog(null, "Secretário inserido com sucesso", "Sucesso!",
-                        JOptionPane.INFORMATION_MESSAGE);
-                GerenteMasterView gerenteMasterView = new GerenteMasterView();
-                gerenteMasterView.pack();
-                gerenteMasterView.setLocationRelativeTo(null);
-                gerenteMasterView.setVisible(true);
-                this.dispose();
-            } catch (ClassNotFoundException | IOException e) {
-                JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-            }
+            this.hospital.addFuncionario(secretario);
+
+            JOptionPane.showMessageDialog(null, "Secretário inserido com sucesso", "Sucesso!",
+                    JOptionPane.INFORMATION_MESSAGE);
+            GerenteMasterView gerenteMasterView = new GerenteMasterView();
+            gerenteMasterView.pack();
+            gerenteMasterView.setLocationRelativeTo(null);
+            gerenteMasterView.setVisible(true);
+            this.dispose();
         }
     }
 

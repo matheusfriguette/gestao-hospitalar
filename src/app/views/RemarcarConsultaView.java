@@ -1,23 +1,24 @@
 package app.views;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import javax.swing.JOptionPane;
 
-import app.dao.ConsultaDAO;
 import app.models.Consulta;
+import app.models.Hospital;
+import app.models.Paciente;
 
 public class RemarcarConsultaView extends javax.swing.JFrame {
     private static final long serialVersionUID = 1L;
-    private ConsultaDAO consultaDAO;
+    private Hospital hospital;
     private String consultaId;
 
     public RemarcarConsultaView(Consulta consulta) {
-        consultaDAO = new ConsultaDAO();
-        initComponents();
+        hospital = new Hospital();
         this.consultaId = consulta.getId();
+        initComponents();
+
         jTextField15.setText(Integer.toString(consulta.getData().getYear()));
         jComboBox3.setSelectedIndex(consulta.getData().getMonthValue() - 1);
         jComboBox4.setSelectedIndex(consulta.getData().getDayOfMonth() - 1);
@@ -200,20 +201,20 @@ public class RemarcarConsultaView extends javax.swing.JFrame {
                         + jComboBox2.getSelectedItem().toString() + ":00",
                 DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"));
 
-        try {
-            Consulta consulta = consultaDAO.getConsulta(this.consultaId);
-            consulta.setData(data);
-            this.consultaDAO.editConsulta(this.consultaId, consulta);
-            JOptionPane.showMessageDialog(null, "Consulta remarcada com sucesso", "Sucesso!",
-                    JOptionPane.INFORMATION_MESSAGE);
-            SecretarioMasterView secretarioMasterView = new SecretarioMasterView();
-            secretarioMasterView.pack();
-            secretarioMasterView.setLocationRelativeTo(null);
-            secretarioMasterView.setVisible(true);
-            this.dispose();
-        } catch (ClassNotFoundException | IOException e) {
-            JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
-        }
+        Consulta consulta = hospital.getConsulta(this.consultaId);
+        consulta.setData(data);
+        Paciente paciente = consulta.getPaciente();
+        paciente.editConsulta(this.consultaId, consulta);
+        this.hospital.editPaciente(paciente.getId(), paciente);
+        this.hospital.editConsulta(this.consultaId, consulta);
+
+        JOptionPane.showMessageDialog(null, "Consulta remarcada com sucesso", "Sucesso!",
+                JOptionPane.INFORMATION_MESSAGE);
+        SecretarioMasterView secretarioMasterView = new SecretarioMasterView();
+        secretarioMasterView.pack();
+        secretarioMasterView.setLocationRelativeTo(null);
+        secretarioMasterView.setVisible(true);
+        this.dispose();
     }
 
     /*

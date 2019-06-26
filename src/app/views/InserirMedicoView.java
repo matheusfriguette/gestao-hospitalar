@@ -6,7 +6,6 @@ import java.time.format.DateTimeFormatter;
 
 import javax.swing.JOptionPane;
 
-import app.controllers.LoginController;
 import app.models.Endereco;
 import app.models.Hospital;
 import app.models.Medico;
@@ -433,8 +432,7 @@ public class InserirMedicoView extends javax.swing.JFrame {
             return;
         }
 
-        LoginController loginController = new LoginController();
-        if (loginController.existeLogin(jTextField5.getText())) {
+        if (hospital.existeLogin(jTextField5.getText())) {
             JOptionPane.showMessageDialog(null, "O login inserido já existe", "Erro!", JOptionPane.WARNING_MESSAGE);
             return;
         }

@@ -67,6 +67,22 @@ public class Paciente extends Pessoa implements Serializable {
         this.plano.diminuiConsultasRestantes();
     }
 
+    public void editConsulta(String id, Consulta novaConsulta) {
+        for (Consulta consulta : consultas) {
+            if (consulta.getId().equals(id)) {
+                consulta = novaConsulta;
+            }
+        }
+    }
+
+    public void deleteConsulta(String id) {
+        for (Consulta consulta : consultas) {
+            if (consulta.getId().equals(id)) {
+                consultas.remove(consulta);
+            }
+        }
+    }
+
     public boolean podeConsultar() {
         if (plano == null) {
             return false;

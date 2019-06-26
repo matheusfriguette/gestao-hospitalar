@@ -543,7 +543,11 @@ public class SecretarioMasterView extends javax.swing.JFrame {
                     "Desmarcar consulta?", JOptionPane.YES_NO_OPTION);
 
             if (option == JOptionPane.YES_OPTION) {
-                hospital.deleteConsulta(this.idsConsultas[jTable4.getSelectionModel().getAnchorSelectionIndex()]);
+                Consulta consulta = hospital.getConsulta(this.idsConsultas[jTable4.getSelectionModel().getAnchorSelectionIndex()]);
+                Paciente paciente = consulta.getPaciente();
+                paciente.deleteConsulta(consulta.getId());
+                hospital.editPaciente(paciente.getId(), paciente);
+                hospital.deleteConsulta(consulta.getId());
                 this.loadTabelas();
             }
         }
