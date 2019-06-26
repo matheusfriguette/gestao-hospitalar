@@ -10,10 +10,12 @@ import app.controllers.GerenteController;
 import app.dao.FarmaceuticoDAO;
 import app.dao.GerenteDAO;
 import app.dao.MedicoDAO;
+import app.dao.PlanoDAO;
 import app.dao.SecretarioDAO;
 import app.models.Farmaceutico;
 import app.models.Gerente;
 import app.models.Medico;
+import app.models.Plano;
 import app.models.Secretario;
 
 public class GerenteMasterView extends javax.swing.JFrame {
@@ -22,26 +24,31 @@ public class GerenteMasterView extends javax.swing.JFrame {
     private SecretarioDAO secretarioDAO;
     private MedicoDAO medicoDAO;
     private FarmaceuticoDAO farmaceuticoDAO;
+    private PlanoDAO planoDAO;
     private GerenteController gerenteController;
     private Gerente gerenteLogado;
     private HashMap<String, Gerente> listaGerentes;
     private HashMap<String, Secretario> listaSecretarios;
     private HashMap<String, Medico> listaMedicos;
     private HashMap<String, Farmaceutico> listaFarmaceuticos;
+    private HashMap<String, Plano> listaPlanos;
     private String[] listaIdGerentes;
     private String[] listaIdSecretarios;
     private String[] listaIdMedicos;
     private String[] listaIdFarmaceuticos;
+    private String[] listaIdPlanos;
     private Object[][] tabelaGerentes;
     private Object[][] tabelaSecretarios;
     private Object[][] tabelaMedicos;
     private Object[][] tabelaFarmaceuticos;
+    private Object[][] tabelaPlanos;
 
     public GerenteMasterView() {
         this.gerenteDAO = new GerenteDAO();
         this.secretarioDAO = new SecretarioDAO();
         this.medicoDAO = new MedicoDAO();
         this.farmaceuticoDAO = new FarmaceuticoDAO();
+        this.planoDAO = new PlanoDAO();
         this.gerenteController = new GerenteController();
         this.gerenteLogado = gerenteController.getGerenteLogado();
         initComponents();
@@ -53,6 +60,7 @@ public class GerenteMasterView extends javax.swing.JFrame {
         this.listaSecretarios = gerenteController.getSecretarios();
         this.listaMedicos = gerenteController.getMedicos();
         this.listaFarmaceuticos = gerenteController.getFarmaceuticos();
+        this.listaPlanos = gerenteController.getPlanos();
 
         this.tabelaGerentes = new Object[listaGerentes.keySet().size()][4];
         this.listaIdGerentes = new String[listaGerentes.keySet().size()];
@@ -119,6 +127,19 @@ public class GerenteMasterView extends javax.swing.JFrame {
             index++;
         }
 
+        this.tabelaPlanos = new Object[listaPlanos.keySet().size()][4];
+        this.listaIdPlanos = new String[listaPlanos.keySet().size()];
+        index = 0;
+        for (String id : listaPlanos.keySet()) {
+            Plano farmaceutico = listaPlanos.get(id);
+            listaIdPlanos[index] = id;
+            tabelaPlanos[index][0] = farmaceutico.getNome();
+            tabelaPlanos[index][1] = "R$ " + farmaceutico.getValor();
+            tabelaPlanos[index][2] = farmaceutico.getConsultasDisponiveis();
+            tabelaPlanos[index][3] = farmaceutico.getIdadeMinima() + " - " + farmaceutico.getIdadeMaxima();
+            index++;
+        }
+
         jTable1.setModel(new javax.swing.table.DefaultTableModel(this.tabelaGerentes,
                 new String[] { "Nome", "Telefone", "Data de admissão", "NCTPS" }));
         jTable4.setModel(new javax.swing.table.DefaultTableModel(this.tabelaSecretarios,
@@ -127,6 +148,8 @@ public class GerenteMasterView extends javax.swing.JFrame {
                 new String[] { "Nome", "Telefone", "Data de admissão", "NCTPS", "Especialidade" }));
         jTable6.setModel(new javax.swing.table.DefaultTableModel(this.tabelaFarmaceuticos,
                 new String[] { "Nome", "Telefone", "Data de admissão", "NCTPS" }));
+        jTable7.setModel(new javax.swing.table.DefaultTableModel(this.tabelaPlanos,
+                new String[] { "Nome", "Valor", "Consultas", "Faixa etária" }));
     }
 
     private void initComponents() {
@@ -166,6 +189,13 @@ public class GerenteMasterView extends javax.swing.JFrame {
         jButton12 = new javax.swing.JButton();
         jButton13 = new javax.swing.JButton();
         jButton14 = new javax.swing.JButton();
+        jPanel16 = new javax.swing.JPanel();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        jTable7 = new javax.swing.JTable();
+        jPanel17 = new javax.swing.JPanel();
+        jButton15 = new javax.swing.JButton();
+        jButton16 = new javax.swing.JButton();
+        jButton17 = new javax.swing.JButton();
 
         jCheckBox1.setText("jCheckBox1");
 
@@ -516,6 +546,80 @@ public class GerenteMasterView extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Farmacêuticos", jPanel14);
 
+        jPanel16.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        jPanel16.setLayout(new java.awt.GridBagLayout());
+
+        jTable7.setModel(new javax.swing.table.DefaultTableModel(this.tabelaPlanos,
+                new String[] { "Nome", "Valor", "Consultas", "Faixa etária" }));
+        jScrollPane7.setViewportView(jTable7);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.ipady = 40;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.weightx = 6.0;
+        gridBagConstraints.weighty = 1.0;
+        jPanel16.add(jScrollPane7, gridBagConstraints);
+
+        jButton15.setText("Editar");
+        jButton15.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton15ActionPerformed(evt);
+            }
+        });
+
+        jButton16.setText("Novo");
+        jButton16.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton16ActionPerformed(evt);
+            }
+        });
+
+        jButton17.setText("Deletar");
+        jButton17.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton17ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel17Layout = new javax.swing.GroupLayout(jPanel17);
+        jPanel17.setLayout(jPanel17Layout);
+        jPanel17Layout.setHorizontalGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel17Layout.createSequentialGroup().addContainerGap(43, Short.MAX_VALUE)
+                        .addGroup(jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jButton16, javax.swing.GroupLayout.PREFERRED_SIZE, 100,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButton17, javax.swing.GroupLayout.PREFERRED_SIZE, 100,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButton15, javax.swing.GroupLayout.PREFERRED_SIZE, 100,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(44, Short.MAX_VALUE)));
+        jPanel17Layout
+                .setVerticalGroup(
+                        jPanel17Layout
+                                .createParallelGroup(
+                                        javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel17Layout.createSequentialGroup().addGap(50, 50, 50)
+                                        .addComponent(jButton16, javax.swing.GroupLayout.PREFERRED_SIZE, 30,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jButton15, javax.swing.GroupLayout.PREFERRED_SIZE, 30,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jButton17, javax.swing.GroupLayout.PREFERRED_SIZE, 30,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        jPanel16.add(jPanel17, gridBagConstraints);
+
+        jTabbedPane1.addTab("Planos", jPanel16);
+
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -771,6 +875,60 @@ public class GerenteMasterView extends javax.swing.JFrame {
         }
     }
 
+    /*
+     * Botão novo plano
+     */
+    private void jButton16ActionPerformed(java.awt.event.ActionEvent evt) {
+        InserirPlanoView inserirPlanoView = new InserirPlanoView();
+        inserirPlanoView.pack();
+        inserirPlanoView.setLocationRelativeTo(null);
+        inserirPlanoView.setVisible(true);
+    }
+
+    /*
+     * Botão editar plano
+     */
+    private void jButton15ActionPerformed(java.awt.event.ActionEvent evt) {
+        this.dispose();
+        if (jTable7.getSelectionModel().isSelectionEmpty()) {
+            JOptionPane.showMessageDialog(null, "Selecione um plano", "Erro!", JOptionPane.WARNING_MESSAGE);
+        } else {
+            try {
+                Plano plano = planoDAO.getPlano(
+                        this.listaIdPlanos[jTable7.getSelectionModel().getAnchorSelectionIndex()]);
+                InserirPlanoView inserirPlanoView = new InserirPlanoView(plano);
+                inserirPlanoView.pack();
+                inserirPlanoView.setLocationRelativeTo(null);
+                inserirPlanoView.setVisible(true);
+                this.dispose();
+            } catch (ClassNotFoundException | IOException e) {
+                JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+    }
+
+    /*
+     * Botão deletar plano
+     */
+    private void jButton17ActionPerformed(java.awt.event.ActionEvent evt) {
+        if (jTable7.getSelectionModel().isSelectionEmpty()) {
+            JOptionPane.showMessageDialog(null, "Selecione um plano", "Erro!", JOptionPane.WARNING_MESSAGE);
+        } else {
+            int option = JOptionPane.showConfirmDialog(null, "Você tem certeza que deseja deletar este plano?",
+                    "Deletar plano?", JOptionPane.YES_NO_OPTION);
+
+            if (option == JOptionPane.YES_OPTION) {
+                try {
+                    planoDAO.deletePlano(
+                            this.listaIdPlanos[jTable7.getSelectionModel().getAnchorSelectionIndex()]);
+                    this.loadTabelas();
+                } catch (ClassNotFoundException | IOException e) {
+                    JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        }
+    }
+
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
@@ -785,6 +943,9 @@ public class GerenteMasterView extends javax.swing.JFrame {
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
+    private javax.swing.JButton jButton15;
+    private javax.swing.JButton jButton16;
+    private javax.swing.JButton jButton17;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel10;
@@ -793,6 +954,8 @@ public class GerenteMasterView extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel15;
+    private javax.swing.JPanel jPanel16;
+    private javax.swing.JPanel jPanel17;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
@@ -800,9 +963,11 @@ public class GerenteMasterView extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable4;
     private javax.swing.JTable jTable5;
     private javax.swing.JTable jTable6;
+    private javax.swing.JTable jTable7;
 }

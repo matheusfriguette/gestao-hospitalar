@@ -312,7 +312,7 @@ public class InserirPacienteView extends javax.swing.JFrame {
                 jTextField11.getText(), jTextField12.getText(), jTextField13.getText());
 
         Paciente paciente = new Paciente(jTextField3.getText(), jTextField4.getText(), jTextField1.getText(),
-                jTextField2.getText(), dataNascimento, endereco, consultas);
+                jTextField2.getText(), dataNascimento, endereco, consultas, null);
 
         if (this.pacienteId != null) {
             try {

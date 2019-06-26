@@ -75,4 +75,9 @@ public class Remedio implements Serializable {
     public void setPreco(double preco) {
         this.preco = preco;
     }
+
+    @Override
+    public String toString() {
+        return nome;
+    }
 }

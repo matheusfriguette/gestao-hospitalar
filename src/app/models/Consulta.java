@@ -14,7 +14,7 @@ public class Consulta implements Serializable {
     private Medico medico;
     private Date data;
     private boolean consultaRealizada;
-    private Diagnostico diagnostico;
+    private Prontuario prontuario;
 
     /*
      * Construtores
@@ -25,16 +25,16 @@ public class Consulta implements Serializable {
         setMedico(null);
         setData(null);
         setConsultaRealizada(false);
-        setDiagnostico(null);
+        setProntuario(null);
     }
 
-    public Consulta(Paciente paciente, Medico medico, Date data, boolean consultaRealizada, Diagnostico diagnostico) {
+    public Consulta(Paciente paciente, Medico medico, Date data, boolean consultaRealizada, Prontuario prontuario) {
         setId(UUID.randomUUID().toString());
         setPaciente(paciente);
         setMedico(medico);
         setData(data);
         setConsultaRealizada(consultaRealizada);
-        setDiagnostico(diagnostico);
+        setProntuario(prontuario);
     }
 
     /*
@@ -80,11 +80,11 @@ public class Consulta implements Serializable {
         this.consultaRealizada = consultaRealizada;
     }
 
-    public Diagnostico getDiagnostico() {
-        return diagnostico;
+    public Prontuario getProntuario() {
+        return prontuario;
     }
 
-    public void setDiagnostico(Diagnostico diagnostico) {
-        this.diagnostico = diagnostico;
+    public void setProntuario(Prontuario prontuario) {
+        this.prontuario = prontuario;
     }
 }

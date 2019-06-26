@@ -1,7 +1,7 @@
 package app.views;
 
 import java.io.IOException;
-import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JOptionPane;
 
@@ -24,15 +24,18 @@ public class InserirExameView extends javax.swing.JFrame {
         this.exameId = exame.getId();
         jTextField2.setText(exame.getNome());
         jTextField3.setText(exame.getObservacoes());
-        jComboBox6.setSelectedIndex(
-                exame.getTempoDuracao().toHours() == 60 ? 0 : (int) exame.getTempoDuracao().toHours());
-        jComboBox7.setSelectedIndex(
-                exame.getTempoDuracao().toMinutes() == 60 ? 0 : (int) exame.getTempoDuracao().toMinutes());
-        jComboBox8.setSelectedIndex((int) exame.getTempoResultado().toDays());
-        jComboBox5.setSelectedIndex(
-                exame.getTempoResultado().toHours() == 60 ? 0 : (int) exame.getTempoResultado().toHours());
-        jComboBox2.setSelectedIndex(
-                exame.getTempoResultado().toMinutes() == 60 ? 0 : (int) exame.getTempoResultado().toMinutes());
+
+        long tempoDuracao = exame.getTempoDuracao();
+        long horasTempoDuracao = TimeUnit.SECONDS.toHours(tempoDuracao);
+        tempoDuracao -= TimeUnit.HOURS.toSeconds(horasTempoDuracao);
+        long minutosTempoDuracao = TimeUnit.SECONDS.toMinutes(tempoDuracao);
+
+        jComboBox6.setSelectedItem(String.format("%02d", horasTempoDuracao));
+        jComboBox7.setSelectedItem(String.format("%02d", minutosTempoDuracao));
+
+        long tempoResultado = exame.getTempoResultado();
+        long diasTempoResultado = TimeUnit.SECONDS.toDays(tempoResultado);
+        jSpinner1.setValue(diasTempoResultado);
     }
 
     private void initComponents() {
@@ -43,18 +46,13 @@ public class InserirExameView extends javax.swing.JFrame {
         jTextField2 = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jComboBox5 = new javax.swing.JComboBox<>();
         jTextField3 = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
         jComboBox6 = new javax.swing.JComboBox<>();
         jLabel12 = new javax.swing.JLabel();
         jComboBox7 = new javax.swing.JComboBox<>();
         jLabel13 = new javax.swing.JLabel();
-        jComboBox8 = new javax.swing.JComboBox<>();
+        jSpinner1 = new javax.swing.JSpinner();
         jPanel3 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -71,22 +69,6 @@ public class InserirExameView extends javax.swing.JFrame {
 
         jLabel6.setText("Tempo de duração:");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(
-                new String[] { "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14",
-                        "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30",
-                        "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46",
-                        "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59" }));
-
-        jLabel8.setText("Minuto(s):");
-
-        jLabel7.setText("Hora(s):");
-
-        jLabel5.setText("Tempo de obtenção dos resultados:");
-
-        jComboBox5.setModel(new javax.swing.DefaultComboBoxModel<>(
-                new String[] { "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14",
-                        "15", "16", "17", "18", "19", "20", "21", "22", "23" }));
-
         jLabel11.setText("Hora(s):");
 
         jComboBox6.setModel(new javax.swing.DefaultComboBoxModel<>(
@@ -101,13 +83,8 @@ public class InserirExameView extends javax.swing.JFrame {
                         "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46",
                         "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59" }));
 
-        jLabel13.setText("Dia(s):");
-
-        jComboBox8.setModel(new javax.swing.DefaultComboBoxModel<>(
-                new String[] { "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14",
-                        "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30",
-                        "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46",
-                        "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60" }));
+        jLabel13.setText("Dia(s) para obtenção dos resultados:");
+        jLabel13.setToolTipText("");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -116,37 +93,28 @@ public class InserirExameView extends javax.swing.JFrame {
                         .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel2Layout.createSequentialGroup().addComponent(jLabel6).addGap(0, 0,
                                 Short.MAX_VALUE))
-                        .addGroup(jPanel2Layout.createSequentialGroup().addComponent(jLabel5).addGap(183, 184,
-                                Short.MAX_VALUE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel13)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jComboBox8, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel7)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jComboBox5, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel8)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(jPanel2Layout.createSequentialGroup().addComponent(jLabel2)
+                        .addGroup(jPanel2Layout.createSequentialGroup().addGroup(jPanel2Layout
+                                .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+                                        jPanel2Layout.createSequentialGroup().addComponent(jLabel13)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jTextField2))
-                                        .addGroup(jPanel2Layout.createSequentialGroup().addComponent(jLabel10)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jTextField3))
-                                        .addGroup(jPanel2Layout.createSequentialGroup().addComponent(jLabel11)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jComboBox6, 0, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                        Short.MAX_VALUE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jLabel12)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jComboBox7, 0, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                        Short.MAX_VALUE)))
+                                                .addComponent(jSpinner1, javax.swing.GroupLayout.DEFAULT_SIZE, 236,
+                                                        Short.MAX_VALUE))
+                                .addGroup(jPanel2Layout.createSequentialGroup().addComponent(jLabel2)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jTextField2))
+                                .addGroup(jPanel2Layout.createSequentialGroup().addComponent(jLabel10)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jTextField3))
+                                .addGroup(jPanel2Layout.createSequentialGroup().addComponent(jLabel11)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jComboBox6, 0, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                Short.MAX_VALUE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel12)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jComboBox7, 0, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                Short.MAX_VALUE)))
                                 .addContainerGap()))));
         jPanel2Layout.setVerticalGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel2Layout.createSequentialGroup().addContainerGap()
@@ -156,8 +124,8 @@ public class InserirExameView extends javax.swing.JFrame {
                                 .addComponent(jLabel2))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel10)
-                                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 75,
+                                .addComponent(jLabel10).addComponent(jTextField3,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE, 75,
                                         javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(21, 21, 21).addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -172,24 +140,11 @@ public class InserirExameView extends javax.swing.JFrame {
                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
                                                 javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18).addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jLabel7)
-                                        .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel8)
-                                        .addGroup(jPanel2Layout
-                                                .createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                .addComponent(jLabel13).addComponent(jComboBox8,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                        javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE,
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel13).addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE,
                                         javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+                        .addContainerGap(19, Short.MAX_VALUE)));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -243,12 +198,9 @@ public class InserirExameView extends javax.swing.JFrame {
      * Botão enviar
      */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
-        Duration tempoDuracao = Duration.ofHours(Long.parseLong(jComboBox6.getSelectedItem().toString()));
-        tempoDuracao.plusMinutes(Long.parseLong(jComboBox7.getSelectedItem().toString()));
-
-        Duration tempoResultado = Duration.ofDays(Long.parseLong(jComboBox8.getSelectedItem().toString()));
-        tempoDuracao.plusHours(Long.parseLong(jComboBox5.getSelectedItem().toString()));
-        tempoDuracao.plusMinutes(Long.parseLong(jComboBox2.getSelectedItem().toString()));
+        int tempoDuracao = (Integer.parseInt(jComboBox6.getSelectedItem().toString()) * 3600)
+                + (Integer.parseInt(jComboBox7.getSelectedItem().toString()) * 60);
+        int tempoResultado = (Integer.parseInt(jSpinner1.getValue().toString()) * 86400);
 
         Exame exame = new Exame(jTextField2.getText(), jTextField3.getText(), tempoDuracao, tempoResultado);
 
@@ -295,22 +247,17 @@ public class InserirExameView extends javax.swing.JFrame {
 
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox5;
     private javax.swing.JComboBox<String> jComboBox6;
     private javax.swing.JComboBox<String> jComboBox7;
-    private javax.swing.JComboBox<String> jComboBox8;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JSpinner jSpinner1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
 }

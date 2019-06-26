@@ -1,6 +1,7 @@
 package app.views;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.DefaultListModel;
@@ -8,38 +9,34 @@ import javax.swing.JOptionPane;
 
 import app.dao.ConsultaDAO;
 import app.dao.ExameDAO;
-import app.dao.MedicoDAO;
-import app.dao.PacienteDAO;
 import app.dao.RemedioDAO;
 import app.models.Consulta;
 import app.models.Exame;
+import app.models.Prontuario;
 import app.models.Remedio;
 
 public class RealizarConsultaView extends javax.swing.JFrame {
     private static final long serialVersionUID = 1L;
     private ConsultaDAO consultaDAO;
-    private MedicoDAO medicoDAO;
-    private PacienteDAO pacienteDAO;
     private ExameDAO exameDAO;
     private RemedioDAO remedioDAO;
+    private Consulta consultaSelecionada;
     private HashMap<String, Exame> listaExames;
-    private String[] opcoesExames;
-    private String[] listaIdOpcoesExames;
-    private String[] selecionadoExames;
-    private String[] listaIdSelecionadoExames;
+    DefaultListModel<Exame> listModelExames;
+    DefaultListModel<Exame> listModelExamesSelecionados;
+    DefaultListModel<Exame> listaIdOpcoesExames;
+    DefaultListModel<Exame> listaIdSelecionadoExames;
     private HashMap<String, Remedio> listaRemedios;
-    private String[] opcoesRemedios;
-    private String[] listaIdOpcoesRemedios;
-    private String[] selecionadoRemedios;
-    private String[] listaIdSelecionadoRemedios;
+    DefaultListModel<Remedio> listModelRemedios;
+    DefaultListModel<Remedio> listModelRemediosSelecionados;
+    DefaultListModel<Remedio> listaIdOpcoesRemedios;
+    DefaultListModel<Remedio> listaIdSelecionadoRemedios;
 
     public RealizarConsultaView(Consulta consulta) {
         consultaDAO = new ConsultaDAO();
-        medicoDAO = new MedicoDAO();
-        pacienteDAO = new PacienteDAO();
         exameDAO = new ExameDAO();
         remedioDAO = new RemedioDAO();
-        initComponents();
+        this.consultaSelecionada = consulta;
 
         try {
             this.listaExames = exameDAO.getExames();
@@ -48,32 +45,21 @@ public class RealizarConsultaView extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
         }
 
-        this.opcoesExames = new String[listaExames.keySet().size()];
-        this.listaIdOpcoesExames = new String[listaExames.keySet().size()];
-        DefaultListModel<String> listModelExames = new DefaultListModel<>();
-        int index = 0;
+        listModelExames = new DefaultListModel<Exame>();
+        listModelExamesSelecionados = new DefaultListModel<Exame>();
         for (String id : listaExames.keySet()) {
             Exame exame = listaExames.get(id);
-            listModelExames.addElement(exame.getNome());
-            opcoesExames[index] = exame.getNome();
-            listaIdOpcoesExames[index] = id;
-            index++;
+            listModelExames.addElement(exame);
         }
 
-        this.opcoesRemedios = new String[listaRemedios.keySet().size()];
-        this.listaIdOpcoesRemedios = new String[listaRemedios.keySet().size()];
-        DefaultListModel<String> listModelRemedios = new DefaultListModel<>();
-        index = 0;
+        listModelRemedios = new DefaultListModel<Remedio>();
+        listModelRemediosSelecionados = new DefaultListModel<Remedio>();
         for (String id : listaRemedios.keySet()) {
             Remedio remedio = listaRemedios.get(id);
-            listModelRemedios.addElement(remedio.getNome());
-            opcoesRemedios[index] = remedio.getNome();
-            listaIdOpcoesRemedios[index] = id;
-            index++;
+            listModelRemedios.addElement(remedio);
         }
 
-        jList1.setModel(listModelExames);
-        jList3.setModel(listModelRemedios);
+        initComponents();
     }
 
     private void initComponents() {
@@ -150,30 +136,10 @@ public class RealizarConsultaView extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Exames"));
 
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "" };
-
-            public int getSize() {
-                return strings.length;
-            }
-
-            public String getElementAt(int i) {
-                return strings[i];
-            }
-        });
+        jList1.setModel(listModelExames);
         jScrollPane1.setViewportView(jList1);
 
-        jList2.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "" };
-
-            public int getSize() {
-                return strings.length;
-            }
-
-            public String getElementAt(int i) {
-                return strings[i];
-            }
-        });
+        jList2.setModel(listModelExamesSelecionados);
         jScrollPane2.setViewportView(jList2);
 
         jLabel3.setText("Opções");
@@ -181,8 +147,18 @@ public class RealizarConsultaView extends javax.swing.JFrame {
         jLabel4.setText("Selecionados");
 
         jButton3.setText("Adicionar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Excluir");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -242,30 +218,10 @@ public class RealizarConsultaView extends javax.swing.JFrame {
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Remédios"));
 
-        jList3.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "" };
-
-            public int getSize() {
-                return strings.length;
-            }
-
-            public String getElementAt(int i) {
-                return strings[i];
-            }
-        });
+        jList3.setModel(listModelRemedios);
         jScrollPane3.setViewportView(jList3);
 
-        jList4.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "" };
-
-            public int getSize() {
-                return strings.length;
-            }
-
-            public String getElementAt(int i) {
-                return strings[i];
-            }
-        });
+        jList4.setModel(listModelRemediosSelecionados);
         jScrollPane4.setViewportView(jList4);
 
         jLabel5.setText("Opções");
@@ -273,8 +229,18 @@ public class RealizarConsultaView extends javax.swing.JFrame {
         jLabel6.setText("Selecionados");
 
         jButton5.setText("Adicionar");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         jButton6.setText("Excluir");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -375,7 +341,42 @@ public class RealizarConsultaView extends javax.swing.JFrame {
      * Botão enviar
      */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
+        ArrayList<Exame> exames = new ArrayList<Exame>();
+        ArrayList<Remedio> remedios = new ArrayList<Remedio>();
 
+        for (int i = 0; i < listModelExamesSelecionados.getSize(); i++) {
+            try {
+                exames.add(this.exameDAO.getExame(listModelExamesSelecionados.getElementAt(i).getId()));
+            } catch (ClassNotFoundException | IOException e) {
+                JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+
+        for (int i = 0; i < listModelRemediosSelecionados.getSize(); i++) {
+            try {
+                exames.add(this.exameDAO.getExame(listModelRemediosSelecionados.getElementAt(i).getId()));
+            } catch (ClassNotFoundException | IOException e) {
+                JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+
+        Prontuario prontuario = new Prontuario(jTextField1.getText(), jTextField2.getText(), exames, remedios);
+
+        this.consultaSelecionada.setConsultaRealizada(true);
+        this.consultaSelecionada.setProntuario(prontuario);
+
+        try {
+            this.consultaDAO.editConsulta(consultaSelecionada.getId(), consultaSelecionada);
+            JOptionPane.showMessageDialog(null, "Consulta realizada com sucesso", "Sucesso!",
+                    JOptionPane.INFORMATION_MESSAGE);
+            MedicoMasterView medicoMasterView = new MedicoMasterView();
+            medicoMasterView.pack();
+            medicoMasterView.setLocationRelativeTo(null);
+            medicoMasterView.setVisible(true);
+            this.dispose();
+        } catch (ClassNotFoundException | IOException e) {
+            JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
+        }
     }
 
     /*
@@ -387,6 +388,54 @@ public class RealizarConsultaView extends javax.swing.JFrame {
         medicoMasterView.setLocationRelativeTo(null);
         medicoMasterView.setVisible(true);
         this.dispose();
+    }
+
+    /*
+     * Botão adicionar exame
+     */
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
+        if (jList1.getSelectedValue() != null) {
+            jList1.getSelectedValuesList().stream().forEach((data) -> {
+                listModelExamesSelecionados.addElement(data);
+                listModelExames.removeElement(data);
+            });
+        }
+    }
+
+    /*
+     * Botão excluir exame
+     */
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {
+        if (jList2.getSelectedValue() != null) {
+            jList2.getSelectedValuesList().stream().forEach((data) -> {
+                listModelExames.addElement(data);
+                listModelExamesSelecionados.removeElement(data);
+            });
+        }
+    }
+
+    /*
+     * Botão adicionar remédio
+     */
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {
+        if (jList3.getSelectedValue() != null) {
+            jList3.getSelectedValuesList().stream().forEach((data) -> {
+                listModelRemediosSelecionados.addElement(data);
+                listModelRemedios.removeElement(data);
+            });
+        }
+    }
+
+    /*
+     * Botão excluir remédio
+     */
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {
+        if (jList4.getSelectedValue() != null) {
+            jList4.getSelectedValuesList().stream().forEach((data) -> {
+                listModelRemedios.addElement(data);
+                listModelRemediosSelecionados.removeElement(data);
+            });
+        }
     }
 
     private javax.swing.JButton jButton1;
@@ -401,10 +450,10 @@ public class RealizarConsultaView extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JList<String> jList1;
-    private javax.swing.JList<String> jList2;
-    private javax.swing.JList<String> jList3;
-    private javax.swing.JList<String> jList4;
+    private javax.swing.JList<Exame> jList1;
+    private javax.swing.JList<Exame> jList2;
+    private javax.swing.JList<Remedio> jList3;
+    private javax.swing.JList<Remedio> jList4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

@@ -3,6 +3,7 @@ package app.views;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JOptionPane;
 
@@ -90,7 +91,11 @@ public class SecretarioMasterView extends javax.swing.JFrame {
             tabelaExames[index][0] = exame.getId().substring(0, exame.getId().indexOf("-"));
             tabelaExames[index][1] = exame.getNome();
             tabelaExames[index][2] = exame.getObservacoes();
-            tabelaExames[index][3] = exame.getTempoDuracao() != null ? exame.getTempoDuracao().toString() : "";
+            long tempoDuracao = exame.getTempoDuracao();
+            long horas = TimeUnit.SECONDS.toHours(tempoDuracao);
+            tempoDuracao -= TimeUnit.HOURS.toSeconds(horas);
+            long minutos = TimeUnit.SECONDS.toMinutes(tempoDuracao);
+            tabelaExames[index][3] = String.format("%02d:%02d horas", horas, minutos);
             index++;
         }
 
@@ -132,6 +137,7 @@ public class SecretarioMasterView extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jButton8 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sistema hospitalar");
@@ -189,6 +195,13 @@ public class SecretarioMasterView extends javax.swing.JFrame {
             }
         });
 
+        jButton8.setText("Atribuir plano");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -203,7 +216,10 @@ public class SecretarioMasterView extends javax.swing.JFrame {
                                 .addComponent(jButton12, javax.swing.GroupLayout.DEFAULT_SIZE,
                                         javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jButton13, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton8, javax.swing.GroupLayout.Alignment.TRAILING,
+                                        javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                        Short.MAX_VALUE))
                         .addContainerGap(40, Short.MAX_VALUE)));
         jPanel5Layout
                 .setVerticalGroup(
@@ -212,6 +228,9 @@ public class SecretarioMasterView extends javax.swing.JFrame {
                                         javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(jPanel5Layout.createSequentialGroup().addGap(50, 50, 50)
                                         .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 30,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 30,
                                                 javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
                                         .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 30,
@@ -225,7 +244,7 @@ public class SecretarioMasterView extends javax.swing.JFrame {
                                         .addGap(18, 18, 18)
                                         .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 30,
                                                 javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addContainerGap(107, Short.MAX_VALUE)));
+                                        .addContainerGap(59, Short.MAX_VALUE)));
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
@@ -455,10 +474,35 @@ public class SecretarioMasterView extends javax.swing.JFrame {
             try {
                 Paciente paciente = pacienteDAO
                         .getPaciente(this.listaIdPacientes[jTable1.getSelectionModel().getAnchorSelectionIndex()]);
-                InserirConsultaView inserirConsultaView = new InserirConsultaView(paciente);
-                inserirConsultaView.pack();
-                inserirConsultaView.setLocationRelativeTo(null);
-                inserirConsultaView.setVisible(true);
+                if(paciente.podeConsultar()) {
+                    InserirConsultaView inserirConsultaView = new InserirConsultaView(paciente);
+                    inserirConsultaView.pack();
+                    inserirConsultaView.setLocationRelativeTo(null);
+                    inserirConsultaView.setVisible(true);
+                    this.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(null, "As consultas do paciente expiraram", "Erro!", JOptionPane.WARNING_MESSAGE);
+                }
+            } catch (ClassNotFoundException | IOException e) {
+                JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+    }
+
+    /*
+     * Botão atribuir plano
+     */
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {
+        if (jTable1.getSelectionModel().isSelectionEmpty()) {
+            JOptionPane.showMessageDialog(null, "Selecione um paciente", "Erro!", JOptionPane.WARNING_MESSAGE);
+        } else {
+            try {
+                Paciente paciente = pacienteDAO
+                        .getPaciente(this.listaIdPacientes[jTable1.getSelectionModel().getAnchorSelectionIndex()]);
+                AtribuirPlanoView atribuirPlanoView = new AtribuirPlanoView(paciente);
+                atribuirPlanoView.pack();
+                atribuirPlanoView.setLocationRelativeTo(null);
+                atribuirPlanoView.setVisible(true);
                 this.dispose();
             } catch (ClassNotFoundException | IOException e) {
                 JOptionPane.showMessageDialog(null, "Arquivo não encontrado", "Erro!", JOptionPane.WARNING_MESSAGE);
@@ -650,6 +694,7 @@ public class SecretarioMasterView extends javax.swing.JFrame {
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel10;

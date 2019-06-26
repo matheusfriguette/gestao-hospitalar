@@ -6,10 +6,12 @@ import java.util.HashMap;
 import app.dao.FarmaceuticoDAO;
 import app.dao.GerenteDAO;
 import app.dao.MedicoDAO;
+import app.dao.PlanoDAO;
 import app.dao.SecretarioDAO;
 import app.models.Farmaceutico;
 import app.models.Gerente;
 import app.models.Medico;
+import app.models.Plano;
 import app.models.Secretario;
 
 /*
@@ -73,6 +75,18 @@ public class GerenteController {
 
         try {
             return farmaceuticoDAO.getFarmaceuticos();
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public HashMap<String, Plano> getPlanos() {
+        PlanoDAO planoDAO = new PlanoDAO();
+
+        try {
+            return planoDAO.getPlanos();
         } catch (ClassNotFoundException | IOException e) {
             e.printStackTrace();
         }

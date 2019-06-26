@@ -1,7 +1,6 @@
 package app.models;
 
 import java.io.Serializable;
-import java.time.Duration;
 import java.util.UUID;
 
 /*
@@ -12,8 +11,8 @@ public class Exame implements Serializable {
     private String id;
     private String nome;
     private String observacoes;
-    private Duration tempoDuracao;
-    private Duration tempoResultado;
+    private int tempoDuracao;
+    private int tempoResultado;
 
     /*
      * Construtores
@@ -22,11 +21,11 @@ public class Exame implements Serializable {
         setId(UUID.randomUUID().toString());
         setNome(null);
         setObservacoes(null);
-        setTempoDuracao(null);
-        setTempoResultado(null);
+        setTempoDuracao(0);
+        setTempoResultado(0);
     }
 
-    public Exame(String nome, String observacoes, Duration tempoDuracao, Duration tempoResultado) {
+    public Exame(String nome, String observacoes, int tempoDuracao, int tempoResultado) {
         setId(UUID.randomUUID().toString());
         setNome(nome);
         setObservacoes(observacoes);
@@ -61,19 +60,24 @@ public class Exame implements Serializable {
         this.observacoes = observacoes;
     }
 
-    public Duration getTempoDuracao() {
+    public int getTempoDuracao() {
         return tempoDuracao;
     }
 
-    public void setTempoDuracao(Duration tempoDuracao) {
+    public void setTempoDuracao(int tempoDuracao) {
         this.tempoDuracao = tempoDuracao;
     }
 
-    public Duration getTempoResultado() {
+    public int getTempoResultado() {
         return tempoResultado;
     }
 
-    public void setTempoResultado(Duration tempoResultado) {
+    public void setTempoResultado(int tempoResultado) {
         this.tempoResultado = tempoResultado;
+    }
+
+    @Override
+    public String toString() {
+        return nome;
     }
 }

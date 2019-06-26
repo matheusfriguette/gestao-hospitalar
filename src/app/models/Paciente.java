@@ -11,6 +11,7 @@ import java.util.UUID;
 public class Paciente extends Pessoa implements Serializable {
     private static final long serialVersionUID = 1L;
     private String id;
+    private PlanoPaciente plano;
     public ArrayList<Consulta> consultas;
 
     /*
@@ -19,13 +20,15 @@ public class Paciente extends Pessoa implements Serializable {
     public Paciente() {
         super(null, null, null, null, null, null);
         setId(UUID.randomUUID().toString());
+        setPlano(null);
         setConsultas(null);
     }
 
     public Paciente(String cpf, String rg, String nome, String telefone, Date dataNascimento, Endereco endereco,
-            ArrayList<Consulta> consultas) {
+            ArrayList<Consulta> consultas, PlanoPaciente plano) {
         super(cpf, rg, nome, telefone, dataNascimento, endereco);
         setId(UUID.randomUUID().toString());
+        setPlano(plano);
         setConsultas(consultas);
     }
 
@@ -40,6 +43,14 @@ public class Paciente extends Pessoa implements Serializable {
         this.id = id;
     }
 
+    public PlanoPaciente getPlano() {
+        return plano;
+    }
+
+    public void setPlano(PlanoPaciente plano) {
+        this.plano = plano;
+    }
+
     public ArrayList<Consulta> getConsultas() {
         return consultas;
     }
@@ -51,7 +62,16 @@ public class Paciente extends Pessoa implements Serializable {
     /*
      * Métodos
      */
+    public void renovarPlano() {
+        this.plano.setConsultasRestantes(this.plano.getPlano().getConsultasDisponiveis());
+    }
+
     public void addConsulta(Consulta consulta) {
         this.consultas.add(consulta);
+        this.plano.diminuiConsultasRestantes();
+    }
+
+    public boolean podeConsultar() {
+        return this.plano.getConsultasRestantes() > 0;
     }
 }
