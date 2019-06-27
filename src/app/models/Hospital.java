@@ -1,6 +1,8 @@
 package app.models;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 
 /**
@@ -25,12 +27,28 @@ public class Hospital {
      * Construtores
      */
     public Hospital() {
-        this.arquivoFuncionarios = new File("data/funcionarios.dat");
-        this.arquivoPacientes = new File("data/pacientes.dat");
-        this.arquivoConsultas = new File("data/consultas.dat");
-        this.arquivoExames = new File("data/exames.dat");
-        this.arquivoRemedios = new File("data/remedios.dat");
-        this.arquivoPlanos = new File("data/planos.dat");
+        try {
+            this.arquivoFuncionarios = new File(
+                    URLDecoder.decode(Hospital.class.getProtectionDomain().getCodeSource().getLocation().getPath(),
+                            "UTF-8") + "data/funcionarios.dat");
+            this.arquivoPacientes = new File(
+                    URLDecoder.decode(Hospital.class.getProtectionDomain().getCodeSource().getLocation().getPath(),
+                            "UTF-8") + "data/pacientes.dat");
+            this.arquivoConsultas = new File(
+                    URLDecoder.decode(Hospital.class.getProtectionDomain().getCodeSource().getLocation().getPath(),
+                            "UTF-8") + "data/consultas.dat");
+            this.arquivoExames = new File(
+                    URLDecoder.decode(Hospital.class.getProtectionDomain().getCodeSource().getLocation().getPath(),
+                            "UTF-8") + "data/exames.dat");
+            this.arquivoRemedios = new File(
+                    URLDecoder.decode(Hospital.class.getProtectionDomain().getCodeSource().getLocation().getPath(),
+                            "UTF-8") + "data/remedios.dat");
+            this.arquivoPlanos = new File(
+                    URLDecoder.decode(Hospital.class.getProtectionDomain().getCodeSource().getLocation().getPath(),
+                            "UTF-8") + "data/planos.dat");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 
     /*
@@ -258,8 +276,8 @@ public class Hospital {
 
     public ArrayList<Consulta> getConsultas() {
         consultas = (ArrayList<Consulta>) Arquivos.get(arquivoConsultas);
-        if (pacientes == null) {
-            pacientes = new ArrayList<Paciente>();
+        if (consultas == null) {
+            consultas = new ArrayList<Consulta>();
         }
 
         return consultas;

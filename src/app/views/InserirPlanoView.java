@@ -58,7 +58,7 @@ public class InserirPlanoView extends javax.swing.JFrame {
 
         jLabel18.setText("Consultas disponíveis:");
 
-        jLabel8.setText("Minuto");
+        jLabel8.setText("Máximo");
 
         jLabel7.setText("Mínima:");
 

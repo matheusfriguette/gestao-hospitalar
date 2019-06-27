@@ -1,9 +1,5 @@
 package app;
 
-import java.time.LocalDate;
-
-import app.models.Gerente;
-import app.models.Hospital;
 import app.views.LoginView;
 
 public class App {

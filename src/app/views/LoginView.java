@@ -106,17 +106,17 @@ public class LoginView extends javax.swing.JFrame {
                 this.dispose();
             }
             if (funcionario instanceof Secretario) {
+                SecretarioMasterView secretarioMasterView = new SecretarioMasterView();
+                secretarioMasterView.pack();
+                secretarioMasterView.setLocationRelativeTo(null);
+                secretarioMasterView.setVisible(true);
+                this.dispose();
+            }
+            if (funcionario instanceof Medico) {
                 MedicoMasterView medicoMasterView = new MedicoMasterView();
                 medicoMasterView.pack();
                 medicoMasterView.setLocationRelativeTo(null);
                 medicoMasterView.setVisible(true);
-                this.dispose();
-            }
-            if (funcionario instanceof Medico) {
-                GerenteMasterView gerenteMasterView = new GerenteMasterView();
-                gerenteMasterView.pack();
-                gerenteMasterView.setLocationRelativeTo(null);
-                gerenteMasterView.setVisible(true);
                 this.dispose();
             }
             if (funcionario instanceof Farmaceutico) {

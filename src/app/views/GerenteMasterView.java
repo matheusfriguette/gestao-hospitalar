@@ -820,6 +820,7 @@ public class GerenteMasterView extends javax.swing.JFrame {
         inserirPlanoView.pack();
         inserirPlanoView.setLocationRelativeTo(null);
         inserirPlanoView.setVisible(true);
+        this.dispose();
     }
 
     /*
