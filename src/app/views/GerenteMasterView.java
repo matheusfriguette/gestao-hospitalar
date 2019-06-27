@@ -30,7 +30,6 @@ public class GerenteMasterView extends javax.swing.JFrame {
     public GerenteMasterView() {
         this.hospital = new Hospital();
         this.loadTabelas();
-        initComponents();
     }
 
     private void loadTabelas() {
@@ -111,6 +110,8 @@ public class GerenteMasterView extends javax.swing.JFrame {
         }
         this.tabelaPlanos = new DefaultTableModel(planosData,
                 new String[] { "Nome", "Valor", "Consultas", "Faixa etária" });
+
+        initComponents();
     }
 
     private void initComponents() {

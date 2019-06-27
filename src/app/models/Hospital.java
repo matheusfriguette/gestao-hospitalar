@@ -159,6 +159,7 @@ public class Hospital {
         for (Funcionario funcionario : funcionarios) {
             if (funcionario.getId().equals(id)) {
                 deleteFuncionario(funcionario.getId());
+                break;
             }
         }
         funcionarios.add(novoFuncionario);
@@ -172,6 +173,7 @@ public class Hospital {
         for (Funcionario funcionario : funcionarios) {
             if (funcionario.getId().equals(id)) {
                 funcionarios.remove(funcionario);
+                break;
             }
         }
 
@@ -213,6 +215,7 @@ public class Hospital {
         for (Paciente paciente : pacientes) {
             if (paciente.getId().equals(id)) {
                 deletePaciente(paciente.getId());
+                break;
             }
         }
         pacientes.add(novoPaciente);
@@ -226,6 +229,7 @@ public class Hospital {
         for (Paciente paciente : pacientes) {
             if (paciente.getId().equals(id)) {
                 pacientes.remove(paciente);
+                break;
             }
         }
 
@@ -267,6 +271,7 @@ public class Hospital {
         for (Consulta consulta : consultas) {
             if (consulta.getId().equals(id)) {
                 deleteConsulta(consulta.getId());
+                break;
             }
         }
         consultas.add(novoConsulta);
@@ -280,6 +285,7 @@ public class Hospital {
         for (Consulta consulta : consultas) {
             if (consulta.getId().equals(id)) {
                 consultas.remove(consulta);
+                break;
             }
         }
 
@@ -321,6 +327,7 @@ public class Hospital {
         for (Exame exame : exames) {
             if (exame.getId().equals(id)) {
                 deleteExame(exame.getId());
+                break;
             }
         }
         exames.add(novoExame);
@@ -334,6 +341,7 @@ public class Hospital {
         for (Exame exame : exames) {
             if (exame.getId().equals(id)) {
                 exames.remove(exame);
+                break;
             }
         }
 
@@ -375,6 +383,7 @@ public class Hospital {
         for (Remedio remedio : remedios) {
             if (remedio.getId().equals(id)) {
                 deleteRemedio(remedio.getId());
+                break;
             }
         }
         remedios.add(novoRemedio);
@@ -388,6 +397,7 @@ public class Hospital {
         for (Remedio remedio : remedios) {
             if (remedio.getId().equals(id)) {
                 remedios.remove(remedio);
+                break;
             }
         }
 
@@ -429,6 +439,7 @@ public class Hospital {
         for (Plano plano : planos) {
             if (plano.getId().equals(id)) {
                 deletePlano(plano.getId());
+                break;
             }
         }
         planos.add(novoPlano);
@@ -442,6 +453,7 @@ public class Hospital {
         for (Plano plano : planos) {
             if (plano.getId().equals(id)) {
                 planos.remove(plano);
+                break;
             }
         }
 

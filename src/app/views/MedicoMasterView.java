@@ -18,7 +18,6 @@ public class MedicoMasterView extends javax.swing.JFrame {
     public MedicoMasterView() {
         this.hospital = new Hospital();
         this.loadTabelas();
-        initComponents();
     }
 
     private void loadTabelas() {
@@ -38,6 +37,7 @@ public class MedicoMasterView extends javax.swing.JFrame {
             }
         }
         this.tabelaConsultas = new DefaultTableModel(consultasData, new String[] { "ID", "Paciente", "Data" });
+        initComponents();
     }
 
     private void initComponents() {

@@ -26,7 +26,6 @@ public class SecretarioMasterView extends javax.swing.JFrame {
     public SecretarioMasterView() {
         this.hospital = new Hospital();
         this.loadTabelas();
-        initComponents();
     }
 
     private void loadTabelas() {
@@ -76,6 +75,7 @@ public class SecretarioMasterView extends javax.swing.JFrame {
             index++;
         }
         this.tabelaExames = new DefaultTableModel(examesData, new String[] { "ID", "Nome", "Observações", "Duração" });
+        initComponents();
     }
 
     private void initComponents() {

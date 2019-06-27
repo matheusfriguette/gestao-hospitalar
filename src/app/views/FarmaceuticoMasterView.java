@@ -17,7 +17,6 @@ public class FarmaceuticoMasterView extends javax.swing.JFrame {
     public FarmaceuticoMasterView() {
         this.hospital = new Hospital();
         this.loadTabelas();
-        initComponents();
     }
 
     private void loadTabelas() {
@@ -35,6 +34,8 @@ public class FarmaceuticoMasterView extends javax.swing.JFrame {
         }
         this.tabelaRemedios = new DefaultTableModel(remediosData,
                 new String[] { "ID", "Nome", "Qtd disponivel", "Preço" });
+
+        initComponents();
     }
 
     private void initComponents() {
