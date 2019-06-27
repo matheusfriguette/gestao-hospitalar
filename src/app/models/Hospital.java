@@ -1,6 +1,7 @@
 package app.models;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -47,6 +48,33 @@ public class Hospital {
                     URLDecoder.decode(Hospital.class.getProtectionDomain().getCodeSource().getLocation().getPath(),
                             "UTF-8") + "data/planos.dat");
         } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            if (!this.arquivoFuncionarios.exists()) {
+                this.arquivoFuncionarios.createNewFile();
+            }
+            if (!this.arquivoPacientes.exists()) {
+                this.arquivoPacientes.createNewFile();
+            }
+            if (!this.arquivoConsultas.exists()) {
+                this.arquivoConsultas.createNewFile();
+            }
+            if (!this.arquivoConsultas.exists()) {
+                this.arquivoConsultas.createNewFile();
+            }
+
+            if (!this.arquivoExames.exists()) {
+                this.arquivoExames.createNewFile();
+            }
+            if (!this.arquivoRemedios.exists()) {
+                this.arquivoRemedios.createNewFile();
+            }
+            if (!this.arquivoPlanos.exists()) {
+                this.arquivoPlanos.createNewFile();
+            }
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
