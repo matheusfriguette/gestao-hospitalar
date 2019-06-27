@@ -25,6 +25,12 @@ public class SecretarioMasterView extends javax.swing.JFrame {
 
     public SecretarioMasterView() {
         this.hospital = new Hospital();
+        this.tabelaPacientes = new DefaultTableModel(new Object[0][4],
+                new String[] { "Nome", "CPF", "Telefone", "Primeira consulta" });
+        this.tabelaConsultas = new DefaultTableModel(new Object[0][4],
+                new String[] { "ID", "Paciente", "Médico", "Data" });
+        this.tabelaExames = new DefaultTableModel(new Object[0][4], new String[] { "ID", "Nome", "Observações", "Duração" });
+        initComponents();
         this.loadTabelas();
     }
 
@@ -75,7 +81,9 @@ public class SecretarioMasterView extends javax.swing.JFrame {
             index++;
         }
         this.tabelaExames = new DefaultTableModel(examesData, new String[] { "ID", "Nome", "Observações", "Duração" });
-        initComponents();
+        jTable1.setModel(this.tabelaPacientes);
+        jTable4.setModel(this.tabelaConsultas);
+        jTable5.setModel(this.tabelaExames);
     }
 
     private void initComponents() {
@@ -543,7 +551,8 @@ public class SecretarioMasterView extends javax.swing.JFrame {
                     "Desmarcar consulta?", JOptionPane.YES_NO_OPTION);
 
             if (option == JOptionPane.YES_OPTION) {
-                Consulta consulta = hospital.getConsulta(this.idsConsultas[jTable4.getSelectionModel().getAnchorSelectionIndex()]);
+                Consulta consulta = hospital
+                        .getConsulta(this.idsConsultas[jTable4.getSelectionModel().getAnchorSelectionIndex()]);
                 Paciente paciente = consulta.getPaciente();
                 paciente.deleteConsulta(consulta.getId());
                 hospital.editPaciente(paciente.getId(), paciente);

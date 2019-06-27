@@ -70,15 +70,18 @@ public class Paciente extends Pessoa implements Serializable {
     public void editConsulta(String id, Consulta novaConsulta) {
         for (Consulta consulta : consultas) {
             if (consulta.getId().equals(id)) {
-                consulta = novaConsulta;
+                deleteConsulta(consulta.getId());
             }
         }
+
+        this.consultas.add(novaConsulta);
     }
 
     public void deleteConsulta(String id) {
         for (Consulta consulta : consultas) {
             if (consulta.getId().equals(id)) {
                 consultas.remove(consulta);
+                break;
             }
         }
     }

@@ -29,6 +29,17 @@ public class GerenteMasterView extends javax.swing.JFrame {
 
     public GerenteMasterView() {
         this.hospital = new Hospital();
+        this.tabelaGerentes = new DefaultTableModel(new Object[0][4],
+                new String[] { "Nome", "Telefone", "Data de admissão", "NCTPS" });
+        this.tabelaSecretarios = new DefaultTableModel(new Object[0][5],
+                new String[] { "Nome", "Telefone", "Data de admissão", "NCTPS", "Horário" });
+        this.tabelaMedicos = new DefaultTableModel(new Object[0][5],
+                new String[] { "Nome", "Telefone", "Data de admissão", "NCTPS", "Especialidade" });
+        this.tabelaFarmaceuticos = new DefaultTableModel(new Object[0][4],
+                new String[] { "Nome", "Telefone", "Data de admissão", "NCTPS" });
+        this.tabelaPlanos = new DefaultTableModel(new Object[0][4],
+                new String[] { "Nome", "Valor", "Consultas", "Faixa etária" });
+        initComponents();
         this.loadTabelas();
     }
 
@@ -111,7 +122,11 @@ public class GerenteMasterView extends javax.swing.JFrame {
         this.tabelaPlanos = new DefaultTableModel(planosData,
                 new String[] { "Nome", "Valor", "Consultas", "Faixa etária" });
 
-        initComponents();
+        jTable1.setModel(this.tabelaGerentes);
+        jTable4.setModel(this.tabelaSecretarios);
+        jTable5.setModel(this.tabelaMedicos);
+        jTable6.setModel(this.tabelaFarmaceuticos);
+        jTable7.setModel(this.tabelaPlanos);
     }
 
     private void initComponents() {
